@@ -1,0 +1,38 @@
+{
+  "cache": {
+    "cacheLocation": ".cache/.cspellcache"
+  },
+  "dictionaries": [
+    "softwareTerms",
+    "misc",
+    "bash",
+    "typescript",
+    "node",
+    "html",
+    "css",
+    "fonts",
+    "filetypes",
+    "npm"
+  ],
+  "ignorePaths": [
+    "**/.git/**",
+    "**/.github/workflows/**",
+    "**/.gitignore",
+    "**/.prettierignore",
+    "**/.npmrc",
+    "**/.devcontainer/**",
+    "**/.vscode/extensions.json",
+    "**/.vscode/settings.json",
+    "**/scripts/**"
+  ],
+  "language": "en,en-GB,en-US",
+  "useGitignore": true,
+  "version": "0.2",
+  "words": [
+    ".gitmessage",
+    "nlobby4",
+    "flockmod",
+    "sphoon",
+    "exquz3me"
+  ]
+}

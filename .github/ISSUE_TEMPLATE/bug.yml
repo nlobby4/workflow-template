@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+name: Report a bug
+description: An unexpected problem or incorrect behavior
+title: "[BUG] <title>"
+type: Bug
+labels:
+  - bug
+  - needs-triage
+# TODO: Update assignees to the appropriate team members
+assignees:
+  - exquz3me
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue
+      description: |
+        Provide a summary of the issue or incorrect behavior.
+        Adding reproduction steps, relevant links or reduced test cases would be helpful.
+
+        NOTE: Before submitting, please search for duplicate or closed issues.
+    validations:
+      required: true

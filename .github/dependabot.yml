@@ -1,0 +1,67 @@
+# --------------------------------------------------
+# Dependabot configuration file.
+#
+# Dependabot opens pull requests to keep dependencies up to date
+# automatically. It supports a wide range of package ecosystems and
+# can be configured to group updates, set schedules, and apply labels.
+#
+# For more information please see:
+# https://docs.github.com/en/code-security/dependabot
+# --------------------------------------------------
+
+# yaml-language-server: $schema=https://json.schemastore.org/dependabot-2.0.json
+
+version: 2
+updates:
+  # GitHub Actions workflow updates
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Node.js dependency updates.
+  # Minor and patch updates are grouped to reduce PR noise.
+  # Major updates are separated to require explicit review.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      dependencies-major:
+        patterns:
+          - "*"
+        update-types:
+          - major
+    # TODO: Add ignore rules for major bumps you want to defer
+    ignore:
+      # @commitlint/cz-commitlint requires inquirer@^9.0.0.
+      # Do not allow dependabot to bump inquirer past v9 until
+      # @commitlint/cz-commitlint explicitly supports a higher major version.
+      - dependency-name: inquirer
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor

@@ -1,0 +1,285 @@
+# --------------------------------------------------
+# CI General workflow.
+#
+# Handles code quality checks for all pushes to main
+# and pull requests. Uses pull_request to safely execute
+# untrusted code from forks without elevated privileges.
+#
+# Jobs run in parallel after a shared install step
+# that caches node_modules to avoid redundant installs
+# across runners.
+#
+# For more information please see:
+# https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request
+# --------------------------------------------------
+
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: CI General
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group:
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+  NPM_VERSION: "11"
+
+jobs:
+  # --------------------------------------------------
+  # Dependency installation - shared across all jobs
+  # via cache to avoid redundant npm ci calls.
+  # node_modules is cached by os, node version, and
+  # package-lock.json hash for precise invalidation.
+  # --------------------------------------------------
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Compute cache key
+        id: cache-key
+        run:
+          echo "key=node-modules-${{ runner.os }}-${{ env.NODE_VERSION }}-${{
+          hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+
+      - name: Restore node_modules cache
+        id: cache-restore
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ steps.cache-key.outputs.key }}
+
+      - name: Install dependencies
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Save node_modules cache
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: node_modules
+          key: ${{ steps.cache-key.outputs.key }}
+
+  # --------------------------------------------------
+  # Commit lint - validates all commits in the PR
+  # against conventional commits specification
+  # --------------------------------------------------
+  commitlint:
+    name: commitlint
+    needs: install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ needs.install.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Lint commits
+        run: npm run lint:commits:ci
+
+  # --------------------------------------------------
+  # Format check - validates code formatting
+  # using Prettier
+  # --------------------------------------------------
+  prettier:
+    name: prettier
+    needs: install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ needs.install.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Check formatting
+        run: npm run format:check
+
+  # --------------------------------------------------
+  # Markdown lint - validates markdown files
+  # --------------------------------------------------
+  markdownlint:
+    name: markdownlint
+    needs: install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ needs.install.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Lint markdown
+        run: npm run lint:md
+
+  # --------------------------------------------------
+  # Spell check - validates spelling across all files
+  # using cspell. Cache is keyed by package-lock.json
+  # and .cspell.json only since dictionary changes
+  # are the only reason to invalidate the cache,
+  # not file content changes.
+  # --------------------------------------------------
+  spellcheck:
+    name: spellcheck
+    needs: install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ needs.install.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Restore cspell cache
+        id: cspell-cache-restore
+        uses: actions/cache/restore@v5
+        with:
+          path: .cache
+          key:
+            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
+            '.cspell.json') }}
+          restore-keys: |
+            cspell-${{ runner.os }}-
+
+      - name: Spell check
+        run: npm run lint:spell
+
+      - name: Save cspell cache
+        if: steps.cspell-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: .cache
+          key:
+            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
+            '.cspell.json') }}
+
+  # --------------------------------------------------
+  # Audit - checks for known vulnerabilities in
+  # production dependencies
+  # --------------------------------------------------
+  audit:
+    name: audit
+    needs: install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ needs.install.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Audit dependencies
+        run: npm run audit
+
+  # --------------------------------------------------
+  # Knip - checks for unused dependencies, exports,
+  # and files
+  # --------------------------------------------------
+  knip:
+    name: knip
+    needs: install
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set npm version
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ needs.install.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Check unused dependencies
+        run: npm run deps:unused

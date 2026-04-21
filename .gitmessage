@@ -1,0 +1,26 @@
+# --------------------------------------------------
+# Git commit message template.
+#
+# This file serves as a template for writing consistent commit messages
+# that satisfy the Conventional Commits specification.
+#
+# To use this file as the default commit message template,
+# run the setup script or set the following git configuration:
+#
+# git config commit.template .gitmessage
+#
+# Alternatively, use the interactive prompt:
+#
+# npm run commit
+# --------------------------------------------------
+
+# type: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert (required)
+# scope: assets, ci, deps, dev-deps, docs, meta, release, scripts, src, templates, tests (optional)
+# subject: imperative, lowercase start, all caps forbidden, no period, max 72 chars total
+
+type(scope): short summary
+
+# why: what problem does this solve?
+# what: what changed
+
+# Refs: #issue

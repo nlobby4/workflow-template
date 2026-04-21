@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# --------------------------------------------------
+# Commit message hook.
+#
+# Validates the commit message against the
+# Conventional Commits specification using commitlint.
+# Failures here block the commit.
+#
+# Use `npm run commit` for an interactive prompt
+# that guides you through the correct format.
+# --------------------------------------------------
+
+npx --no -- commitlint --edit "$1" --verbose

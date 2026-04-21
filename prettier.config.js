@@ -1,0 +1,68 @@
+/**
+ * Prettier is installed as a dev dependency and is used for consistent
+ * formatting across the project, it also automatically applies EditorConfig
+ * settings as formatting rules.
+ *
+ * These rules are also enforced in CI to avoid unformatted code and to ensure
+ * consistency across the codebase.
+ *
+ * **NOTE:** The prettier yaml plugin does not support docker files, it gets
+ * handled by the sh plugin. To avoid conflicts name docker files "Dockerfile"
+ * instead of "dockerfile.yaml".
+ *
+ * **NOTE:** The Prettier vscode extension cannot use a .gitignore and
+ * .prettierignore at the same time, instead sync the .prettierignore file with
+ * .gitignore to maintain flexibility.
+ *
+ * @file Prettier configuration file.
+ *
+ * @author sphoon
+ *
+ * @see https://github.com/prettier/prettier-vscode/issues/3894
+ */
+
+/**
+ * @type {import("prettier").Config}
+ *
+ * @see https://prettier.io/docs/configuration
+ */
+export default {
+  // Plugins are applied in the order they are listed here
+  plugins: [
+    "prettier-plugin-sh",
+    "prettier-plugin-yaml",
+    "prettier-plugin-sort-json",
+    "prettier-plugin-packagejson",
+    "prettier-plugin-multiline-arrays",
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-jsdoc",
+  ],
+
+  // Allow to use prettier-ignore-start and prettier-ignore-end
+  checkIgnorePragma: true,
+
+  // Always wrap prose if it exceeds the print width.
+  proseWrap: "always",
+
+  // Put the > of a blockquote on the same line as the content.
+  bracketSameLine: true,
+
+  // Put the operator at the beginning of the line
+  experimentalOperatorPosition: "start",
+
+  // Use the curious ternaries formatting style.
+  // https://prettier.io/blog/2023/11/13/curious-ternaries.html
+  experimentalTernaries: true,
+
+  // Don't remove unused imports
+  organizeImportsSkipDestructiveCodeActions: true,
+
+  // Add a period at the end of JSDoc descriptions if missing
+  jsdocDescriptionWithDot: true,
+
+  // Put @returns on a separate line from @param
+  jsdocSeparateReturnsFromParam: true,
+
+  // Separate JSDoc tags into groups with blank lines between them
+  jsdocSeparateTagGroups: true,
+};

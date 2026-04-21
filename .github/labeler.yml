@@ -1,0 +1,112 @@
+# --------------------------------------------------
+# Labeler configuration file.
+#
+# Automatically applies labels to pull requests based on branch names,
+# pull request titles, and changed files. Labels align with the
+# Conventional Commits specification and the organization label set.
+#
+# For more information please see:
+# https://github.com/actions/labeler
+# --------------------------------------------------
+
+# yaml-language-server: $schema=https://json.schemastore.org/pull-request-labeler.json
+
+feat:
+  - head-branch: [^feat/, ^feature/]
+  - title: ["^feat(\\(.+\\))?!?:"]
+
+fix:
+  - head-branch: [^fix/]
+  - title: ["^fix(\\(.+\\))?!?:"]
+
+bug:
+  - head-branch: [^bugfix/, ^hotfix/]
+
+docs:
+  - head-branch: [^docs/]
+  - title: ["^docs(\\(.+\\))?!?:"]
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - docs/**
+
+chore:
+  - head-branch: [^chore/]
+  - title: ["^chore(\\(.+\\))?!?:"]
+
+# TODO: Adjust if using other CI systems or configurations
+ci:
+  - head-branch: [^ci/]
+  - title: ["^ci(\\(.+\\))?!?:"]
+  - changed-files:
+      - any-glob-to-any-file:
+          - .devcontainer/**
+          - .github/workflows/**
+          - .github/labeler.yml
+          - .github/dependabot.yml
+          - .husky/**
+          - release.config.*
+          - .tool-versions
+          - .nvmrc
+          - .npmrc
+
+# TODO: Adjust to fit your build system
+build:
+  - head-branch: [^build/]
+  - title: ["^build(\\(.+\\))?!?:"]
+  # - changed-files:
+  #   - any-glob-to-any-file:
+  #       - ...
+
+refactor:
+  - head-branch: [^refactor/]
+  - title: ["^refactor(\\(.+\\))?!?:"]
+
+perf:
+  - head-branch: [^perf/]
+  - title: ["^perf(\\(.+\\))?!?:"]
+
+test:
+  - head-branch: [^test/]
+  - title: ["^test(\\(.+\\))?!?:"]
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.test.*"
+          - "**/*.spec.*"
+          - "**/tests/**"
+          - "**/__tests__/**"
+
+# TODO: Add further paths for used linter configurations
+style:
+  - head-branch: [^style/]
+  - title: ["^style(\\(.+\\))?!?:"]
+  - changed-files:
+      - any-glob-to-any-file:
+          - .editorconfig
+          - prettier.config.*
+          - .prettierignore
+          - commitlint.config.*
+          - .cspell.json
+
+revert:
+  - head-branch: [^revert/]
+  - title: ["^revert(\\(.+\\))?!?:"]
+
+breaking-change:
+  - title: ["^[a-z]+(\\(.+\\))?!:"]
+
+# TODO: Adjust if using other package ecosystems
+dependencies:
+  - head-branch: [^dependabot/]
+  - changed-files:
+      - any-glob-to-any-file:
+          - package.json
+          - package-lock.json
+
+release:
+  - head-branch: [^release/, ^v\d+\.\d+]
+  - title: ["^release(\\(.+\\))?!?:"]
+
+security:
+  - head-branch: [^security/, ^sec/]
+  - title: ["^security(\\(.+\\))?!?:"]

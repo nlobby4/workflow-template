@@ -1,0 +1,61 @@
+# --------------------------------------------------
+# CI Privileged workflow.
+#
+# Handles pull request automation that requires write
+# permissions. Uses pull_request_target to safely access
+# repository secrets and permissions without executing
+# untrusted code from the pull request branch.
+#
+# SECURITY: No job in this workflow may checkout or
+# execute code from the pull request branch. Doing so
+# would expose repository secrets to untrusted code.
+#
+# For more information please see:
+# https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request_target
+# --------------------------------------------------
+
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: CI Privileged
+
+on:
+  pull_request_target:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # --------------------------------------------------
+  # Labeler - applies labels to pull requests based
+  # on branch name, title, and changed files.
+  # --------------------------------------------------
+  labeler:
+    name: labeler
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/labeler@v6
+        with:
+          configuration-path: .github/labeler.yml
+          sync-labels: false
+
+  # --------------------------------------------------
+  # Dependency review - checks for known vulnerabilities
+  # in dependency changes introduced by the pull request.
+  # --------------------------------------------------
+  dependency-review:
+    name: dependency-review
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/dependency-review-action@v4
