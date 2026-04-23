@@ -6,8 +6,8 @@
  * These rules are also enforced in CI to avoid unformatted code and to ensure
  * consistency across the codebase.
  *
- * **NOTE:** The prettier yaml plugin does not support docker files, it gets
- * handled by the sh plugin. To avoid conflicts name docker files "Dockerfile"
+ * **NOTE:** The prettier yaml plugin does not support docker files, they get
+ * handled by the sh plugin. To avoid conflicts, name docker files "Dockerfile"
  * instead of "dockerfile.yaml".
  *
  * **NOTE:** The Prettier vscode extension cannot use a .gitignore and
