@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+
 name: Request a feature
 description: A request, idea, enhancement or new functionality
 title: "[FEATURE] <title>"

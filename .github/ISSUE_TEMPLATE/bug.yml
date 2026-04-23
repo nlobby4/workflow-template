@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+
 name: Report a bug
 description: An unexpected problem or incorrect behavior
 title: "[BUG] <title>"
