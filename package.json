@@ -7,8 +7,6 @@
   "scripts": {
     "audit": "npm audit --omit=dev --audit-level=high",
     "check": "npm run format:check && npm run lint && npm run deps:unused && npm run audit",
-    "ci:lint": "npm run lint:commits:ci && npm run lint:md && npm run lint:spell",
-    "ci:verify": "npm run format:check && npm run ci:lint && npm run deps:unused && npm run audit",
     "commit": "git-cz",
     "deps:check": "npm outdated",
     "deps:unused": "knip",
@@ -16,11 +14,11 @@
     "format:check": "prettier . --check",
     "lint": "npm run lint:commits && npm run lint:md && npm run lint:spell",
     "lint:commits": "commitlint --last --verbose",
-    "lint:commits:ci": "commitlint --from=origin/main --to=HEAD --verbose",
     "lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
     "lint:md:fix": "markdownlint \"**/*.md\" --ignore node_modules --fix",
     "lint:spell": "cspell lint \"**/*\" --dot --no-progress --cache --cache-strategy content",
-    "prepare": "husky"
+    "prepare": "husky",
+    "verify": "npm run format:check && npm run lint && npm run deps:unused && npm run audit"
   },
   "lint-staged": {
     "*.md": [
