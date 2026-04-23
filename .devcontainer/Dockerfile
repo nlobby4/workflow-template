@@ -40,16 +40,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 # Install ASDF
 #
 # ASDF is used to manage runtime versions (Node.js, etc.) across all
-# contributors and CI environments. The version is pinned here for
-# reproducibility. To upgrade, update ASDF_VERSION and rebuild the image.
+# contributors. The version is pinned here for reproducibility.
+# To upgrade, update ASDF_VERSION and rebuild the image.
 #
 # ASDF_DIR and ASDF_DATA_DIR are set to a shared system path so all users
 # inside the container (including the non-root "vscode" user) can access
 # the installed runtimes without per-user installation.
 #
 # To add more language plugins, extend the RUN block below.
-# Available plugins: https://github.com/asdf-vm
-#                    https://github.com/asdf-community
 # --------------------------
 
 ENV ASDF_VERSION=0.18.1
@@ -83,6 +81,8 @@ RUN printf '%s\n' \
 RUN echo '. <(asdf completion bash)' >> /etc/bash.bashrc
 
 # Install ASDF plugins and set permissions
+# Available plugins: https://github.com/asdf-vm
+#                    https://github.com/asdf-community
 # TODO: Add needed plugins
 RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
   && chown -R vscode:vscode /usr/local/asdf \
