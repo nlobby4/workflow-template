@@ -96,5 +96,7 @@ CHANGELOG.md
 # Project rules
 .husky/_
 node_modules/
+# TODO: Add project-specific ignore rules
 
+# Exceptions
 # TODO: Add file extensions that should use a different formatter
