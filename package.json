@@ -17,8 +17,7 @@
     "lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
     "lint:md:fix": "markdownlint \"**/*.md\" --ignore node_modules --fix",
     "lint:spell": "cspell lint \"**/*\" --dot --no-progress --cache --cache-strategy content",
-    "prepare": "husky",
-    "verify": "npm run format:check && npm run lint && npm run deps:unused && npm run audit"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.md": [
