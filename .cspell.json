@@ -21,8 +21,8 @@
     "**/.prettierignore",
     "**/.npmrc",
     "**/.devcontainer/**",
-    "**/.vscode/extensions.json",
-    "**/.vscode/settings.json",
+    "**/.vscode/**",
+    "**/.husky/**",
     "**/scripts/**"
   ],
   "language": "en,en-GB,en-US",
