@@ -21,6 +21,6 @@
     }
   },
   "name": "nlobby4 Dev Container",
-  "postCreateCommand": "chmod +x scripts/linux/setup.sh && ./scripts/linux/setup.sh",
+  "postCreateCommand": "./scripts/linux/setup.sh",
   "remoteUser": "vscode"
 }

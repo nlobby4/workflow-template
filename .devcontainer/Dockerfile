@@ -10,7 +10,6 @@
 # you can set up your local environment by running the setup script.
 # Please note that the script does not automatically install required tools:
 #
-# chmod +x scripts/linux/setup.sh
 # ./scripts/linux/setup.sh
 #
 # For more information, see:
