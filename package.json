@@ -14,15 +14,15 @@
     "format:check": "prettier . --check",
     "lint": "npm run lint:commits && npm run lint:md && npm run lint:spell",
     "lint:commits": "commitlint --last --verbose",
-    "lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
-    "lint:md:fix": "markdownlint \"**/*.md\" --ignore node_modules --fix",
+    "lint:md": "markdownlint \"**/*.md\"",
+    "lint:md:fix": "markdownlint \"**/*.md\"",
     "lint:spell": "cspell lint \"**/*\" --dot --no-progress --cache --cache-strategy content",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.md": [
       "prettier --write",
-      "markdownlint . --fix --ignore node_modules",
+      "markdownlint . --fix",
       "cspell lint . --no-progress"
     ],
     "*.{js,ts,json,yaml,yml,sh}": [
