@@ -1,4 +1,4 @@
-#!/bin/bash
+# This file is sourced, not executed
 
 # --------------------------------------------------
 # Check functions for the repository scripts.
@@ -8,6 +8,24 @@
 # This script is not meant to be run directly,
 # scripts relying on these functions source this as needed.
 # --------------------------------------------------
+
+# Guard against direct execution
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  echo "This file is meant to be sourced, not executed directly." >&2
+  exit 1
+fi
+
+# Guard against multiple sourcing
+[ -n "${_CHECK_LOADED:-}" ] && return
+_CHECK_LOADED=1
+
+# Load dependent scripts
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/variables.sh"
+
+# --------------------------
+# Functions
+# --------------------------
 
 # Check if a command is available in PATH
 check_command() {
@@ -19,13 +37,13 @@ check_command() {
 
 # Check if a required argument is provided
 check_argument() {
-  if [ -z "$1" ]; then
+  if [ -z "${1:-}" ]; then
     echo "$ERROR $2 argument is required but was not provided" >&2
     exit 1
   fi
 }
 
-# Check if the project is run from project root
+# Check if the script is run from the project root
 check_project_root() {
   if [ ! -f package.json ]; then
     echo "$ERROR run this script from repository root" >&2
@@ -33,12 +51,11 @@ check_project_root() {
   fi
 }
 
-# Check which of the supported node version managers is available
+# Check which supported version manager is available
 check_node_version_manager() {
   if command -v asdf > /dev/null 2>&1; then
-    # Check for the nodejs plugin
-    if ! asdf plugin list | grep -qx 'nodejs'; then
-      echo "$ERROR asdf is configured but nodejs plugin is not found" >&2
+    if ! asdf plugin list 2> /dev/null | grep -qx 'nodejs'; then
+      echo "$ERROR asdf is configured but the nodejs plugin was not found" >&2
       exit 1
     fi
     echo "asdf"
@@ -49,3 +66,5 @@ check_node_version_manager() {
     exit 1
   fi
 }
+
+# TODO: Add checks for other version managers as needed (e.g. pyenv, rbenv, etc.)
