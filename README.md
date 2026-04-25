@@ -30,8 +30,10 @@
 
 This repository is a bare bones template for creating clean and consistent
 repositories across the entire nlobby4 codebase. It includes reusable CI
-workflows, dev container configuration, commit conventions, formatting rules,
-and common GitHub configuration files.
+workflows, dev container configuration, commit conventions and formatting rules.
+
+This template is intended for repositories that want to use custom tools that do
+not have their own specific template.
 
 Please check out the other
 [templates](https://github.com/orgs/nlobby4/repositories?q=template%3Atrue+archived%3Afalse)
@@ -116,10 +118,8 @@ page.
 | `.github/workflows/ci-general.yml`    | Formatting, linting, spelling, audit, knip                            |
 | `.github/workflows/ci-privileged.yml` | Label automation and dependency review on pull requests               |
 | `.github/workflows/ci-release.yml`    | Automated semantic versioning and GitHub release via semantic-release |
-| `.github/ISSUE_TEMPLATE/`             | Bug, feature, question, and config issue templates                    |
-| `.github/PULL_REQUEST_TEMPLATE/`      | Pull request template                                                 |
-| `.github/labeler.yml`                 | Automatic PR labeling by branch name, title, and changed files        |
 | `.github/dependabot.yml`              | Weekly dependency updates for npm and GitHub Actions                  |
+| `.github/labeler.yml`                 | Automatic PR labeling by branch name, title, and changed files        |
 | `.github/CODEOWNERS`                  | Code ownership definitions                                            |
 | `.github/CONTRIBUTING.md`             | Contribution guidelines                                               |
 | `.husky/`                             | Git hooks for commit message validation and pre-commit checks         |
@@ -130,6 +130,13 @@ page.
 | `.cspell.json`                        | Spell check configuration                                             |
 | `knip.json`                           | Unused dependency and export detection                                |
 | `release.config.js`                   | semantic-release configuration                                        |
+
+> [!NOTE]
+>
+> If you are outside the organization you can checkout the
+> [readme template](https://github.com/nlobby4/readme-template) for common
+> GitHub markdown files and templates. These get applied to all repositories in
+> the organization by default but not outside of it.
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
@@ -151,16 +158,16 @@ need to make:
 | `AUTHORS`                          | Add project authors                                       |
 | `ARCHITECTURE.md`                  | Create the architecture documentation                     |
 | `.gitignore`                       | Update ignored files to match your project                |
-| `.gitattributes`                   | Update line ending settings if needed                     |
+| `.gitattributes`                   | Update line ending settings and configure lfs if needed   |
 | `.github/dependabot.yml`           | Add ignore rules if needed                                |
-| `.github/labeler.yml`              | Update label rules to match your stack                    |
+| `.github/labeler.yml`              | Update label rules to match your used tooling             |
 | `.github/CODEOWNERS`               | Add code owners                                           |
 | `.github/CONTRIBUTING.md`          | Update contribution guidelines if needed                  |
-| `.github/ISSUE_TEMPLATE/`          | Update assignees in every issue template                  |
+| `.github/workflows/ci-general.yml` | Add workflows for new tools if needed                     |
 | `.github/workflows/ci-release.yml` | Update release workflow if needed                         |
+| `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack       |
 | `scripts/linux/setup.sh`           | Add any project-specific setup steps                      |
 | `scripts/linux/release/release.sh` | Adjust release packaging if needed                        |
-| `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack       |
 | `.prettierignore`                  | Add file extensions that should use a different formatter |
 | `.tool-versions`                   | Add additional tools and versions for asdf                |
 | `.cspell.json`                     | Add project-specific words if needed                      |
