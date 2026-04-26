@@ -198,8 +198,8 @@ in the repositories issue tab:
 
 We are using a GitHub App for authentication in the release workflow, as
 semantic-release does not work on protected branches with the default
-`GITHUB_TOKEN`. For simplicity, you can either remove the release workflow,
-remove `main` branch protection, or follow
+`GITHUB_TOKEN`. For simplicity, you can either remove the release workflow, or
+follow
 [this guide](https://gist.github.com/fq-stong/4e75263d42846eabd55376bc70081b5c)
 to setup your own GitHub App and add the necessary secrets to your repository.
 
