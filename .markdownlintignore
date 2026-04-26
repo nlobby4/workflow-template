@@ -1,0 +1,11 @@
+# --------------------------------------------------
+# Ignore list for markdownlint.
+#
+# This file lists files and patterns that should
+# be ignored by the markdownlint cli.
+#
+# This does not affect the markdownlint vscode extension.
+# --------------------------------------------------
+
+node_modules
+CHANGELOG.md
