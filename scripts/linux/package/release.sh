@@ -9,27 +9,26 @@
 #
 # You can run this script manually to verify the packaging process:
 #
-# chmod +x scripts/linux/package/release.sh
 # ./scripts/linux/package/release.sh <version>
 # --------------------------------------------------
-
-echo "Packaging project for distribution..."
-
-# --------------------------
-# Setup
-# --------------------------
 
 # Exit immediately if a command exits with a non-zero status
 # Treat unset variables as an error and exit immediately
 # Prevent errors in a pipeline from being masked
 set -euo pipefail
 
-# Load helper functions
+# --------------------------
+# Setup
+# --------------------------
+
+# Load dependent scripts
 . "$(dirname "${BASH_SOURCE[0]}")/../utils/variables.sh"
 . "$(dirname "${BASH_SOURCE[0]}")/../utils/check.sh"
 
 # Get the release version from the first argument
 version="${1:-}"
+
+echo "Packaging project for distribution..."
 
 # --------------------------
 # Pre-flight checks
@@ -65,7 +64,11 @@ rm -f "$archive_path"
 #   tar -czf "$archive_path" -C dist .
 
 # Create a tar.gz archive of the entire project.
-tar --exclude='release' -czf "$archive_path" .
+tar \
+  --exclude-vcs \
+  --exclude='release' \
+  --exclude='node_modules' \
+  -czf "$archive_path" .
 
 if [ ! -f "$archive_path" ]; then
   echo "$ERROR archive was not created at $archive_path" >&2

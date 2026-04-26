@@ -27,9 +27,9 @@
  * sections can be configured explicitly. The following types trigger a
  * release:
  *
- * - Feat: minor — a new feature.
- * - Fix: patch — a bug fix.
- * - Perf: patch — a performance improvement.
+ * - Feat: minor - a new feature.
+ * - Fix: patch - a bug fix.
+ * - Perf: patch - a performance improvement.
  *
  * Breaking changes (BREAKING CHANGE footer or ! suffix) always trigger a major
  * release regardless of type.
@@ -50,6 +50,7 @@ export default {
     { name: "beta", prerelease: true },
     { name: "alpha", prerelease: true },
   ],
+  tagFormat: "v${version}",
   // Order of plugins to run during the release process
   plugins: [
     // Analyze commit messages to determine the next version.
@@ -94,6 +95,8 @@ export default {
     // Bump version in package.json and package-lock.json.
     // TODO: set npmPublish true if you want to publish to npm registry.
     ["@semantic-release/npm", { npmPublish: false }],
+    // Update the changelog file with the new release notes.
+    ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
     // Package the project for distribution by creating a tar.gz archive of
     // the entire project (excluding ignored files). The next release version
     // is passed as the first argument to the script.
@@ -104,8 +107,6 @@ export default {
           "bash scripts/linux/package/release.sh ${nextRelease.version}",
       },
     ],
-    // Update the changelog file with the new release notes
-    ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
     // Commit changelog, bumped package.json and lockfile, then create git tag
     [
       "@semantic-release/git",
@@ -121,7 +122,7 @@ export default {
       {
         assets: [
           {
-            path: "release/project-dist-v${nextRelease.version}.tar.gz",
+            path: "release/project-dist-v*.tar.gz",
             label: "project-dist-v${nextRelease.version}.tar.gz",
           },
         ],
