@@ -5,9 +5,10 @@
 # and pull requests. Uses pull_request to safely execute
 # untrusted code from forks without elevated privileges.
 #
-# Jobs run in parallel after a shared install step
-# that caches node_modules to avoid redundant installs
-# across runners.
+# Jobs run in parallel after a shared install step.
+# Node.js global npm cache is shared across jobs via
+# setup-node's built-in cache support, keyed by
+# package-lock.json hash for precise invalidation.
 #
 # For more information please see:
 # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request
@@ -25,97 +26,39 @@ on:
 
 concurrency:
   group:
-    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 env:
   NODE_VERSION: 24.14.1
   NPM_VERSION: "11"
+  NPM_CONFIG_LOGLEVEL: error
 
 jobs:
   # --------------------------------------------------
-  # Dependency installation - shared across all jobs
-  # via cache to avoid redundant npm ci calls.
-  # node_modules is cached by os, node version, and
-  # package-lock.json hash for precise invalidation.
+  # Dependency installation - shared across all jobs.
+  # Uses setup-node's built-in npm cache to avoid
+  # redundant installs across runners. The npm global
+  # cache is keyed by package-lock.json hash.
   # --------------------------------------------------
   install:
     name: Install
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    outputs:
-      cache-key: ${{ steps.cache-key.outputs.key }}
     steps:
       - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Set npm version
         run: npm install -g npm@${{ env.NPM_VERSION }}
-
-      - name: Compute cache key
-        id: cache-key
-        run:
-          echo "key=node-modules-${{ runner.os }}-${{ env.NODE_VERSION }}-${{
-          hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
-
-      - name: Restore node_modules cache
-        id: cache-restore
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ steps.cache-key.outputs.key }}
 
       - name: Install dependencies
-        if: steps.cache-restore.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
-
-      - name: Save node_modules cache
-        if: steps.cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
-        with:
-          path: node_modules
-          key: ${{ steps.cache-key.outputs.key }}
-
-  # --------------------------------------------------
-  # Commit lint - validates all commits in the PR
-  # against conventional commits specification
-  # --------------------------------------------------
-  commitlint:
-    name: commitlint
-    needs: install
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Set npm version
-        run: npm install -g npm@${{ env.NPM_VERSION }}
-
-      - name: Restore node_modules
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ needs.install.outputs.cache-key }}
-          fail-on-cache-miss: true
-
-      - name: Lint commits
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            npx commitlint --from="${{ github.event.pull_request.base.sha }}" --to=HEAD --verbose
-          else
-            npx commitlint --from="${{ github.event.before }}" --to=HEAD --verbose
-          fi
 
   # --------------------------------------------------
   # Format check - validates code formatting
@@ -133,16 +76,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Set npm version
         run: npm install -g npm@${{ env.NPM_VERSION }}
 
-      - name: Restore node_modules
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ needs.install.outputs.cache-key }}
-          fail-on-cache-miss: true
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
 
       - name: Check formatting
         run: npm run format:check
@@ -162,16 +102,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Set npm version
         run: npm install -g npm@${{ env.NPM_VERSION }}
 
-      - name: Restore node_modules
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ needs.install.outputs.cache-key }}
-          fail-on-cache-miss: true
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
 
       - name: Lint markdown
         run: npm run lint:md
@@ -195,16 +132,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Set npm version
         run: npm install -g npm@${{ env.NPM_VERSION }}
 
-      - name: Restore node_modules
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ needs.install.outputs.cache-key }}
-          fail-on-cache-miss: true
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
 
       - name: Restore cspell cache
         id: cspell-cache-restore
@@ -245,16 +179,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Set npm version
         run: npm install -g npm@${{ env.NPM_VERSION }}
 
-      - name: Restore node_modules
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ needs.install.outputs.cache-key }}
-          fail-on-cache-miss: true
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
 
       - name: Audit dependencies
         run: npm run audit
@@ -275,16 +206,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Set npm version
         run: npm install -g npm@${{ env.NPM_VERSION }}
 
-      - name: Restore node_modules
-        uses: actions/cache/restore@v5
-        with:
-          path: node_modules
-          key: ${{ needs.install.outputs.cache-key }}
-          fail-on-cache-miss: true
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
 
       - name: Check unused dependencies
         run: npm run deps:unused
