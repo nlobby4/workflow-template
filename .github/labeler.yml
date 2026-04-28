@@ -41,6 +41,7 @@ ci:
   - changed-files:
       - any-glob-to-any-file:
           - .devcontainer/**
+          - .github/actions/**
           - .github/workflows/**
           - .github/labeler.yml
           - .github/dependabot.yml
