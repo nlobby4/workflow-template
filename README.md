@@ -163,7 +163,7 @@ need to make:
 | `.github/labeler.yml`              | Update label rules to match your used tooling             |
 | `.github/CODEOWNERS`               | Add code owners                                           |
 | `.github/CONTRIBUTING.md`          | Update contribution guidelines if needed                  |
-| `.github/workflows/ci-general.yml` | Add workflows for new tools if needed                     |
+| `.github/workflows/ci-general.yml` | Add workflows for tests and new tools if needed           |
 | `.github/workflows/ci-release.yml` | Update release workflow if needed                         |
 | `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack       |
 | `scripts/linux/setup.sh`           | Add any project-specific setup steps                      |
