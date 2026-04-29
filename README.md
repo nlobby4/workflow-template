@@ -192,7 +192,7 @@ automated labeler and referenced in issue and PR templates. You can set these up
 in the repositories issue tab:
 
 `feat` `fix` `docs` `chore` `ci` `build` `refactor` `perf` `test` `style`
-`revert` `breaking-change` `dependencies` `release` `security` `bug`
+`revert` `breaking-change` `dependencies` `release`
 
 ### Semantic Release
 
