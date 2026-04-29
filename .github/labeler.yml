@@ -9,18 +9,15 @@
 # https://github.com/actions/labeler
 # --------------------------------------------------
 
-# yaml-language-server: $schema=https://json.schemastore.org/pull-request-labeler.json
+# yaml-language-server: $schema=https://www.schemastore.org/pull-request-labeler.json
 
 feat:
   - head-branch: [^feat/, ^feature/]
   - title: ["^feat(\\(.+\\))?!?:"]
 
 fix:
-  - head-branch: [^fix/]
+  - head-branch: [^fix/, ^bugfix/, ^hotfix/]
   - title: ["^fix(\\(.+\\))?!?:"]
-
-bug:
-  - head-branch: [^bugfix/, ^hotfix/]
 
 docs:
   - head-branch: [^docs/]
@@ -106,8 +103,3 @@ dependencies:
 
 release:
   - head-branch: [^release/, ^v\d+\.\d+]
-  - title: ["^release(\\(.+\\))?!?:"]
-
-security:
-  - head-branch: [^security/, ^sec/]
-  - title: ["^security(\\(.+\\))?!?:"]

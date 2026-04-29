@@ -104,20 +104,8 @@ export default {
         },
       },
       scope: {
-        description: "What is the scope of this change (e.g. src, tests, docs)",
-        enum: {
-          assets: { description: "Static assets" },
-          ci: { description: "CI configuration and scripts" },
-          deps: { description: "Dependency updates" },
-          "deps-dev": { description: "Development dependency updates" },
-          docs: { description: "Documentation" },
-          meta: { description: "Project metadata and configuration" },
-          release: { description: "Release preparation and versioning" },
-          scripts: { description: "Build and utility scripts" },
-          src: { description: "Source code" },
-          templates: { description: "Template files" },
-          tests: { description: "Test files" },
-        },
+        description:
+          "What is the scope of this change (e.g. src, scripts, meta)",
       },
       subject: {
         description:
@@ -169,23 +157,6 @@ export default {
     "type-case": [2, "always", "lower-case"],
     "type-empty": [2, "never"],
     "scope-case": [2, "always", "lower-case"],
-    "scope-enum": [
-      2,
-      "always",
-      [
-        "assets",
-        "ci",
-        "deps",
-        "deps-dev",
-        "docs",
-        "meta",
-        "release",
-        "scripts",
-        "src",
-        "templates",
-        "tests",
-      ],
-    ],
     "subject-empty": [2, "never"],
     "subject-case": [
       2,
