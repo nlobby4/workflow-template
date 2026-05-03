@@ -16,7 +16,8 @@
         "streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries",
         "joshbolduc.commitlint",
         "DavidAnson.vscode-markdownlint",
-        "webpro.vscode-knip"
+        "webpro.vscode-knip",
+        "redhat.vscode-yaml"
       ]
     }
   },
