@@ -36,19 +36,6 @@ echo "$INFO Setting up repository environment..."
 check_project_root
 check_command git
 
-# Require either asdf or nvm (asdf takes precedence)
-node_manager=$(check_node_version_manager)
-# TODO: Add checks for other version managers as needed (e.g. pyenv, rbenv, etc.)
-
-# Warn if the expected version file is missing for the active manager
-if [ "$node_manager" = "asdf" ]; then
-  [ -f .tool-versions ] || echo "$WARN .tool-versions file is missing." >&2
-elif [ "$node_manager" = "nvm" ]; then
-  [ -f .nvmrc ] || echo "$WARN .nvmrc file is missing." >&2
-fi
-
-# TODO: Add warnings for missing configuration files
-
 # --------------------------
 # Configuration
 # --------------------------
@@ -65,16 +52,6 @@ echo "$OK Configured commit.template"
 # TODO: Uncomment if Git LFS is needed
 # git lfs install
 # echo "$OK Installed Git LFS"
-
-# Set node version using asdf or nvm
-if [ "$node_manager" = "asdf" ]; then
-  asdf install
-  asdf reshim
-  echo "$OK Installed node versions with asdf"
-elif [ "$node_manager" = "nvm" ]; then
-  nvm install
-  echo "$OK Installed node version with nvm"
-fi
 
 # --------------------------
 # Verification

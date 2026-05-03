@@ -83,6 +83,12 @@ RUN echo '. <(asdf completion bash)' >> /etc/bash.bashrc
 # Available plugins: https://github.com/asdf-vm
 #                    https://github.com/asdf-community
 # TODO: Add needed plugins
-RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
+RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+
+# Install tools
+COPY .tool-versions /usr/local/asdf/.tool-versions
+
+RUN cd /usr/local/asdf && asdf install \
+  && asdf reshim \
   && chown -R vscode:vscode /usr/local/asdf \
   && chmod -R 755 /usr/local/asdf

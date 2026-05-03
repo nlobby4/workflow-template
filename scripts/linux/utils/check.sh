@@ -50,21 +50,3 @@ check_project_root() {
     exit 1
   fi
 }
-
-# Check which supported version manager is available
-check_node_version_manager() {
-  if command -v asdf > /dev/null 2>&1; then
-    if ! asdf plugin list 2> /dev/null | grep -qx 'nodejs'; then
-      echo "$ERROR asdf is configured but the nodejs plugin was not found" >&2
-      exit 1
-    fi
-    echo "asdf"
-  elif command -v nvm > /dev/null 2>&1; then
-    echo "nvm"
-  else
-    echo "$ERROR asdf or nvm is required but not found in PATH" >&2
-    exit 1
-  fi
-}
-
-# TODO: Add checks for other version managers as needed (e.g. pyenv, rbenv, etc.)
