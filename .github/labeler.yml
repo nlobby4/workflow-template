@@ -85,6 +85,8 @@ style:
           - .prettierignore
           - commitlint.config.*
           - .cspell.json
+          - .markdownlint.json
+          - .markdownlintignore
 
 revert:
   - head-branch: [^revert/]
