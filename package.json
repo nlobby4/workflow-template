@@ -15,7 +15,7 @@
     "lint": "npm run lint:commits && npm run lint:md && npm run lint:spell",
     "lint:commits": "commitlint --last --verbose",
     "lint:md": "markdownlint \"**/*.md\"",
-    "lint:md:fix": "markdownlint \"**/*.md\"",
+    "lint:md:fix": "markdownlint \"**/*.md\" --fix",
     "lint:spell": "cspell lint \"**/*\" --dot --no-progress --cache --cache-strategy content",
     "prepare": "husky"
   },
