@@ -122,7 +122,7 @@ export default {
       {
         assets: [
           {
-            path: "release/project-dist-v*.tar.gz",
+            path: "dist/project-dist-v*.tar.gz",
             label: "project-dist-v${nextRelease.version}.tar.gz",
           },
         ],
