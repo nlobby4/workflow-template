@@ -3,7 +3,8 @@
   "entry": [
     "release.config.js"
   ],
-  "ignoreFiles": [
-    "dist/**"
+  "project": [
+    "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
+    "!dist/**"
   ]
 }
