@@ -124,7 +124,7 @@ page.
 | `.github/CONTRIBUTING.md`             | Contribution guidelines                                               |
 | `.husky/`                             | Git hooks for commit message validation and pre-commit checks         |
 | `scripts/linux/setup.sh`              | Environment setup script for local development                        |
-| `scripts/linux/release/release.sh`    | Release packaging script                                              |
+| `scripts/linux/package/release.sh`    | Release packaging script                                              |
 | `commitlint.config.js`                | Conventional Commits enforcement                                      |
 | `prettier.config.js`                  | Formatting rules across all file types                                |
 | `.cspell.json`                        | Spell check configuration                                             |
@@ -167,7 +167,7 @@ need to make:
 | `.github/workflows/ci-release.yml` | Update release workflow if needed                         |
 | `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack       |
 | `scripts/linux/setup.sh`           | Add any project-specific setup steps                      |
-| `scripts/linux/release/release.sh` | Adjust release packaging if needed                        |
+| `scripts/linux/package/release.sh` | Adjust release packaging if needed                        |
 | `.prettierignore`                  | Add file extensions that should use a different formatter |
 | `.tool-versions`                   | Add additional tools and versions for asdf                |
 | `.cspell.json`                     | Add project-specific words if needed                      |
