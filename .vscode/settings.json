@@ -38,9 +38,9 @@
   "files.autoSave": "off",
   "prettier.requireConfig": true,
   "search.exclude": {
-    "**/release": true,
     "**/node_modules": true,
-    ".husky/_/*": true,
-    "package-lock.json": true
+    "**/dist": true,
+    "**/.husky/_/**": true,
+    "**/package-lock.json": true
   }
 }

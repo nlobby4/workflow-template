@@ -43,8 +43,8 @@ check_command tar
 # --------------------------
 
 # Prepare the release directory and archive path
-mkdir -p release
-archive_path="release/project-dist-v${version}.tar.gz"
+mkdir -p dist
+archive_path="dist/project-dist-v${version}.tar.gz"
 
 # Remove any existing archive for this version
 rm -f "$archive_path"
@@ -66,8 +66,8 @@ rm -f "$archive_path"
 # Create a tar.gz archive of the entire project.
 tar \
   --exclude-vcs \
-  --exclude='release' \
   --exclude='node_modules' \
+  --exclude='dist' \
   -czf "$archive_path" .
 
 if [ ! -f "$archive_path" ]; then

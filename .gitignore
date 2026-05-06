@@ -91,6 +91,6 @@ logs/
 *.sav
 
 # Project rules
-release/
 node_modules/
+dist/
 # TODO: Add project-specific ignore rules

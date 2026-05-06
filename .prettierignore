@@ -94,8 +94,8 @@ logs/
 CHANGELOG.md
 
 # Project rules
-release/
 node_modules/
+dist/
 .husky/_
 # TODO: Add project-specific ignore rules
 
