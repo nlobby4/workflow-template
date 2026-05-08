@@ -151,28 +151,28 @@ lookup. These comments can be removed once you have acknowledged their purpose.
 The following table outlines the files you should modify and the changes you
 need to make:
 
-| File                               | Change                                                    |
-| ---------------------------------- | --------------------------------------------------------- |
-| `README.md`                        | Update contents                                           |
-| `LICENSE`                          | [Choose a license](https://choosealicense.com/)           |
-| `AUTHORS`                          | Add project authors                                       |
-| `ARCHITECTURE.md`                  | Create the architecture documentation                     |
-| `.gitignore`                       | Update ignored files to match your project                |
-| `.gitattributes`                   | Update line ending settings and configure lfs if needed   |
-| `.github/dependabot.yml`           | Add ignore rules if needed                                |
-| `.github/labeler.yml`              | Update label rules to match your used tooling             |
-| `.github/CODEOWNERS`               | Add code owners                                           |
-| `.github/CONTRIBUTING.md`          | Update contribution guidelines if needed                  |
-| `.github/workflows/ci-general.yml` | Add workflows for tests and new tools if needed           |
-| `.github/workflows/ci-release.yml` | Update release workflow if needed                         |
-| `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack       |
-| `scripts/linux/setup.sh`           | Add any project-specific setup steps                      |
-| `scripts/linux/package/release.sh` | Adjust release packaging if needed                        |
-| `.prettierignore`                  | Add file extensions that should use a different formatter |
-| `.tool-versions`                   | Add additional tools and versions for asdf                |
-| `.cspell.json`                     | Add project-specific words if needed                      |
-| `package.json`                     | Update values and lint-staged configuration if needed     |
-| `release.config.js`                | Update release configuration if needed                    |
+| File                               | Change                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------ |
+| `README.md`                        | Update contents                                                                |
+| `LICENSE`                          | [Choose a license](https://choosealicense.com/)                                |
+| `AUTHORS`                          | Add project authors                                                            |
+| `ARCHITECTURE.md`                  | Create the architecture documentation                                          |
+| `.gitignore`                       | [Choose a ignore template](https://github.com/github/gitignore)                |
+| `.gitattributes`                   | [Choose a attributes template](https://github.com/gitattributes/gitattributes) |
+| `.github/dependabot.yml`           | Add ignore rules if needed                                                     |
+| `.github/labeler.yml`              | Update label rules to match your used tooling                                  |
+| `.github/CODEOWNERS`               | Add code owners                                                                |
+| `.github/CONTRIBUTING.md`          | Update contribution guidelines if needed                                       |
+| `.github/workflows/ci-general.yml` | Add workflows for tests and new tools if needed                                |
+| `.github/workflows/ci-release.yml` | Update release workflow if needed                                              |
+| `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack                            |
+| `scripts/linux/setup.sh`           | Add any project-specific setup steps                                           |
+| `scripts/linux/package/release.sh` | Adjust release packaging if needed                                             |
+| `.prettierignore`                  | Add file extensions that should use a different formatter                      |
+| `.tool-versions`                   | Add additional tools and versions for asdf                                     |
+| `.cspell.json`                     | Add project-specific words if needed                                           |
+| `package.json`                     | Update values and lint-staged configuration if needed                          |
+| `release.config.js`                | Update release configuration if needed                                         |
 
 > [!TIP]
 >
