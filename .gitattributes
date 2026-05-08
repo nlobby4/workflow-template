@@ -107,4 +107,33 @@
 
 .gitattributes export-ignore
 .gitignore export-ignore
-.gitkeep export-ignore
+**/.gitkeep export-ignore
+
+# Repository metadata / dotfiles (root)
+.editorconfig text eol=lf
+.git-blame-ignore-revs text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.mailmap text eol=lf
+AUTHORS text eol=lf
+LICENSE text eol=lf
+
+# GitHub configuration
+.github/CODEOWNERS text eol=lf
+
+# Keep files (ensure text normalization)
+**/.gitkeep text eol=lf
+
+# Repository tooling/config files
+.devcontainer/Dockerfile text eol=lf
+.gitmessage text eol=lf
+.husky/commit-msg text eol=lf
+.husky/pre-commit text eol=lf
+.markdownlintignore text eol=lf
+.npmrc text eol=lf
+.nvmrc text eol=lf
+.prettierignore text eol=lf
+.tool-versions text eol=lf
+commitlint.config.js text eol=lf
+prettier.config.js text eol=lf
+release.config.js text eol=lf
