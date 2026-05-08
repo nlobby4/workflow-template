@@ -65,3 +65,5 @@ updates:
         update-types:
           - version-update:semver-major
           - version-update:semver-minor
+
+# TODO: Add additional package ecosystems or paths as needed
