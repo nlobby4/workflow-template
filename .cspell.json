@@ -19,6 +19,7 @@
     "**/.github/actions/**",
     "**/.github/workflows/**",
     "**/.gitignore",
+    "**/.gitattributes",
     "**/.prettierignore",
     "**/.npmrc",
     "**/.devcontainer/**",
