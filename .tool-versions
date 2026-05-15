@@ -2,9 +2,8 @@
 # Tool version list for asdf version manager.
 #
 # This file specifies the exact versions of tools to be used in this project.
-# asdf is automatically installed in the development container.
-# if you are not using the development container,
-# run the setup script or manually set the tool versions:
+# asdf is automatically installed and run in the development container.
+# If you are not using the development container set the tool versions manually:
 #
 # For asdf users:
 # asdf install
@@ -12,7 +11,6 @@
 # Manual setup:
 # nvm use
 # TODO: Add manual setup instructions for other tools as needed.
-# ...
 #
 # NOTE: ASDF requires the necessary plugins to be installed.
 #
@@ -22,5 +20,3 @@
 
 nodejs 24.14.1
 # TODO: Add more tools and versions as needed.
-# python 3.14.0
-# ...
