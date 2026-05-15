@@ -7,10 +7,11 @@
 # across local development environments.
 #
 # If you prefer not to use the development container,
-# you can set up your local environment by running the setup script.
+# you can set up your local environment by running the setup script,
+# and manually configuring the tool versions as specified in .tool-versions.
 # Please note that the script does not automatically install required tools:
 #
-# ./scripts/linux/setup.sh
+# . ./scripts/linux/setup.sh
 #
 # For more information, see:
 # https://github.com/devcontainers/images/tree/main/src/typescript-node
