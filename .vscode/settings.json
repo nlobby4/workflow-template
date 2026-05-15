@@ -12,11 +12,11 @@
   },
   "[markdown]": {
     "diffEditor.ignoreTrimWhitespace": false,
-    "editor.wordWrap": "on",
-    "cSpell.fixSpellingWithRenameProvider": true,
-    "cSpell.advanced.feature.useReferenceProviderWithRename": true,
+    "editor.wordWrap": "off",
     "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/"
   },
+  "cSpell.advanced.feature.useReferenceProviderWithRename": true,
+  "cSpell.fixSpellingWithRenameProvider": true,
   "cSpell.useLocallyInstalledCSpellDictionaries": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
@@ -27,13 +27,13 @@
   "editor.rulers": [80],
   "files.associations": {
     ".gitmessage": "ignore",
-    ".markdownlintignore": "ignore",
-    ".husky/*": "shellscript",
     ".mailmap": "properties",
-    ".tool-versions": "properties",
     "AUTHORS": "properties",
     "CODEOWNERS": "properties",
-    "LICENSE": "plaintext"
+    "LICENSE": "plaintext",
+    ".markdownlintignore": "ignore",
+    ".husky/*": "shellscript",
+    ".tool-versions": "properties"
   },
   "files.autoSave": "off",
   "prettier.requireConfig": true,
