@@ -1,11 +1,6 @@
 {
   "$schema": "./node_modules/knip/schema.json",
-  "entry": [
-    "release.config.js"
-  ],
   "project": [
-    "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
-    "!node_modules/**",
-    "!dist/**"
+    "!project/**"
   ]
 }
