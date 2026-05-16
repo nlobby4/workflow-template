@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "audit": "npm audit --omit=dev --audit-level=high",
+    "audit:dev": "npm audit --only=dev --audit-level=high",
     "check": "npm run format:check && npm run lint && npm run deps:unused && npm run audit",
     "commit": "git-cz",
     "deps:check": "npm outdated",
@@ -16,18 +17,18 @@
     "lint:commits": "commitlint --last --verbose",
     "lint:md": "markdownlint \"**/*.md\"",
     "lint:md:fix": "markdownlint \"**/*.md\" --fix",
-    "lint:spell": "cspell lint \"**/*\" --dot --no-progress --cache --cache-strategy content",
+    "lint:spell": "cspell lint \"**/*\" --dot --no-progress --no-must-find-files --cache --cache-strategy content",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.md": [
       "prettier --write",
-      "markdownlint . --fix",
-      "cspell lint . --no-progress"
+      "markdownlint --fix",
+      "cspell lint --no-progress --no-must-find-files"
     ],
     "*.{js,ts,json,yaml,yml,sh}": [
       "prettier --write",
-      "cspell lint . --no-progress"
+      "cspell lint --no-progress --no-must-find-files"
     ]
   },
   "config": {
@@ -58,7 +59,7 @@
     "prettier-plugin-yaml": "1.1.3"
   },
   "engines": {
-    "node": ">=24.14.1 <25",
-    "npm": ">=11 <12"
+    "node": ">=24.14.1",
+    "npm": ">=11"
   }
 }
