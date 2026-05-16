@@ -55,6 +55,7 @@
 !/AUTHORS
 !/CHANGELOG.md
 !/*.config.js
+!/dictionary.txt
 !/LICENSE
 !/README_TEMPLATE.md
 !/README.md
