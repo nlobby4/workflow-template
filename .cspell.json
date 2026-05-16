@@ -3,38 +3,42 @@
     "cacheLocation": ".cache/.cspellcache"
   },
   "dictionaries": [
+    "companies",
     "softwareTerms",
     "misc",
-    "bash",
     "typescript",
     "node",
+    "php",
+    "go",
+    "python",
+    "powershell",
     "html",
     "css",
+    "cpp",
+    "csharp",
+    "latex",
+    "bash",
     "fonts",
     "filetypes",
-    "npm"
+    "npm",
+    "project-words"
   ],
+  "dictionaryDefinitions": [
+    {
+      "name": "project-words",
+      "path": "./dictionary.txt",
+      "addWords": true
+    }
+  ],
+  "flagWords": [],
   "ignorePaths": [
-    "**/.git/**",
-    "**/.github/actions/**",
-    "**/.github/workflows/**",
-    "**/.gitignore",
-    "**/.gitattributes",
-    "**/.prettierignore",
-    "**/.npmrc",
-    "**/.devcontainer/**",
-    "**/.vscode/**",
-    "**/.husky/**",
-    "**/scripts/**"
+    ".git",
+    ".husky/_",
+    "dictionary.txt",
+    "package-lock.json"
   ],
-  "language": "en,en-GB,en-US",
+  "language": "en",
+  "readonly": true,
   "useGitignore": true,
-  "version": "0.2",
-  "words": [
-    ".gitmessage",
-    "nlobby4",
-    "flockmod",
-    "sphoon",
-    "exquz3me"
-  ]
+  "version": "0.2"
 }
