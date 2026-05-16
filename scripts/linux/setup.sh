@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # --------------------------------------------------
 # Environment setup script for the repository.
@@ -10,7 +10,7 @@
 # however it can also be run manually in a local environment if desired.
 # Please note that the script does not automatically install required tools:
 #
-# ./scripts/linux/setup.sh
+# . ./scripts/linux/setup.sh
 # --------------------------------------------------
 
 # Exit immediately if a command exits with a non-zero status

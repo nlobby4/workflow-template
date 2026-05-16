@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # --------------------------------------------------
 # Git attributes verification script.
@@ -7,7 +7,7 @@
 # rule in .gitattributes (e.g. to enforce consistent text handling).
 #
 # Usage:
-# ./scripts/linux/utils/attributes.sh
+# . ./scripts/linux/utils/attributes.sh
 # --------------------------------------------------
 
 missing_attributes=$(git ls-files | git check-attr -a --stdin | grep 'text: auto' || printf '\n')
