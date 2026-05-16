@@ -33,7 +33,8 @@
     "LICENSE": "plaintext",
     ".markdownlintignore": "ignore",
     ".husky/*": "shellscript",
-    ".tool-versions": "properties"
+    ".tool-versions": "properties",
+    "dictionary.txt": "properties"
   },
   "files.autoSave": "off",
   "prettier.requireConfig": true,
