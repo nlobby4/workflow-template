@@ -46,7 +46,7 @@ jobs:
       - uses: actions/labeler@v6
         with:
           configuration-path: .github/labeler.yml
-          sync-labels: false
+          sync-labels: true
 
   # --------------------------------------------------
   # Dependency review - checks for known vulnerabilities
@@ -60,10 +60,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
       - uses: actions/dependency-review-action@v4
+
   # --------------------------------------------------
   # PR title lint - validates the pull request title
   # against conventional commits specification.
@@ -104,6 +102,7 @@ jobs:
             templates
             tests
           requireScope: false
+          validateSingleCommit: true
           subjectPattern: ^(?![A-Z.]).+(?<!\.)$
           subjectPatternError: |
             The subject "{subject}" in the PR title "{title}" must start with
