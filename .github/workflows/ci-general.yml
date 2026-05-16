@@ -27,10 +27,32 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: 24.14.1
   NPM_CONFIG_LOGLEVEL: error
 
 jobs:
+  # --------------------------------------------------
+  # Commit check - validates the pull request branch name and
+  # commit messages against conventional commits specification.
+  # --------------------------------------------------
+  commit-check:
+    name: commit-check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: commit-check/commit-check-action@v2
+        with:
+          message: true
+          branch: true
+          author-name: false
+          author-email: false
+          job-summary: true
+          pr-comments: ${{ github.event_name == 'pull_request' }}
+
   # --------------------------------------------------
   # Audit - checks for known vulnerabilities in
   # production dependencies
@@ -45,7 +67,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -68,7 +90,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -90,7 +112,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -101,9 +123,9 @@ jobs:
 
   # --------------------------------------------------
   # Spell check - validates spelling across all files
-  # using cspell. Cache is keyed by package-lock.json
-  # and .cspell.json only since dictionary changes
-  # are the only reason to invalidate the cache,
+  # using cspell. Cache is keyed by package-lock.json,
+  # .cspell.json and dictionary.txt only since dictionary
+  # changes are the only reason to invalidate the cache,
   # not file content changes.
   # --------------------------------------------------
   spellcheck:
@@ -116,7 +138,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -129,7 +151,7 @@ jobs:
           path: .cache
           key: >-
             cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
-            '.cspell.json') }}
+            '.cspell.json', 'dictionary.txt') }}
           restore-keys: |
             cspell-${{ runner.os }}-
 
@@ -143,7 +165,7 @@ jobs:
           path: .cache
           key: >-
             cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
-            '.cspell.json') }}
+            '.cspell.json', 'dictionary.txt') }}
 
   # --------------------------------------------------
   # Knip - checks for unused dependencies, exports,
@@ -159,7 +181,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
