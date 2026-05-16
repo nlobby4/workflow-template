@@ -51,7 +51,7 @@ jobs:
           author-name: false
           author-email: false
           job-summary: true
-          pr-comments: ${{ github.event_name == 'pull_request' }}
+          pr-comments: false
 
   # --------------------------------------------------
   # Audit - checks for known vulnerabilities in
