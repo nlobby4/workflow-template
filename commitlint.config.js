@@ -106,6 +106,52 @@ export default {
       scope: {
         description:
           "What is the scope of this change (e.g. src, scripts, meta)",
+        enum: {
+          assets: {
+            description: "Static assets",
+            title: "assets",
+          },
+          ci: {
+            description: "CI configuration",
+            title: "ci",
+          },
+          deps: {
+            description: "Production dependencies",
+            title: "deps",
+          },
+          "deps-dev": {
+            description: "Development dependencies",
+            title: "deps-dev",
+          },
+          docs: {
+            description: "Documentation",
+            title: "docs",
+          },
+          meta: {
+            description: "Repository meta files",
+            title: "meta",
+          },
+          release: {
+            description: "Release tooling",
+            title: "release",
+          },
+          scripts: {
+            description: "Repository scripts",
+            title: "scripts",
+          },
+          src: {
+            description: "Source code",
+            title: "src",
+          },
+          templates: {
+            description: "Templates",
+            title: "templates",
+          },
+          tests: {
+            description: "Tests",
+            title: "tests",
+          },
+        },
       },
       subject: {
         description:
@@ -156,7 +202,24 @@ export default {
     ],
     "type-case": [2, "always", "lower-case"],
     "type-empty": [2, "never"],
-    "scope-case": [2, "always", "lower-case"],
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "assets",
+        "ci",
+        "deps",
+        "deps-dev",
+        "docs",
+        "meta",
+        "release",
+        "scripts",
+        "src",
+        "templates",
+        "tests",
+      ],
+    ],
+    "scope-case": [2, "always", "kebab-case"],
     "subject-empty": [2, "never"],
     "subject-case": [
       2,
@@ -168,5 +231,16 @@ export default {
     "body-max-line-length": [1, "always", 100],
     "footer-max-line-length": [1, "always", 100],
     "footer-leading-blank": [1, "always"],
+    "no-empty-scope": [2, "always"],
   },
+  plugins: [
+    {
+      rules: {
+        "no-empty-scope": ({ header }) => [
+          !header.includes("():"),
+          "Scope cannot be empty. Use 'type: subject' or 'type(scope): subject'.",
+        ],
+      },
+    },
+  ],
 };
