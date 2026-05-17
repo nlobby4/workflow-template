@@ -11,7 +11,7 @@
 # and manually configuring the tool versions as specified in .tool-versions.
 # Please note that the script does not automatically install required tools:
 #
-# . ./scripts/linux/setup.sh
+# ./scripts/linux/setup.sh
 #
 # For more information, see:
 # https://github.com/devcontainers/images/tree/main/src/typescript-node

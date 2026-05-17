@@ -14,7 +14,7 @@
 # You can run the helper script to determine files that
 # are missing an attribute:
 #
-# . ./scripts/linux/utils/attributes.sh
+# ./scripts/linux/utils/attributes.sh
 #
 # For more information, see:
 # https://git-lfs.com/
