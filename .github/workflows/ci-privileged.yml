@@ -20,7 +20,7 @@ name: CI Privileged
 
 on:
   pull_request_target:
-    branches: [main]
+    branches: [main, alpha, beta]
     types:
       - opened
       - reopened

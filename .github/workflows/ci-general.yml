@@ -19,7 +19,7 @@ name: CI General
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, alpha, beta]
 
 concurrency:
   group:
