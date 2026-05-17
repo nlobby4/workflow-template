@@ -12,7 +12,7 @@
 
 <a id="readme-top"></a>
 
-<h1 align="center" style="padding-bottom: 0;">
+<h1 align="center">
 
 ![nlobby4][logo]![banner][banner]
 
@@ -26,7 +26,6 @@
 
 <!-- ? ############################################# -->
 <!-- ? Description -->
-<!-- TODO: Create a short repository description -->
 
 This repository is a bare bones template for creating clean and consistent
 repositories across the entire nlobby4 codebase. It includes reusable CI
@@ -43,14 +42,11 @@ first to see if there is already a more specific template that suits your needs.
 <!-- ? URLs -->
 <!-- markdownlint-disable MD013 -->
 
-<!-- TODO: Update the URLs below to match your repository -->
-
 <div align="center">
   <span>ⓘ <a href="https://nlobby4.org/news/">[NEWS]</a></span>
   <span> 🖂 <a href="mailto:contact@nlobby4.org">[CONTACT]</a></span>
-  <span> 🖿 <a href="https://nlobby4.github.io/workflow-template/">[DEMO]</a></span>
-  <span> ★ <a href="https://github.com/nlobby4/workflow-template/issues/new?template=feature.yml">[REQUEST FEATURE]</a></span>
-  <span> &#x26A0;&#xFE0E; <a href="https://github.com/nlobby4/workflow-template/issues/new?template=bug.yml">[REPORT BUG]</a></span>
+  <span> ★ <a href="../../issues/new?template=feature.yml">[REQUEST FEATURE]</a></span>
+  <span> &#x26A0;&#xFE0E; <a href="../../issues/new?template=bug.yml">[REPORT BUG]</a></span>
 </div>
 
 <br>
@@ -79,9 +75,6 @@ first to see if there is already a more specific template that suits your needs.
 
 <!-- ? ############################################# -->
 <!-- ? Main Area -->
-<!-- TODO: Write your basic readme markdown here -->
-<!-- TODO: Add a "back to top" button and horizontal bar for every section -->
-<!-- TODO: Update the table of contents accordingly -->
 
 ## Usage
 
@@ -89,15 +82,9 @@ There are two ways to use this template:
 
 ### A. Copy to an Existing Repository
 
-If you already have an existing repository, copy and paste the specific files
-you need, or
-[download](https://github.com/nlobby4/workflow-template/archive/refs/heads/main.zip)
-the repository as a ZIP file.
-
-> [!IMPORTANT]
->
-> Do not clone this repository directly unless you intend to contribute to the
-> template itself.
+If you already have an existing repository, you can easily copy and paste the
+specific files you need, or [download](./archive/refs/heads/main.zip) the
+repository as a ZIP file.
 
 ### B. Start a New Repository
 
@@ -106,30 +93,37 @@ creating a new repository within the organization via GitHub. For external
 collaborators, use the **Use this template** button at the top right of this
 page.
 
+> [!IMPORTANT]
+>
+> Do not clone this repository directly unless you intend to contribute to the
+> template itself.
+
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
 ---
 
 ## What Is Included
 
-| Path                                  | Purpose                                                               |
-| ------------------------------------- | --------------------------------------------------------------------- |
-| `.devcontainer/`                      | Dev container with Node.js via asdf, pre-installed VS Code extensions |
-| `.github/workflows/ci-general.yml`    | Formatting, linting, spelling, audit, knip                            |
-| `.github/workflows/ci-privileged.yml` | Label automation and dependency review on pull requests               |
-| `.github/workflows/ci-release.yml`    | Automated semantic versioning and GitHub release via semantic-release |
-| `.github/dependabot.yml`              | Weekly dependency updates for npm and GitHub Actions                  |
-| `.github/labeler.yml`                 | Automatic PR labeling by branch name, title, and changed files        |
-| `.github/CODEOWNERS`                  | Code ownership definitions                                            |
-| `.github/CONTRIBUTING.md`             | Contribution guidelines                                               |
-| `.husky/`                             | Git hooks for commit message validation and pre-commit checks         |
-| `scripts/linux/setup.sh`              | Environment setup script for local development                        |
-| `scripts/linux/package/release.sh`    | Release packaging script                                              |
-| `commitlint.config.js`                | Conventional Commits enforcement                                      |
-| `prettier.config.js`                  | Formatting rules across all file types                                |
-| `.cspell.json`                        | Spell check configuration                                             |
-| `knip.json`                           | Unused dependency and export detection                                |
-| `release.config.js`                   | semantic-release configuration                                        |
+| Path                                  | Purpose                                                                                                           |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `.devcontainer/`                      | Dev container with Node.js via asdf, pre-installed VS Code extensions                                             |
+| `.github/workflows/ci-general.yml`    | Audit (npm), formatting (prettier), linting (markdownlint), spelling (cspell), unused dependency detection (knip) |
+| `.github/workflows/ci-privileged.yml` | Label automation, dependency review, PR title linting                                                             |
+| `.github/workflows/ci-release.yml`    | Release workflow with semantic versioning and GitHub release via semantic-release                                 |
+| `.github/dependabot.yml`              | Weekly dependency updates for GitHub Actions and npm packages                                                     |
+| `.github/labeler.yml`                 | Automatic PR labeling by branch name, title, and changed files                                                    |
+| `.github/CODEOWNERS`                  | Code ownership definitions for automatic PR review assignments                                                    |
+| `.husky/`                             | Git hooks for conventional commit message linting and lint-staged                                                 |
+| `scripts/linux/setup.sh`              | Environment setup script for local development                                                                    |
+| `scripts/linux/package/release.sh`    | Release packaging script                                                                                          |
+| `.cspell.json`                        | Spell check configuration                                                                                         |
+| `.editorconfig`                       | Editor formatting configuration                                                                                   |
+| `.markdownlint.json`                  | Markdown linting rules                                                                                            |
+| `commitlint.config.js`                | Conventional commit enforcement                                                                                   |
+| `prettier.config.js`                  | Formatting rules                                                                                                  |
+| `knip.json`                           | Unused dependency and export detection                                                                            |
+| `release.config.js`                   | Semantic-release configuration                                                                                    |
+| `.nvmrc`, `.npmrc`, `.tool-versions`  | Toolchain pinning                                                                                                 |
 
 > [!NOTE]
 >
@@ -144,40 +138,41 @@ page.
 
 ## Apply These Changes
 
-After adding the template to your project, you will have to make some minor
-adjustments. The files include `TODO:` comments with instructions for easy
+After using this template to start a new project, you will have to make some
+minor adjustments. The files include `TODO:` comments with instructions for easy
 lookup. These comments can be removed once you have acknowledged their purpose.
 
 The following table outlines the files you should modify and the changes you
 need to make:
 
-| File                               | Change                                                                         |
-| ---------------------------------- | ------------------------------------------------------------------------------ |
-| `README.md`                        | Update contents                                                                |
-| `LICENSE`                          | [Choose a license](https://choosealicense.com/)                                |
-| `AUTHORS`                          | Add project authors                                                            |
-| `ARCHITECTURE.md`                  | Create the architecture documentation                                          |
-| `.gitignore`                       | [Choose a ignore template](https://github.com/github/gitignore)                |
-| `.gitattributes`                   | [Choose a attributes template](https://github.com/gitattributes/gitattributes) |
-| `.github/dependabot.yml`           | Add ignore rules if needed                                                     |
-| `.github/labeler.yml`              | Update label rules to match your used tooling                                  |
-| `.github/CODEOWNERS`               | Add code owners                                                                |
-| `.github/CONTRIBUTING.md`          | Update contribution guidelines if needed                                       |
-| `.github/workflows/ci-general.yml` | Add workflows for tests and new tools if needed                                |
-| `.github/workflows/ci-release.yml` | Update release workflow if needed                                              |
-| `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack                            |
-| `scripts/linux/setup.sh`           | Add any project-specific setup steps                                           |
-| `scripts/linux/package/release.sh` | Adjust release packaging if needed                                             |
-| `.prettierignore`                  | Add file extensions that should use a different formatter                      |
-| `.tool-versions`                   | Add additional tools and versions for asdf                                     |
-| `.cspell.json`                     | Add project-specific words if needed                                           |
-| `package.json`                     | Update values and lint-staged configuration if needed                          |
-| `release.config.js`                | Update release configuration if needed                                         |
+| File                               | Change                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------- |
+| `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack                             |
+| `.github/CODEOWNERS`               | Add code owners                                                                 |
+| `.github/dependabot.yml`           | Add ignore rules if needed                                                      |
+| `.github/labeler.yml`              | Update label rules to match your used tooling                                   |
+| `.github/workflows/ci-general.yml` | Add workflows for tests and new tools if needed                                 |
+| `project/.gitignore`               | [Choose an ignore template](https://github.com/github/gitignore)                |
+| `scripts/linux/setup.sh`           | Add any project-specific setup steps                                            |
+| `.gitattributes`                   | [Choose an attributes template](https://github.com/gitattributes/gitattributes) |
+| `.gitignore`                       | Whitelist new configuration files and generated folders                         |
+| `.mailmap`                         | Alias your flockmod username                                                    |
+| `.prettierignore`                  | Add file extensions that should use a different formatter                       |
+| `.tool-versions`                   | Add additional tools and versions for asdf                                      |
+| `AUTHORS`                          | Add project maintainers                                                         |
+| `dictionary.txt`                   | Maintain a dictionary of project-specific words                                 |
+| `LICENSE`                          | [Choose a license](https://choosealicense.com/)                                 |
+| `package.json`                     | Update values and add scripts for new tools                                     |
+| `README_TEMPLATE.md`               | Use this as the base for your own `README.md`                                   |
+| `ARCHITECTURE.md`                  | Optionally maintain a architecture documentation                                |
+| `release.config.js`                | Configure npm publishing if needed                                              |
 
-> [!TIP]
+> [!NOTE]
 >
-> You can remove the `LICENSE` file if you are setting up a private repository
-> and do not plan on publishing your code.
+> The community markdown files and PR/issue templates are provided by the
+> organizations [.github](https://github.com/nlobby4/.github) repository. If you
+> need to adjust them, copy the respective file into the `.github` directory and
+> make the necessary changes.
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
