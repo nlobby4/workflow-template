@@ -1,18 +1,19 @@
 # --------------------------------------------------
 # CI Release workflow.
 #
-# Triggers semantic-release on pushes to release
-# branches after a pull request is merged. Analyzes
-# commits since the last release, determines the next
+# Triggers semantic-release manually via workflow_dispatch.
+# Analyzes commits since the last release, determines the next
 # version, generates a changelog, packages the project,
 # creates a git tag, and publishes a GitHub release via
 # a GitHub App with branch protection bypass permissions.
 #
-# Commit types that trigger a release:
-#   feat  -> minor
-#   fix   -> patch
-#   perf  -> patch
-#   breaking change (any type) -> major
+# Sematic release will include the following commit types
+# into the changelog and use highest version bump:
+#
+# breaking change (any type) -> major
+# feat  -> minor
+# fix   -> patch
+# perf  -> patch
 #
 # For more information please see:
 # https://semantic-release.gitbook.io/semantic-release
@@ -23,11 +24,6 @@
 name: CI Release
 
 on:
-  push:
-    branches:
-      - main
-      - beta
-      - alpha
   workflow_dispatch:
 
 concurrency:
