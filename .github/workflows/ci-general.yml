@@ -31,29 +31,6 @@ env:
 
 jobs:
   # --------------------------------------------------
-  # Commit check - validates the pull request branch name and
-  # commit messages against conventional commits specification.
-  # --------------------------------------------------
-  commit-check:
-    name: commit-check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - uses: commit-check/commit-check-action@2239d8980732e84a380552fdd71e1d49e149baf3
-        with:
-          message: true
-          branch: true
-          author-name: false
-          author-email: false
-          job-summary: true
-          pr-comments: false
-
-  # --------------------------------------------------
   # Audit - checks for known vulnerabilities in
   # production dependencies
   # --------------------------------------------------
