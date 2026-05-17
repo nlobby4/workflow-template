@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: commit-check/commit-check-action@v2
+      - uses: commit-check/commit-check-action@2239d8980732e84a380552fdd71e1d49e149baf3
         with:
           message: true
           branch: true
