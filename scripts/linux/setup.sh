@@ -8,8 +8,9 @@
 #
 # This script is used by the development container,
 # however it can also be run manually in a local environment if desired.
-# Please note that the script does not automatically install required tools:
+# Please note that the script does not automatically install required tools.
 #
+# Usage:
 # ./scripts/linux/setup.sh
 # --------------------------------------------------
 
@@ -48,11 +49,6 @@ echo "$OK Configured blame.ignoreRevsFile"
 git config commit.template .gitmessage
 echo "$OK Configured commit.template"
 
-# Install Git LFS (Large File Storage)
-# TODO: Uncomment if Git LFS is needed
-# git lfs install
-# echo "$OK Installed Git LFS"
-
 # --------------------------
 # Verification
 # --------------------------
@@ -65,20 +61,38 @@ echo "Uses node version: $(node -v)"
 echo "Uses npm version: $(npm -v)"
 
 # --------------------------
+# Tools
+# --------------------------
+
+# Install tool versions via asdf if running locally.
+# In a devcontainer, asdf install is handled by the Dockerfile.
+if [ -z "${REMOTE_CONTAINERS:-}" ] && [ -z "${CODESPACES:-}" ]; then
+  if [ ! -f .tool-versions ]; then
+    echo "$WARN No .tool-versions file found"
+  elif ! command -v asdf &> /dev/null; then
+    echo "$WARN asdf not found, tool versions must be installed manually"
+  else
+    echo "Installing tool versions via asdf..."
+    asdf install
+    echo "$OK Tool versions installed"
+  fi
+fi
+
+# --------------------------
 # Dependencies
 # --------------------------
 
 # Install Node.js dependencies
 if [ -f package-lock.json ]; then
   echo "Installing Node.js dependencies with npm ci..."
-  npm ci --loglevel=error
+  npm ci --silent
   echo "$OK Node.js dependencies installed"
 elif [ -f package.json ]; then
   echo "Installing Node.js dependencies with npm install..."
-  npm install --loglevel=error
+  npm install --silent
   echo "$OK Node.js dependencies installed"
 fi
 
 # TODO: Install further dependencies as needed (e.g. Python, Ruby, Go, etc.)
 
-echo "Environment setup complete! Repository is ready to use."
+echo "Environment setup complete!"
