@@ -4,17 +4,11 @@
  * extends the standard configuration and defines custom rules for commit types,
  * scopes, and message formatting.
  *
- * These rules are also enforced in CI to avoid un-parseable commit messages.
  * Commitlint uses the prompt configuration to provide an interactive commit
- * message wizard that enforces the same rules.
+ * message wizard that enforces the same rules. Run the following command to use
+ * the commit message wizard:
  *
- * **Commit Message Format:**
- *
- * <type>(<scope>): <subject>
- *
- * - Type: The type of change (e.g., feat, fix, docs).
- * - Scope: The area of the codebase affected (e.g., src, tests).
- * - Subject: A brief description of the change.
+ *     npm run commit
  *
  * @file Commitlint configuration file.
  *
