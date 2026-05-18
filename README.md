@@ -83,7 +83,7 @@ There are two ways to use this template:
 ### A. Copy to an Existing Repository
 
 If you already have an existing repository, you can easily copy and paste the
-specific files you need, or [download](./archive/refs/heads/main.zip) the
+specific files you need, or [download](../../archive/refs/heads/main.zip) the
 repository as a ZIP file.
 
 ### B. Start a New Repository
@@ -109,7 +109,8 @@ page.
 | `.devcontainer/`                      | Dev container with Node.js via asdf, pre-installed VS Code extensions                                             |
 | `.github/workflows/ci-general.yml`    | Audit (npm), formatting (prettier), linting (markdownlint), spelling (cspell), unused dependency detection (knip) |
 | `.github/workflows/ci-privileged.yml` | Label automation, dependency review, PR title linting                                                             |
-| `.github/workflows/ci-release.yml`    | Release workflow with semantic versioning and GitHub release via semantic-release                                 |
+| `.github/workflows/ci-release.yml`    | Release workflow with semantic versioning via semantic-release                                                    |
+| `.github/workflows/ci-test.yml`       | Test workflow running the test script specified in `package.json`                                                 |
 | `.github/dependabot.yml`              | Weekly dependency updates for GitHub Actions and npm packages                                                     |
 | `.github/labeler.yml`                 | Automatic PR labeling by branch name, title, and changed files                                                    |
 | `.github/CODEOWNERS`                  | Code ownership definitions for automatic PR review assignments                                                    |
@@ -119,11 +120,10 @@ page.
 | `.cspell.json`                        | Spell check configuration                                                                                         |
 | `.editorconfig`                       | Editor formatting configuration                                                                                   |
 | `.markdownlint.json`                  | Markdown linting rules                                                                                            |
-| `commitlint.config.js`                | Conventional commit enforcement                                                                                   |
+| `commitlint.config.js`                | Conventional commit configuration with a commitizen prompt wizard                                                 |
 | `prettier.config.js`                  | Formatting rules                                                                                                  |
 | `knip.json`                           | Unused dependency and export detection                                                                            |
 | `release.config.js`                   | Semantic-release configuration                                                                                    |
-| `.nvmrc`, `.npmrc`, `.tool-versions`  | Toolchain pinning                                                                                                 |
 
 > [!NOTE]
 >
@@ -151,20 +151,18 @@ need to make:
 | `.github/CODEOWNERS`               | Add code owners                                                                 |
 | `.github/dependabot.yml`           | Add ignore rules if needed                                                      |
 | `.github/labeler.yml`              | Update label rules to match your used tooling                                   |
-| `.github/workflows/ci-general.yml` | Add workflows for tests and new tools if needed                                 |
+| `.github/workflows/ci-general.yml` | Add jobs for new tools if needed                                                |
 | `project/.gitignore`               | [Choose an ignore template](https://github.com/github/gitignore)                |
 | `scripts/linux/setup.sh`           | Add any project-specific setup steps                                            |
 | `.gitattributes`                   | [Choose an attributes template](https://github.com/gitattributes/gitattributes) |
 | `.gitignore`                       | Whitelist new configuration files and generated folders                         |
 | `.mailmap`                         | Alias your flockmod username                                                    |
-| `.prettierignore`                  | Add file extensions that should use a different formatter                       |
-| `.tool-versions`                   | Add additional tools and versions for asdf                                      |
+| `.tool-versions`                   | Add additional tools and their versions for asdf                                |
 | `AUTHORS`                          | Add project maintainers                                                         |
 | `dictionary.txt`                   | Maintain a dictionary of project-specific words                                 |
 | `LICENSE`                          | [Choose a license](https://choosealicense.com/)                                 |
-| `package.json`                     | Update values and add scripts for new tools                                     |
+| `package.json`                     | Update values and add scripts for new tools and tests                           |
 | `README_TEMPLATE.md`               | Use this as the base for your own `README.md`                                   |
-| `ARCHITECTURE.md`                  | Optionally maintain a architecture documentation                                |
 | `release.config.js`                | Configure npm publishing if needed                                              |
 
 > [!NOTE]
