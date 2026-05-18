@@ -5,29 +5,18 @@
 # treated as valid by cspell.
 # --------------------------------------------------
 
-# Extension authors
 amannn
 esbenp
 joshbolduc
 Anson
 webpro
-
-# .gitattributes
 bibtex
 astextplain
 adoc
-
-# asdf
 reshim
-
-# .gitmessage
 gitmessage
-
-# npmrc
 mintimeout
 maxtimeout
-
-# project words
 exquz3me
 flockmod
 nlobby4
