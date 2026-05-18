@@ -1,7 +1,7 @@
 # --------------------------------------------------
 # CI General workflow.
 #
-# Handles code quality checks for pull requests to main.
+# Handles code quality checks for pull requests to release branches.
 # Uses pull_request to safely execute untrusted code
 # from forks without elevated privileges.
 #
