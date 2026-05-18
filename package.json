@@ -26,7 +26,7 @@
       "markdownlint --fix",
       "cspell lint --no-progress --no-must-find-files"
     ],
-    "*.{js,ts,json,yaml,yml,sh}": [
+    "*.{js,json,yaml,yml,sh}": [
       "prettier --write",
       "cspell lint --no-progress --no-must-find-files"
     ]
