@@ -18,7 +18,8 @@
     "lint:md": "markdownlint \"**/*.md\"",
     "lint:md:fix": "markdownlint \"**/*.md\" --fix",
     "lint:spell": "cspell lint \"**/*\" --dot --no-progress --no-must-find-files --cache --cache-strategy content",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "lint-staged": {
     "*.md": [
