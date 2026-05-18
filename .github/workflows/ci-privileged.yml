@@ -11,7 +11,7 @@
 # would expose repository secrets to untrusted code.
 #
 # For more information please see:
-# https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request_target
+# https://docs.github.com/en/actions/writing-workflows
 # --------------------------------------------------
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json

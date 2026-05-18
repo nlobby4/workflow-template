@@ -16,9 +16,11 @@
 # Provenance attestations are published automatically by npm when using trusted
 # publishing from GitHub Actions.
 #
-# NOTE: The CI workflow must run on Node >= 22.14.0 and npm >= 11.5.
+# NOTE: The CI workflow must run on Node >= 22.14.0 and npm >= 11.5 for npm OIDC
+#       trusted publishing support.
 #
 # For more information please see:
+# https://docs.github.com/en/actions/writing-workflows
 # https://semantic-release.gitbook.io/semantic-release
 # https://docs.npmjs.com/trusted-publishers
 # --------------------------------------------------
