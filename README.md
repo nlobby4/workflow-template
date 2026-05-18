@@ -161,7 +161,7 @@ need to make:
 | `AUTHORS`                          | Add project maintainers                                                         |
 | `dictionary.txt`                   | Maintain a dictionary of project-specific words                                 |
 | `LICENSE`                          | [Choose a license](https://choosealicense.com/)                                 |
-| `package.json`                     | Update values and add scripts for new tools and tests                           |
+| `package.json`                     | Update values and add scripts for new tools, tests and build                    |
 | `README_TEMPLATE.md`               | Use this as the base for your own `README.md`                                   |
 | `release.config.js`                | Configure npm publishing if needed                                              |
 
