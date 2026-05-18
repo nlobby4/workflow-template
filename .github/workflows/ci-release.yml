@@ -36,9 +36,6 @@ concurrency:
   group: release
   cancel-in-progress: false
 
-env:
-  NPM_CONFIG_LOGLEVEL: error
-
 jobs:
   # --------------------------------------------------
   # Semantic Release - analyzes commits, bumps version,

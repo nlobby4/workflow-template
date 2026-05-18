@@ -26,9 +26,6 @@ concurrency:
     ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
-env:
-  NPM_CONFIG_LOGLEVEL: error
-
 jobs:
   # --------------------------------------------------
   # Audit - checks for known vulnerabilities in
