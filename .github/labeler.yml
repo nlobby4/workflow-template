@@ -74,7 +74,7 @@ test:
           - "**/tests/**"
           - "**/__tests__/**"
 
-# TODO: Add further paths for used linter configurations
+# TODO: Add further paths for used linter configuration files
 style:
   - head-branch: [^style/]
   - title: ["^style(\\(.+\\))?!?:"]
@@ -82,11 +82,9 @@ style:
       - any-glob-to-any-file:
           - "**/.editorconfig"
           - "**/prettier.config.*"
-          - "**/.prettierignore"
           - "**/commitlint.config.*"
           - "**/.cspell.json"
           - "**/.markdownlint.json"
-          - "**/.markdownlintignore"
 
 revert:
   - head-branch: [^revert/]
