@@ -14,7 +14,7 @@
 # ./scripts/linux/setup.sh
 #
 # For more information, see:
-# https://github.com/devcontainers/images/tree/main/src/typescript-node
+# https://github.com/devcontainers/images
 # https://containers.dev/supporting
 # --------------------------------------------------
 

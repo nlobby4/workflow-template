@@ -67,5 +67,4 @@ updates:
         update-types:
           - version-update:semver-major
           - version-update:semver-minor
-      # TODO: Add ignore rules for major bumps you want to defer
-      # TODO: Add additional package ecosystems or paths as needed
+  # TODO: Add additional package ecosystems as needed

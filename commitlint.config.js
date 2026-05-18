@@ -5,10 +5,8 @@
  * scopes, and message formatting.
  *
  * Commitlint uses the prompt configuration to provide an interactive commit
- * message wizard that enforces the same rules. Run the following command to use
- * the commit message wizard:
- *
- *     npm run commit
+ * message wizard that enforces the same rules. Use `npm run commit` to start
+ * the interactive prompt that guides you through the correct format.
  *
  * @file Commitlint configuration file.
  *
