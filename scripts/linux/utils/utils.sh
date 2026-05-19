@@ -1,7 +1,7 @@
 # This file is sourced, not executed
 
 # --------------------------------------------------
-# Check functions for the repository scripts.
+# Utility functions for the repository scripts.
 #
 # This script is sourced by other scripts to provide check functions.
 #
@@ -16,8 +16,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 
 # Guard against multiple sourcing
-[ -n "${_CHECK_LOADED:-}" ] && return
-_CHECK_LOADED=1
+[ -n "${_UTIL_LOADED:-}" ] && return
+_UTIL_LOADED=1
 
 # Load dependent scripts
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -49,4 +49,14 @@ check_project_root() {
     echo "$ERROR run this script from repository root" >&2
     exit 1
   fi
+}
+
+# Read a field from package.json and write it to stdout
+json_field() {
+  node -e "
+    const p = JSON.parse(require('fs').readFileSync('$1', 'utf8'));
+    const v = '$2'.split('.').reduce((o, k) => o?.[k], p);
+    if (v === undefined) process.exit(1);
+    process.stdout.write(String(v));
+  " 2> /dev/null
 }

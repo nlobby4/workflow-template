@@ -26,7 +26,7 @@ set -euo pipefail
 # Load dependent scripts
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/utils/variables.sh"
-. "$SCRIPT_DIR/utils/check.sh"
+. "$SCRIPT_DIR/utils/utils.sh"
 
 echo "$INFO Setting up repository environment..."
 
@@ -64,8 +64,8 @@ echo "Uses npm version: $(npm -v)"
 # Tools
 # --------------------------
 
-# Install tool versions via asdf if running locally.
-# In a devcontainer, asdf install is handled by the Dockerfile.
+# Install tool versions via asdf if running locally
+# In a devcontainer, asdf install is handled by the Dockerfile
 if [ -z "${REMOTE_CONTAINERS:-}" ] && [ -z "${CODESPACES:-}" ]; then
   if [ ! -f .tool-versions ]; then
     echo "$WARN No .tool-versions file found"
