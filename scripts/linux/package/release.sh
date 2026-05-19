@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # --------------------------------------------------
 # Script to package the project for distribution.
@@ -7,9 +7,19 @@
 # a tar.gz archive, which gets uploaded as part of
 # the release assets on GitHub.
 #
-# You can run this script manually to verify the packaging process:
+# Packaging is optional, if no dist directory is found
+# after the build step, the script exits gracefully and
+# no archive is created.
 #
-# ./scripts/linux/package/release.sh <version>
+# If the package is public (private is not set to true in package.json),
+# @semantic-release/npm runs the prepare script (which triggers the build)
+# before this script is called, so the build is skipped here.
+# If the package is private, the build is run here if defined.
+#
+# You can run this script manually to verify the packaging process,
+# but ensure the project has been built first:
+#
+# npm run build && ./scripts/linux/package/release.sh <version>
 # --------------------------------------------------
 
 # Exit immediately if a command exits with a non-zero status
@@ -23,7 +33,7 @@ set -euo pipefail
 
 # Load dependent scripts
 . "$(dirname "${BASH_SOURCE[0]}")/../utils/variables.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../utils/check.sh"
+. "$(dirname "${BASH_SOURCE[0]}")/../utils/utils.sh"
 
 # Get the release version from the first argument
 version="${1:-}"
@@ -36,44 +46,58 @@ echo "Packaging project for distribution..."
 
 check_project_root
 check_argument "$version" "release version"
+check_command mktemp
 check_command tar
+check_command node
+check_command npm
 
 # --------------------------
 # Package
 # --------------------------
 
-# Prepare the release directory and archive path
-mkdir -p dist
-archive_path="dist/project-dist-v${version}.tar.gz"
+# If the package is public, @semantic-release/npm runs the prepare script
+# (which triggers the build) before this script is called. If the package
+# is private, npm publishing is skipped and the build is run here if defined.
+is_private="$(json_field package.json private || echo "false")"
 
-# Remove any existing archive for this version
-rm -f "$archive_path"
-
-# TODO: This template does not include a build step. The entire project is
-# archived as-is. If your project requires a build (e.g. compiling TypeScript,
-# bundling assets), replace this section with your build command and point the
-# tar command at the build output directory instead.
-#
-# Example for a project with a build step:
-#   check_command npm
-#   npm run build:prod
-#   if [ ! -d dist ]; then
-#     echo "$ERROR dist directory was not generated" >&2
-#     exit 1
-#   fi
-#   tar -czf "$archive_path" -C dist .
-
-# Create a tar.gz archive of the entire project.
-tar \
-  --exclude-vcs \
-  --exclude='node_modules' \
-  --exclude='dist' \
-  -czf "$archive_path" .
-
-if [ ! -f "$archive_path" ]; then
-  echo "$ERROR archive was not created at $archive_path" >&2
-  exit 1
+if [ "$is_private" = "true" ]; then
+  build_script="$(json_field package.json scripts.build || echo "")"
+  if [ -n "$build_script" ]; then
+    echo "Running build..."
+    npm run build
+  fi
 fi
 
-# Print the result
+# Require dist folder to exist, skip gracefully if not present
+if [ ! -d "dist" ]; then
+  echo "$WARN No dist directory found, skipping packaging"
+  exit 0
+fi
+
+# Use the package name (sanitized) as the archive base name
+package_name="$(json_field package.json name || echo "")"
+archive_base_name="${package_name:-project}"
+archive_base_name="${archive_base_name#@}"
+archive_base_name="${archive_base_name//\//-}"
+archive_base_name="$(printf '%s' "$archive_base_name" | tr -cs 'A-Za-z0-9._-' '-')"
+archive_base_name="${archive_base_name%-}"
+
+# Falls back to "project" if the package name is empty
+if [ -z "$archive_base_name" ]; then
+  archive_base_name="project"
+fi
+
+# Create a temporary directory for the archive and clean up on exit
+tmp_dir="$(mktemp -d)"
+trap 'rm -rf "$tmp_dir"' EXIT
+tmp_archive="$tmp_dir/${archive_base_name}-v${version}.tar.gz"
+
+# Create release archive from dist
+echo "Archiving dist directory..."
+tar -czf "$tmp_archive" -C dist .
+
+# Move archive to project root
+archive_path="${archive_base_name}-v${version}.tar.gz"
+mv "$tmp_archive" "$archive_path"
+
 echo "$OK Created $archive_path"
