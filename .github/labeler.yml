@@ -71,7 +71,7 @@ test:
       - any-glob-to-any-file:
           - "**/*.test.*"
           - "**/*.spec.*"
-          - "**/tests/**"
+          - "**/test/**"
           - "**/__tests__/**"
 
 # TODO: Add further paths for used linter configuration files
