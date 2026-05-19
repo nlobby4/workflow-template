@@ -56,7 +56,8 @@
  *    - Workflow: `ci-release.yml`
  *    - Environment: (leave blank)
  * 3. Ensure `package.json` includes a "repository" field whose "url" matches your
- *    GitHub repository URL exactly.
+ *    GitHub repository URL exactly and that the "private" field is not set to
+ *    true.
  *
  * @file Semantic release configuration file.
  *
