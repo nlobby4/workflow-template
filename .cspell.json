@@ -35,7 +35,8 @@
     ".git",
     ".husky/_",
     "dictionary.txt",
-    "package-lock.json"
+    "package-lock.json",
+    "dist"
   ],
   "language": "en",
   "readonly": true,
