@@ -68,13 +68,11 @@ perf:
 test:
   - head-branch: [^test/]
   - title: ["^test(\\(.+\\))?!?:"]
-  - changed-files:
-      - any-glob-to-any-file:
-          - "**/*.test.*"
-          - "**/*.spec.*"
-          - "**/test/**"
+  # - changed-files:
+  #   - any-glob-to-any-file:
+  #       - ...
 
-# TODO: Add further paths for used linter configuration files
+  # TODO: Add further paths for used linter configuration files
 style:
   - head-branch: [^style/]
   - title: ["^style(\\(.+\\))?!?:"]
