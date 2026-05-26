@@ -122,7 +122,7 @@ jobs:
         id: cspell-cache-restore
         uses: actions/cache/restore@v5
         with:
-          path: .cache
+          path: .cache/.cspellcache
           key: >-
             cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
             '.cspell.json', 'dictionary.txt') }}
@@ -136,7 +136,7 @@ jobs:
         if: steps.cspell-cache-restore.outputs.cache-hit != 'true'
         uses: actions/cache/save@v5
         with:
-          path: .cache
+          path: .cache/.cspellcache
           key: >-
             cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
             '.cspell.json', 'dictionary.txt') }}
