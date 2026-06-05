@@ -24,6 +24,9 @@ export default {
   formatter: "@commitlint/format",
   helpUrl: "https://www.conventionalcommits.org/en/v1.0.0/#summary",
   prompt: {
+    settings: {
+      useExclamationMark: true,
+    },
     messages: {
       skip: "(press enter to skip)",
       max: "upper %d chars",
@@ -81,7 +84,7 @@ export default {
           ci: {
             description: "Changes to CI configuration files and scripts",
             title: "Continuous Integration",
-            emoji: "⚙️",
+            emoji: "🔄",
           },
           chore: {
             description: "Other changes that do not modify src or test files",
@@ -91,7 +94,7 @@ export default {
           revert: {
             description: "Reverts a previous commit",
             title: "Reverts",
-            emoji: "🗑",
+            emoji: "⏪",
           },
         },
       },
