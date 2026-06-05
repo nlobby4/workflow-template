@@ -5,6 +5,9 @@
 # asdf is automatically installed and run in the development container.
 # If you are not using the development container set the tool versions manually:
 #
+# GitHub Actions runners read the Node.js version from .nvmrc (via actions/setup-node).
+# Keep .nvmrc in sync with the `nodejs` version specified in this file.
+#
 # For asdf users:
 # asdf install
 #
