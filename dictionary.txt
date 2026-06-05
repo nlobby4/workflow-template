@@ -5,20 +5,25 @@
 # treated as valid by cspell.
 # --------------------------------------------------
 
+# Organization
+exquz3me
+flockmod
+nlobby4
+sphoon
+
+# Extensions
 amannn
 esbenp
 joshbolduc
 Anson
 webpro
-bibtex
-astextplain
+
+# Project specific
 adoc
+astextplain
+bibtex
 reshim
 gitmessage
 mintimeout
 maxtimeout
-exquz3me
-flockmod
-nlobby4
-sphoon
 # TODO: Add project specific words here
