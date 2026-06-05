@@ -59,12 +59,4 @@ updates:
           - "*"
         update-types:
           - major
-    ignore:
-      # @commitlint/cz-commitlint requires inquirer@^9.0.0.
-      # Do not allow dependabot to bump inquirer past v9 until
-      # @commitlint/cz-commitlint explicitly supports a higher major version.
-      - dependency-name: inquirer
-        update-types:
-          - version-update:semver-major
-          - version-update:semver-minor
   # TODO: Add additional package ecosystems as needed
