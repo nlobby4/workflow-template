@@ -51,6 +51,22 @@ check_project_root() {
   fi
 }
 
+# Check if a file exists
+check_file() {
+  if [ ! -f "$1" ]; then
+    echo "$ERROR file not found: $1" >&2
+    exit 1
+  fi
+}
+
+# Check if an array or value is not empty
+check_not_empty() {
+  if [ -z "${1:-}" ]; then
+    echo "$ERROR $2" >&2
+    exit 1
+  fi
+}
+
 # Read a field from package.json and write it to stdout
 json_field() {
   node -e "
