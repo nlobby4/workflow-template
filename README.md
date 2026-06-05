@@ -148,7 +148,7 @@ need to make:
 | ---------------------------------- | ------------------------------------------------------------------------------- |
 | `.devcontainer/Dockerfile`         | Add additional asdf plugins for your language stack                             |
 | `.github/CODEOWNERS`               | Add code owners                                                                 |
-| `.github/dependabot.yml`           | Add ignore rules if needed                                                      |
+| `.github/dependabot.yml`           | Add additional package ecosystems as needed                                     |
 | `.github/labeler.yml`              | Update label rules to match your used tooling                                   |
 | `.github/workflows/ci-general.yml` | Add jobs for new tools if needed                                                |
 | `project/.gitignore`               | [Choose an ignore template](https://github.com/github/gitignore)                |
