@@ -32,7 +32,8 @@ repositories across the entire nlobby4 codebase. It includes reusable CI
 workflows, dev container configuration, commit conventions and formatting rules.
 
 This template is intended for repositories that want to use custom tools that do
-not have their own specific template.
+not have their own specific template. Node is used exclusively for CI tooling
+and does not constrain the language or framework of the repository itself.
 
 Please check out the other
 [templates](https://github.com/orgs/nlobby4/repositories?q=template%3Atrue+archived%3Afalse)
@@ -107,16 +108,21 @@ page.
 | Path                                  | Purpose                                                                                                           |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | `.devcontainer/`                      | Dev container with Node.js via asdf, pre-installed VS Code extensions                                             |
+| `.devcontainer/Dockerfile`            | Base image for the dev container with asdf and Node.js setup                                                      |
 | `.github/workflows/ci-general.yml`    | Audit (npm), formatting (prettier), linting (markdownlint), spelling (cspell), unused dependency detection (knip) |
 | `.github/workflows/ci-privileged.yml` | Label automation, dependency review, PR title linting                                                             |
 | `.github/workflows/ci-release.yml`    | Release workflow with semantic versioning via semantic-release                                                    |
 | `.github/workflows/ci-test.yml`       | Test workflow running the test script specified in `package.json`                                                 |
+| `.github/CODEOWNERS`                  | Code ownership definitions for automatic PR review assignments                                                    |
 | `.github/dependabot.yml`              | Weekly dependency updates for GitHub Actions and npm packages                                                     |
 | `.github/labeler.yml`                 | Automatic PR labeling by branch name, title, and changed files                                                    |
-| `.github/CODEOWNERS`                  | Code ownership definitions for automatic PR review assignments                                                    |
 | `.husky/`                             | Git hooks for conventional commit message linting and lint-staged                                                 |
-| `scripts/linux/setup.sh`              | Environment setup script for local development                                                                    |
 | `scripts/linux/package/release.sh`    | Release packaging script                                                                                          |
+| `scripts/linux/utils/attributes.sh`   | Git attributes verification script                                                                                |
+| `scripts/linux/utils/dict.sh`         | Dictionary management script for cspell                                                                           |
+| `scripts/linux/utils/utils.sh`        | Utility functions for bash scripts                                                                                |
+| `scripts/linux/utils/variables.sh`    | Common variables for bash scripts                                                                                 |
+| `scripts/linux/setup.sh`              | Environment setup script for local development                                                                    |
 | `.cspell.json`                        | Spell check configuration                                                                                         |
 | `.editorconfig`                       | Editor formatting configuration                                                                                   |
 | `.markdownlint.json`                  | Markdown linting rules                                                                                            |
@@ -124,13 +130,6 @@ page.
 | `prettier.config.js`                  | Formatting rules                                                                                                  |
 | `knip.json`                           | Unused dependency and export detection                                                                            |
 | `release.config.js`                   | Semantic-release configuration                                                                                    |
-
-> [!NOTE]
->
-> If you are outside the organization you can checkout the
-> [readme template](https://github.com/nlobby4/readme-template) for common
-> GitHub markdown files and templates. These get applied to all repositories in
-> the organization by default but not outside of it.
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
