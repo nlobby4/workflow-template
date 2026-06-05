@@ -98,9 +98,8 @@ jobs:
   # --------------------------------------------------
   # Spell check - validates spelling across all files
   # using cspell. Cache is keyed by package-lock.json,
-  # .cspell.json and dictionary.txt only since dictionary
-  # changes are the only reason to invalidate the cache,
-  # not file content changes.
+  # .cspell.json, dictionary.txt and .nvmrc since a Node
+  # version change can affect cspell's binary behaviour.
   # --------------------------------------------------
   spellcheck:
     name: spellcheck
@@ -125,7 +124,7 @@ jobs:
           path: .cache/.cspellcache
           key: >-
             cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
-            '.cspell.json', 'dictionary.txt') }}
+            '.cspell.json', 'dictionary.txt', '.nvmrc') }}
           restore-keys: |
             cspell-${{ runner.os }}-
 
@@ -139,7 +138,7 @@ jobs:
           path: .cache/.cspellcache
           key: >-
             cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
-            '.cspell.json', 'dictionary.txt') }}
+            '.cspell.json', 'dictionary.txt', '.nvmrc') }}
 
   # --------------------------------------------------
   # Knip - checks for unused dependencies, exports,
