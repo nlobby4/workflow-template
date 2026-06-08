@@ -141,8 +141,7 @@ jobs:
             '.cspell.json', 'dictionary.txt', '.nvmrc') }}
 
   # --------------------------------------------------
-  # Knip - checks for unused dependencies, exports,
-  # and files
+  # Knip - checks for unused dependencies
   # --------------------------------------------------
   knip:
     name: knip
