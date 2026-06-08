@@ -45,7 +45,12 @@ check_argument() {
 
 # Check if the script is run from the project root
 check_project_root() {
-  if [ ! -f package.json ]; then
+  check_git
+
+  project_root="$(git rev-parse --show-toplevel 2> /dev/null)"
+  current_dir="$(pwd -P)"
+
+  if [ "$current_dir" != "$project_root" ]; then
     echo "$ERROR run this script from repository root" >&2
     exit 1
   fi
