@@ -59,20 +59,20 @@ check_file() {
   fi
 }
 
-# Check if an array or value is not empty
-check_not_empty() {
-  if [ -z "${1:-}" ]; then
-    echo "$ERROR $2" >&2
-    exit 1
+# Check if git is initialized
+check_git() {
+  check_command git
+  if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    return 0
+  else
+    echo "$ERROR git repository not found" >&2
+    return 1
   fi
 }
 
-# Read a field from package.json and write it to stdout
+# Read a field from a json file and write it to stdout
 json_field() {
-  node -e "
-    const p = JSON.parse(require('fs').readFileSync('$1', 'utf8'));
-    const v = '$2'.split('.').reduce((o, k) => o?.[k], p);
-    if (v === undefined) process.exit(1);
-    process.stdout.write(String(v));
-  " 2> /dev/null
+  check_command jq
+  check_file "$1"
+  jq -r -e --arg key "$2" 'getpath($key|split("."))' "$1" || return 1
 }

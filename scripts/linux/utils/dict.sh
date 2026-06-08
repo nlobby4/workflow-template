@@ -54,7 +54,10 @@ mapfile -t PROJECT_FILES < <(
       2> /dev/null
 )
 
-check_not_empty "${#PROJECT_FILES[@]}" "no project files found"
+if [ "${#PROJECT_FILES[@]}" -eq 0 ]; then
+  echo "$ERROR no project files found" >&2
+  exit 1
+fi
 
 # --------------------------
 # Check each word

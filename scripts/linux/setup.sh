@@ -35,30 +35,27 @@ echo "$INFO Setting up repository environment..."
 # --------------------------
 
 check_project_root
-check_command git
 
 # --------------------------
 # Configuration
 # --------------------------
 
+# Check if git is initialized, if not, initialize it
+if ! check_git; then
+  echo "$INFO Initializing git repository..."
+  git init
+  echo "$OK Git repository initialized"
+fi
+
 # Configure git blame to ignore specific revisions
+check_file .git-blame-ignore-revs
 git config blame.ignoreRevsFile .git-blame-ignore-revs
 echo "$OK Configured blame.ignoreRevsFile"
 
 # Configure commit message template
+check_file .gitmessage
 git config commit.template .gitmessage
 echo "$OK Configured commit.template"
-
-# --------------------------
-# Verification
-# --------------------------
-
-check_command node
-check_command npm
-
-# Print the versions being used
-echo "Uses node version: $(node -v)"
-echo "Uses npm version: $(npm -v)"
 
 # --------------------------
 # Tools
@@ -72,11 +69,24 @@ if [ -z "${REMOTE_CONTAINERS:-}" ] && [ -z "${CODESPACES:-}" ]; then
   elif ! command -v asdf &> /dev/null; then
     echo "$WARN asdf not found, tool versions must be installed manually"
   else
-    echo "Installing tool versions via asdf..."
+    echo "$INFO Installing tool versions via asdf..."
     asdf install
     echo "$OK Tool versions installed"
   fi
 fi
+
+# --------------------------
+# Verification
+# --------------------------
+
+check_command node
+check_command npm
+# TODO: Check for further tools
+
+# Print the versions being used
+echo "$INFO Uses node version: $(node -v)"
+echo "$INFO Uses npm version: $(npm -v)"
+# TODO: Print versions of further tools
 
 # --------------------------
 # Dependencies
@@ -84,15 +94,15 @@ fi
 
 # Install Node.js dependencies
 if [ -f package-lock.json ]; then
-  echo "Installing Node.js dependencies with npm ci..."
+  echo "$INFO Installing Node.js dependencies with npm ci..."
   npm ci --silent
   echo "$OK Node.js dependencies installed"
 elif [ -f package.json ]; then
-  echo "Installing Node.js dependencies with npm install..."
+  echo "$INFO Installing Node.js dependencies with npm install..."
   npm install --silent
   echo "$OK Node.js dependencies installed"
 fi
 
-# TODO: Install further dependencies as needed (e.g. Python, Ruby, Go, etc.)
+# TODO: Install further dependencies as needed
 
-echo "Environment setup complete!"
+echo "$OK Environment setup complete!"

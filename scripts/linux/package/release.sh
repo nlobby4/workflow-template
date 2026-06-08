@@ -38,7 +38,7 @@ set -euo pipefail
 # Get the release version from the first argument
 version="${1:-}"
 
-echo "Packaging project for distribution..."
+echo "$INFO Packaging project for distribution..."
 
 # --------------------------
 # Pre-flight checks
@@ -63,7 +63,7 @@ is_private="$(json_field package.json private || echo "false")"
 if [ "$is_private" = "true" ]; then
   build_script="$(json_field package.json scripts.build || echo "")"
   if [ -n "$build_script" ]; then
-    echo "Running build..."
+    echo "$INFO Running build..."
     npm run build
   fi
 fi
@@ -93,7 +93,7 @@ trap 'rm -rf "$tmp_dir"' EXIT
 tmp_archive="$tmp_dir/${archive_base_name}-v${version}.tar.gz"
 
 # Create release archive from dist
-echo "Archiving dist directory..."
+echo "$INFO Archiving dist directory..."
 tar -czf "$tmp_archive" -C dist .
 
 # Move archive to project root
