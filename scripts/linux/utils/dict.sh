@@ -11,7 +11,7 @@
 # Running this periodically keeps the dictionary clean.
 #
 # Usage:
-# ./scripts/linux/utils/dict-check.sh
+# ./scripts/linux/utils/dict.sh
 # --------------------------------------------------
 
 # Exit immediately if a command exits with a non-zero status
