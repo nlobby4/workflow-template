@@ -33,11 +33,13 @@
 <!-- ? URLs -->
 <!-- markdownlint-disable MD013 -->
 
+<!-- TODO: Replace example-repo in URLs to match your repo name -->
+
 <div align="center">
   <span>ⓘ <a href="https://nlobby4.org/news/">[NEWS]</a></span>
   <span> 🖂 <a href="mailto:contact@nlobby4.org">[CONTACT]</a></span>
-  <span> ★ <a href="../../issues/new?template=feature.yml">[REQUEST FEATURE]</a></span>
-  <span> &#x26A0;&#xFE0E; <a href="../../issues/new?template=bug.yml">[REPORT BUG]</a></span>
+  <span> ★ <a href="https://github.com/nlobby4/example-repo/issues/new?template=feature.yml">[REQUEST FEATURE]</a></span>
+  <span> &#x26A0;&#xFE0E; <a href="https://github.com/nlobby4/example-repo/issues/new?template=bug.yml">[REPORT BUG]</a></span>
 </div>
 
 <br>
