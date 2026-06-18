@@ -22,12 +22,17 @@ updates:
     schedule:
       interval: weekly
       day: monday
+      time: 09:00
+      timezone: Europe/Berlin
     open-pull-requests-limit: 5
     labels:
       - dependencies
     commit-message:
-      prefix: chore
+      prefix: ci
       include: scope
+    cooldown:
+      default-days: 4
+      semver-major-days: 8
     groups:
       github-actions:
         patterns:
@@ -41,22 +46,35 @@ updates:
     schedule:
       interval: weekly
       day: monday
+      time: 09:00
+      timezone: Europe/Berlin
     open-pull-requests-limit: 5
     labels:
       - dependencies
     commit-message:
       prefix: chore
       include: scope
+    cooldown:
+      default-days: 4
+      semver-minor-days: 6
+      semver-major-days: 8
     groups:
-      dependencies:
-        patterns:
-          - "*"
+      npm-prod:
+        dependency-type: production
         update-types:
           - minor
           - patch
-      dependencies-major:
-        patterns:
-          - "*"
+      npm-prod-major:
+        dependency-type: production
+        update-types:
+          - major
+      npm-dev:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      npm-dev-major:
+        dependency-type: development
         update-types:
           - major
   # TODO: Add additional package ecosystems as needed
