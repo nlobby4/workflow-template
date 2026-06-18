@@ -18,12 +18,16 @@
 name: CI Test
 on:
   pull_request:
-    branches: [main, alpha, beta]
+    branches:
+      - main
 
 concurrency:
   group:
     ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
+
+# Deny all by default, jobs declare their own permissions as needed
+permissions: {}
 
 jobs:
   # --------------------------------------------------
@@ -32,6 +36,7 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:

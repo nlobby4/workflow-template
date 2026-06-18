@@ -1,7 +1,7 @@
 # --------------------------------------------------
 # CI Release workflow.
 #
-# Triggers semantic-release manually via workflow_dispatch.
+# Triggers semantic-release on every push to main.
 # Semantic-release analyzes commits since the last release,
 # determines the next version, generates a changelog,
 # packages the project, creates a git tag, publishes a GitHub release via a
@@ -30,11 +30,16 @@
 name: CI Release
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: release
   cancel-in-progress: false
+
+# Deny all by default, jobs declare their own permissions as needed
+permissions: {}
 
 jobs:
   # --------------------------------------------------
@@ -48,6 +53,7 @@ jobs:
   release:
     name: release
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
       issues: write
