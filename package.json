@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "audit": "npm audit --omit=dev --audit-level=high",
-    "audit:dev": "npm audit --only=dev --audit-level=high",
+    "audit:dev": "npm audit --include=dev --audit-level=high",
     "build": "echo \"No build script specified\" && exit 0",
     "check": "npm run format:check && npm run lint && npm run deps:unused && npm run audit",
     "commit": "git-cz",
