@@ -57,6 +57,9 @@ export default {
   // Don't remove unused imports
   organizeImportsSkipDestructiveCodeActions: true,
 
+  // Quote keys in objects only when required
+  yamlQuoteValues: true,
+
   // Add a period at the end of JSDoc descriptions if missing
   jsdocDescriptionWithDot: true,
 
@@ -65,4 +68,13 @@ export default {
 
   // Separate JSDoc tags into groups with blank lines between them
   jsdocSeparateTagGroups: true,
+
+  overrides: [
+    {
+      files: ["*.yaml", "*.yml"],
+      options: {
+        proseWrap: "preserve",
+      },
+    },
+  ],
 };
