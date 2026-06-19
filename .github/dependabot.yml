@@ -31,8 +31,7 @@ updates:
       prefix: "ci"
       include: "scope"
     cooldown:
-      default-days: 4
-      semver-major-days: 8
+      default-days: 8
     groups:
       github-actions:
         patterns:
