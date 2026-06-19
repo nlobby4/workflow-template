@@ -17,19 +17,19 @@
 version: 2
 updates:
   # GitHub Actions workflow updates
-  - package-ecosystem: github-actions
-    directory: /
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: weekly
-      day: monday
-      time: 09:00
-      timezone: Europe/Berlin
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
     open-pull-requests-limit: 5
     labels:
-      - dependencies
+      - "dependencies"
     commit-message:
-      prefix: ci
-      include: scope
+      prefix: "ci"
+      include: "scope"
     cooldown:
       default-days: 4
       semver-major-days: 8
@@ -41,40 +41,40 @@ updates:
   # Node.js dependency updates.
   # Minor and patch updates are grouped to reduce PR noise.
   # Major updates are separated to require explicit review.
-  - package-ecosystem: npm
-    directory: /
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: weekly
-      day: monday
-      time: 09:00
-      timezone: Europe/Berlin
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
     open-pull-requests-limit: 5
     labels:
-      - dependencies
+      - "dependencies"
     commit-message:
-      prefix: chore
-      include: scope
+      prefix: "chore"
+      include: "scope"
     cooldown:
       default-days: 4
       semver-minor-days: 6
       semver-major-days: 8
     groups:
       npm-prod:
-        dependency-type: production
+        dependency-type: "production"
         update-types:
-          - minor
-          - patch
+          - "minor"
+          - "patch"
       npm-prod-major:
-        dependency-type: production
+        dependency-type: "production"
         update-types:
-          - major
+          - "major"
       npm-dev:
-        dependency-type: development
+        dependency-type: "development"
         update-types:
-          - minor
-          - patch
+          - "minor"
+          - "patch"
       npm-dev-major:
-        dependency-type: development
+        dependency-type: "development"
         update-types:
-          - major
+          - "major"
   # TODO: Add additional package ecosystems as needed

@@ -15,16 +15,15 @@
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: CI General
+name: "CI General"
 
 on:
   pull_request:
     branches:
-      - main
+      - "main"
 
 concurrency:
-  group:
-    ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}"
   cancel-in-progress: true
 
 # Deny all by default, jobs declare their own permissions as needed
@@ -36,71 +35,71 @@ jobs:
   # vulnerable production dependencies.
   # --------------------------------------------------
   audit:
-    name: audit
-    runs-on: ubuntu-latest
+    name: "audit"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: "read"
     steps:
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Audit dependencies
-        run: npm run audit
+      - name: "Audit dependencies"
+        run: "npm run audit"
 
   # --------------------------------------------------
   # Format check - validates code formatting
   # using Prettier
   # --------------------------------------------------
   prettier:
-    name: prettier
-    runs-on: ubuntu-latest
+    name: "prettier"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: "read"
     steps:
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Check formatting
-        run: npm run format:check
+      - name: "Check formatting"
+        run: "npm run format:check"
 
   # --------------------------------------------------
   # Markdown lint - validates markdown files
   # --------------------------------------------------
   markdownlint:
-    name: markdownlint
-    runs-on: ubuntu-latest
+    name: "markdownlint"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: "read"
     steps:
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Lint markdown
-        run: npm run lint:md
+      - name: "Lint markdown"
+        run: "npm run lint:md"
 
   # --------------------------------------------------
   # Spell check - validates spelling across all files
@@ -109,66 +108,64 @@ jobs:
   # version change can affect cspell's binary behaviour.
   # --------------------------------------------------
   spellcheck:
-    name: spellcheck
-    runs-on: ubuntu-latest
+    name: "spellcheck"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: "read"
     steps:
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Restore cspell cache
-        id: cspell-cache-restore
-        uses: actions/cache/restore@v5
+      - name: "Restore cspell cache"
+        id: "cspell-cache-restore"
+        uses: "actions/cache/restore@v5"
         with:
-          path: .cache/.cspellcache
+          path: ".cache/.cspellcache"
           key: >-
-            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
-            '.cspell.json', 'dictionary.txt', '.nvmrc') }}
+            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json', '.cspell.json', 'dictionary.txt', '.nvmrc') }}
           restore-keys: |
             cspell-${{ runner.os }}-
 
-      - name: Spell check
-        run: npm run lint:spell
+      - name: "Spell check"
+        run: "npm run lint:spell"
 
-      - name: Save cspell cache
-        if: always() && steps.cspell-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
+      - name: "Save cspell cache"
+        if: "always() && steps.cspell-cache-restore.outputs.cache-hit != 'true'"
+        uses: "actions/cache/save@v5"
         with:
-          path: .cache/.cspellcache
+          path: ".cache/.cspellcache"
           key: >-
-            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json',
-            '.cspell.json', 'dictionary.txt', '.nvmrc') }}
+            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json', '.cspell.json', 'dictionary.txt', '.nvmrc') }}
 
   # --------------------------------------------------
   # Knip - checks for unused dependencies
   # --------------------------------------------------
   knip:
-    name: knip
-    runs-on: ubuntu-latest
+    name: "knip"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: "read"
     steps:
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Check unused dependencies
-        run: npm run deps:unused
+      - name: "Check unused dependencies"
+        run: "npm run deps:unused"
 
 # TODO: Add jobs for introduced tools

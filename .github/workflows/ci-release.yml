@@ -27,15 +27,15 @@
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: CI Release
+name: "CI Release"
 
 on:
   push:
     branches:
-      - main
+      - "main"
 
 concurrency:
-  group: release
+  group: "release"
   cancel-in-progress: false
 
 # Deny all by default, jobs declare their own permissions as needed
@@ -51,44 +51,44 @@ jobs:
   # alongside the semantic-release plugins.
   # --------------------------------------------------
   release:
-    name: release
-    runs-on: ubuntu-latest
+    name: "release"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      id-token: write
+      contents: "write"
+      issues: "write"
+      pull-requests: "write"
+      id-token: "write"
     steps:
-      - name: Generate Token
-        id: app-token
-        uses: actions/create-github-app-token@v3
+      - name: "Generate Token"
+        id: "app-token"
+        uses: "actions/create-github-app-token@v3"
         with:
-          client-id: ${{ secrets.AUTO_CHAN_CLIENT_ID }}
-          private-key: ${{ secrets.AUTO_CHAN_PRIVATE_KEY }}
+          client-id: "${{ secrets.AUTO_CHAN_CLIENT_ID }}"
+          private-key: "${{ secrets.AUTO_CHAN_PRIVATE_KEY }}"
 
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: "${{ steps.app-token.outputs.token }}"
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Get bot user ID
-        id: bot-user-id
+      - name: "Get bot user ID"
+        id: "bot-user-id"
         run: |
           echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: "${{ steps.app-token.outputs.token }}"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Release
+      - name: "Release"
         run: |
           npx -y \
             --package semantic-release@25 \
@@ -102,12 +102,10 @@ jobs:
             --package conventional-changelog-conventionalcommits@8 \
             semantic-release
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          GIT_AUTHOR_NAME: ${{ steps.app-token.outputs.app-slug }}[bot]
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
+          GIT_AUTHOR_NAME: "${{ steps.app-token.outputs.app-slug }}[bot]"
           GIT_AUTHOR_EMAIL: >-
-            ${{ steps.bot-user-id.outputs.user-id }}+${{
-            steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com
-          GIT_COMMITTER_NAME: ${{ steps.app-token.outputs.app-slug }}[bot]
+            ${{ steps.bot-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: "${{ steps.app-token.outputs.app-slug }}[bot]"
           GIT_COMMITTER_EMAIL: >-
-            ${{ steps.bot-user-id.outputs.user-id }}+${{
-            steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com
+            ${{ steps.bot-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com

@@ -15,15 +15,14 @@
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: CI Test
+name: "CI Test"
 on:
   pull_request:
     branches:
-      - main
+      - "main"
 
 concurrency:
-  group:
-    ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}"
   cancel-in-progress: true
 
 # Deny all by default, jobs declare their own permissions as needed
@@ -34,21 +33,21 @@ jobs:
   # Test - runs code quality checks.
   # --------------------------------------------------
   test:
-    name: test
-    runs-on: ubuntu-latest
+    name: "test"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: "read"
     steps:
-      - uses: actions/checkout@v6
+      - uses: "actions/checkout@v6"
 
-      - uses: actions/setup-node@v6
+      - uses: "actions/setup-node@v6"
         with:
-          node-version-file: .nvmrc
-          cache: npm
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: "Install dependencies"
+        run: "npm ci --ignore-scripts"
 
-      - name: Test
-        run: npm test
+      - name: "Test"
+        run: "npm test"

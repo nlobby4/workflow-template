@@ -12,15 +12,15 @@
 # yaml-language-server: $schema=https://www.schemastore.org/pull-request-labeler.json
 
 feat:
-  - head-branch: [^feat/, ^feature/]
+  - head-branch: ["^feat/", "^feature/"]
   - title: ["^feat(\\(.+\\))?!?:"]
 
 fix:
-  - head-branch: [^fix/, ^bugfix/, ^hotfix/]
+  - head-branch: ["^fix/", "^bugfix/", "^hotfix/"]
   - title: ["^fix(\\(.+\\))?!?:"]
 
 docs:
-  - head-branch: [^docs/]
+  - head-branch: ["^docs/"]
   - title: ["^docs(\\(.+\\))?!?:"]
   - changed-files:
       - any-glob-to-any-file:
@@ -28,12 +28,12 @@ docs:
           - "**/docs/**"
 
 chore:
-  - head-branch: [^chore/]
+  - head-branch: ["^chore/"]
   - title: ["^chore(\\(.+\\))?!?:"]
 
 # TODO: Adjust if using other CI systems or configurations
 ci:
-  - head-branch: [^ci/]
+  - head-branch: ["^ci/"]
   - title: ["^ci(\\(.+\\))?!?:"]
   - changed-files:
       - any-glob-to-any-file:
@@ -50,23 +50,23 @@ ci:
 
 # TODO: Adjust to fit your build system
 build:
-  - head-branch: [^build/]
+  - head-branch: ["^build/"]
   - title: ["^build(\\(.+\\))?!?:"]
   # - changed-files:
   #   - any-glob-to-any-file:
   #       - ...
 
 refactor:
-  - head-branch: [^refactor/]
+  - head-branch: ["^refactor/"]
   - title: ["^refactor(\\(.+\\))?!?:"]
 
 perf:
-  - head-branch: [^perf/]
+  - head-branch: ["^perf/"]
   - title: ["^perf(\\(.+\\))?!?:"]
 
 # TODO: Adjust to fit your testing framework
 test:
-  - head-branch: [^test/]
+  - head-branch: ["^test/"]
   - title: ["^test(\\(.+\\))?!?:"]
   # - changed-files:
   #   - any-glob-to-any-file:
@@ -74,7 +74,7 @@ test:
 
   # TODO: Add further paths for used linter configuration files
 style:
-  - head-branch: [^style/]
+  - head-branch: ["^style/"]
   - title: ["^style(\\(.+\\))?!?:"]
   - changed-files:
       - any-glob-to-any-file:
@@ -85,7 +85,7 @@ style:
           - "**/.markdownlint.json"
 
 revert:
-  - head-branch: [^revert/]
+  - head-branch: ["^revert/"]
   - title: ["^revert(\\(.+\\))?!?:"]
 
 breaking-change:
@@ -93,11 +93,11 @@ breaking-change:
 
 # TODO: Adjust if using other package ecosystems
 dependencies:
-  - head-branch: [^dependabot/]
+  - head-branch: ["^dependabot/"]
   - changed-files:
       - any-glob-to-any-file:
           - "**/package.json"
           - "**/package-lock.json"
 
 release:
-  - head-branch: [^release/, ^v\d+\.\d+]
+  - head-branch: ["^release/", "^v\\d+\\.\\d+"]
