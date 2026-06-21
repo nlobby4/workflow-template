@@ -68,10 +68,10 @@ check_file() {
 check_git() {
   check_command git
   if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    echo "$OK git repository detected"
+    echo "$OK Git repository detected"
     return 0
   else
-    echo "$ERROR git repository not found" >&2
+    echo "$ERROR Git repository not found" >&2
     return 1
   fi
 }
@@ -80,10 +80,10 @@ check_git() {
 check_git_lfs() {
   check_command git-lfs
   if git config --get --local filter.lfs.clean > /dev/null 2>&1; then
-    echo "$OK git LFS is initialized for this repository"
+    echo "$OK Git LFS is initialized for this repository"
     return 0
   else
-    echo "$ERROR git LFS not initialized for this repository" >&2
+    echo "$ERROR Git LFS not initialized for this repository" >&2
     return 1
   fi
 }
