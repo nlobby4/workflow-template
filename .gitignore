@@ -60,6 +60,8 @@
 !/*.config.js
 !/dictionary.txt
 !/LICENSE
-!/README_TEMPLATE.md
 !/README.md
 # TODO: Allow other root-level files as needed
+
+# TODO: Remove template specific exceptions
+!/README_TEMPLATE.md
