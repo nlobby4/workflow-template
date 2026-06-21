@@ -57,6 +57,13 @@ check_file .gitmessage
 git config commit.template .gitmessage
 echo "$OK Configured commit.template"
 
+# Check if git LFS is initialized, if not, initialize it
+if ! check_git_lfs; then
+  echo "$INFO Initializing git LFS..."
+  git lfs install --local
+  echo "$OK Git LFS initialized"
+fi
+
 # --------------------------
 # Tools
 # --------------------------
