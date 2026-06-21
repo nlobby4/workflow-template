@@ -31,6 +31,7 @@ FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 # Install dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y install --no-install-recommends \
+    git-lfs \
     curl gawk \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
