@@ -60,6 +60,18 @@ refactor:
   - head-branch: ["^refactor/"]
   - title: ["^refactor(\\(.+\\))?!?:"]
 
+# TODO: Add further paths for used linter configuration files
+style:
+  - head-branch: ["^style/"]
+  - title: ["^style(\\(.+\\))?!?:"]
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/.editorconfig"
+          - "**/prettier.config.*"
+          - "**/commitlint.config.*"
+          - "**/.cspell.json"
+          - "**/.markdownlint.json"
+
 perf:
   - head-branch: ["^perf/"]
   - title: ["^perf(\\(.+\\))?!?:"]
@@ -71,18 +83,6 @@ test:
   # - changed-files:
   #   - any-glob-to-any-file:
   #       - ...
-
-  # TODO: Add further paths for used linter configuration files
-style:
-  - head-branch: ["^style/"]
-  - title: ["^style(\\(.+\\))?!?:"]
-  - changed-files:
-      - any-glob-to-any-file:
-          - "**/.editorconfig"
-          - "**/prettier.config.*"
-          - "**/commitlint.config.*"
-          - "**/.cspell.json"
-          - "**/.markdownlint.json"
 
 revert:
   - head-branch: ["^revert/"]
