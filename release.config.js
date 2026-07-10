@@ -116,7 +116,7 @@ export default {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "bash scripts/linux/package/release.sh ${nextRelease.version}",
+          "bash scripts/linux/release/release.sh ${nextRelease.version}",
       },
     ],
     // Update the changelog file with the new release notes

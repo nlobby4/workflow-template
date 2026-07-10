@@ -19,7 +19,7 @@
 # You can run this script manually to verify the packaging process,
 # but ensure the project has been built first:
 #
-# npm run build && ./scripts/linux/package/release.sh <version>
+# npm run build && ./scripts/linux/release/release.sh <version>
 # --------------------------------------------------
 
 # Exit immediately if a command exits with a non-zero status
