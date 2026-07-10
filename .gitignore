@@ -53,6 +53,7 @@
 !/.npmrc
 !/.nvmrc
 !/.prettierignore
+!/.shellcheckrc
 !/.tool-versions
 !/ARCHITECTURE.md
 !/AUTHORS
