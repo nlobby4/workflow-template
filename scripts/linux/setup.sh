@@ -25,43 +25,38 @@ set -euo pipefail
 
 # Load dependent scripts
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. "$SCRIPT_DIR/utils/variables.sh"
-. "$SCRIPT_DIR/utils/utils.sh"
+UTILS_DIR="$SCRIPT_DIR/utils"
+. "$UTILS_DIR/functions.sh"
 
-echo "$INFO Setting up repository environment..."
+log_info "Setting up repository environment..."
 
 # --------------------------
 # Pre-flight checks
 # --------------------------
 
 check_project_root
+check_command git
 
 # --------------------------
 # Configuration
 # --------------------------
 
-# Check if git is initialized, if not, initialize it
-if ! check_git; then
-  echo "$INFO Initializing git repository..."
-  git init
-  echo "$OK Git repository initialized"
-fi
-
 # Configure git blame to ignore specific revisions
 check_file .git-blame-ignore-revs
 git config blame.ignoreRevsFile .git-blame-ignore-revs
-echo "$OK Configured blame.ignoreRevsFile"
+log_ok "Configured blame.ignoreRevsFile"
 
 # Configure commit message template
 check_file .gitmessage
 git config commit.template .gitmessage
-echo "$OK Configured commit.template"
+log_ok "Configured commit.template"
 
 # Check if git LFS is initialized, if not, initialize it
+check_command git-lfs
 if ! check_git_lfs; then
-  echo "$INFO Initializing git LFS..."
+  log_info "Initializing git LFS..."
   git lfs install --local
-  echo "$OK Git LFS initialized"
+  log_ok "Git LFS initialized"
 fi
 
 # --------------------------
@@ -70,15 +65,15 @@ fi
 
 # Install tool versions via asdf if running locally
 # In a devcontainer, asdf install is handled by the Dockerfile
-if [ -z "${REMOTE_CONTAINERS:-}" ] && [ -z "${CODESPACES:-}" ]; then
-  if [ ! -f .tool-versions ]; then
-    echo "$WARN No .tool-versions file found"
-  elif ! command -v asdf &> /dev/null; then
-    echo "$WARN asdf not found, tool versions must be installed manually"
+if [[ -z "${REMOTE_CONTAINERS:-}" ]] && [[ -z "${CODESPACES:-}" ]]; then
+  if [[ ! -f .tool-versions ]]; then
+    log_warning "No .tool-versions file found"
+  elif ! command -v asdf > /dev/null 2>&1; then
+    log_warning "asdf not found, tool versions must be installed manually"
   else
-    echo "$INFO Installing tool versions via asdf..."
+    log_info "Installing tool versions via asdf..."
     asdf install
-    echo "$OK Tool versions installed"
+    log_ok "Tool versions installed"
   fi
 fi
 
@@ -91,8 +86,8 @@ check_command npm
 # TODO: Check for further tools
 
 # Print the versions being used
-echo "$INFO Uses node version: $(node -v)"
-echo "$INFO Uses npm version: $(npm -v)"
+log_info "Uses node version: $(node -v)"
+log_info "Uses npm version: $(npm -v)"
 # TODO: Print versions of further tools
 
 # --------------------------
@@ -100,16 +95,16 @@ echo "$INFO Uses npm version: $(npm -v)"
 # --------------------------
 
 # Install Node.js dependencies
-if [ -f package-lock.json ]; then
-  echo "$INFO Installing Node.js dependencies with npm ci..."
+if [[ -f package-lock.json ]]; then
+  log_info "Installing Node.js dependencies with npm ci..."
   npm ci --silent
-  echo "$OK Node.js dependencies installed"
-elif [ -f package.json ]; then
-  echo "$INFO Installing Node.js dependencies with npm install..."
+  log_ok "Node.js dependencies installed"
+elif [[ -f package.json ]]; then
+  log_info "Installing Node.js dependencies with npm install..."
   npm install --silent
-  echo "$OK Node.js dependencies installed"
+  log_ok "Node.js dependencies installed"
 fi
 
 # TODO: Install further dependencies as needed
 
-echo "$OK Environment setup complete!"
+log_ok "Environment setup complete!"
