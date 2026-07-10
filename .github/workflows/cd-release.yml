@@ -1,5 +1,5 @@
 # --------------------------------------------------
-# CI Release workflow.
+# CD Release workflow.
 #
 # Triggers semantic-release on every push to main.
 # Semantic-release analyzes commits since the last release,
@@ -16,7 +16,7 @@
 # Provenance attestations are published automatically by npm when using trusted
 # publishing from GitHub Actions.
 #
-# NOTE: The CI workflow must run on Node >= 22.14.0 and npm >= 11.5 for npm OIDC
+# NOTE: The CD workflow must run on Node >= 22.14.0 and npm >= 11.5 for npm OIDC
 #       trusted publishing support.
 #
 # For more information please see:
@@ -27,7 +27,7 @@
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: "CI Release"
+name: "CD Release"
 
 on:
   push:
