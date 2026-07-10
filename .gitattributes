@@ -9,13 +9,17 @@
 # A pattern that does not contain a slash matches by basename
 # in any directory.
 #
+# Git LFS is used to track large or binary media assets
+# so that the actual file content is stored outside the main
+# Git history, while the repository only tracks lightweight pointer files.
+#
 # Files can be ignored from GitHub source zip downloads
 # by using the `export-ignore` attribute.
 #
-# You can run the helper script to determine files that
-# are missing an attribute:
-#
-# ./scripts/linux/utils/attributes.sh
+# NOTE: Contributors must have the Git LFS client
+#       installed and run `git lfs install` once per machine for the
+#       filters to work correctly; otherwise, LFS-tracked files will
+#       only appear as pointer text rather than their real content.
 #
 # For more information, see:
 # https://git-lfs.com/
@@ -128,6 +132,19 @@ package-lock.json text eol=lf -diff
 
 # Ignore files
 *.*ignore         text eol=lf
+
+# --------------------------------------------------
+# Git LFS Rules
+# --------------------------------------------------
+
+# Apply Git LFS to the media directory and its subdirectories
+media/** filter=lfs diff=lfs merge=lfs -text
+
+# Exclude markdown files in the media directory and its subdirectories
+media/**/*.md -filter -diff -merge text diff=markdown
+
+# Exclude SVG files in the media directory and its subdirectories
+media/**/*.svg -filter -diff -merge text diff
 
 # --------------------------------------------------
 # Custom Rules

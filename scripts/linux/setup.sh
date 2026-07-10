@@ -51,12 +51,26 @@ check_file .gitmessage
 git config commit.template .gitmessage
 log_ok "Configured commit.template"
 
-# Check if git LFS is initialized, if not, initialize it
+# Configure Git LFS filters for this repository
 check_command git-lfs
 if ! check_git_lfs; then
   log_info "Initializing git LFS..."
   git lfs install --local
   log_ok "Git LFS initialized"
+else
+  log_ok "Git LFS already initialized"
+fi
+
+# Download Git LFS objects if the current checkout contains pointer files
+lfs_file_count="$(git lfs ls-files --name-only | wc -l | tr -d '[:space:]')"
+if [[ "$lfs_file_count" -gt 0 ]]; then
+  lfs_file_label="$(plural_label "$lfs_file_count" "file" "files")"
+  log_info "Downloading $lfs_file_count Git LFS $lfs_file_label..."
+  if git lfs pull; then
+    log_ok "Git LFS files downloaded"
+  else
+    log_warning "Git LFS files could not be downloaded"
+  fi
 fi
 
 # --------------------------
@@ -89,6 +103,7 @@ check_command shellcheck
 # Print the versions being used
 log_info "Uses node version: $(node -v)"
 log_info "Uses npm version: $(npm -v)"
+log_info "Uses Git LFS version: $(git lfs version | awk '{ print $1 }')"
 log_info "Uses ShellCheck version: $(shellcheck --version | awk '/^version:/ { print $2 }')"
 # TODO: Print versions of further tools
 
