@@ -83,11 +83,13 @@ fi
 
 check_command node
 check_command npm
+check_command shellcheck
 # TODO: Check for further tools
 
 # Print the versions being used
 log_info "Uses node version: $(node -v)"
 log_info "Uses npm version: $(npm -v)"
+log_info "Uses ShellCheck version: $(shellcheck --version | awk '/^version:/ { print $2 }')"
 # TODO: Print versions of further tools
 
 # --------------------------

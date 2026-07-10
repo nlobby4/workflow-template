@@ -17,6 +17,7 @@ esbenp
 joshbolduc
 Anson
 webpro
+timonwong
 
 # Project specific
 adoc

@@ -102,6 +102,31 @@ jobs:
         run: "npm run lint:md"
 
   # --------------------------------------------------
+  # ShellCheck - validates shell scripts
+  # --------------------------------------------------
+  shellcheck:
+    name: "shellcheck"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    permissions:
+      contents: "read"
+    steps:
+      - uses: "actions/checkout@v6"
+
+      - uses: "actions/setup-node@v6"
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: "Install ShellCheck"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends shellcheck
+
+      - name: "Lint shell scripts"
+        run: "npm run lint:shell"
+
+  # --------------------------------------------------
   # Spell check - validates spelling across all files
   # using cspell. Cache is keyed by package-lock.json,
   # .cspell.json, dictionary.txt and .nvmrc since a Node

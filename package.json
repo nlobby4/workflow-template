@@ -14,10 +14,11 @@
     "deps:unused": "knip",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "lint": "npm run lint:commits && npm run lint:md && npm run lint:spell",
+    "lint": "npm run lint:commits && npm run lint:md && npm run lint:shell && npm run lint:spell",
     "lint:commits": "commitlint --last --verbose",
     "lint:md": "markdownlint \"**/*.md\"",
     "lint:md:fix": "markdownlint \"**/*.md\" --fix",
+    "lint:shell": "bash scripts/linux/utils/shellcheck.sh",
     "lint:spell": "cspell lint \"**/*\" --dot --no-progress --no-must-find-files --cache --cache-strategy content",
     "prepare": "husky",
     "test": "echo \"No tests specified\" && exit 0"
