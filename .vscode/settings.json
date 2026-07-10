@@ -37,6 +37,8 @@
     "dictionary.txt": "properties"
   },
   "files.autoSave": "off",
+  "knip.configFilePath": "knip.json",
+  "knip.requireConfig": true,
   "prettier.requireConfig": true,
   "search.exclude": {
     "**/node_modules": true,
