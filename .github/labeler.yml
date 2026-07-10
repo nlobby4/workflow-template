@@ -71,6 +71,7 @@ style:
           - "**/commitlint.config.*"
           - "**/.cspell.json"
           - "**/.markdownlint.json"
+          - "**/.shellcheckrc"
 
 perf:
   - head-branch: ["^perf/"]
