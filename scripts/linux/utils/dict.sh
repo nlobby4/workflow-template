@@ -115,16 +115,28 @@ fi
 # Check each word
 # --------------------------
 
+word_is_used() {
+  local word="$1"
+  local file
+
+  while IFS= read -r -d '' file; do
+    if grep -qiE \
+      "(^|[^[:alnum:]])${word}([^[:alnum:]]|$)" \
+      "$file"; then
+      return 0
+    fi
+  done < "$PROJECT_FILES"
+
+  return 1
+}
+
 dead_words=()
 dead_lines=()
 checked_words=0
 for word in "${unique_words[@]}"; do
   checked_words=$((checked_words + 1))
 
-  if ! xargs -0 -r grep -qlFi \
-    -- "$word" \
-    < "$PROJECT_FILES" \
-    2> /dev/null; then
+  if ! word_is_used "$word"; then
     dead_words+=("$word")
     dead_lines+=("${first_seen_lines[$word]}")
   fi
