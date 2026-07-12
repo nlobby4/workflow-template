@@ -5,8 +5,8 @@
 # automatically. It supports a wide range of package ecosystems and
 # can be configured to group updates, set schedules, and apply labels.
 #
-# Major releases create a single PR per dependency to require explicit review.
 # Minor and patch releases are grouped together to reduce PR noise.
+# Major releases are grouped separately by dependency type for explicit review.
 #
 # For more information please see:
 # https://docs.github.com/en/code-security/dependabot
@@ -39,7 +39,7 @@ updates:
 
   # Node.js dependency updates.
   # Minor and patch updates are grouped to reduce PR noise.
-  # Major updates are separated to require explicit review.
+  # Major updates are grouped separately by dependency type.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
