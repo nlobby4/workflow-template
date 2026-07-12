@@ -9,7 +9,7 @@
     "audit:dev": "npm audit --include=dev --audit-level=high",
     "build": "echo \"No build script specified\" && exit 0",
     "check": "npm run format:check && npm run lint && npm run deps:unused && npm run audit",
-    "commit": "git-cz",
+    "commit": "XDG_CACHE_HOME=.cache git-cz",
     "deps:check": "npm outdated",
     "deps:unused": "knip",
     "format": "prettier . --write",

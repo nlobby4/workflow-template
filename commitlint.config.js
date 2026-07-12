@@ -221,6 +221,7 @@ export default {
       "never",
       ["sentence-case", "start-case", "pascal-case", "upper-case"],
     ],
+    "subject-max-length": [2, "always", 50],
     "subject-full-stop": [2, "never", "."],
     "header-max-length": [2, "always", 72],
     "body-max-line-length": [1, "always", 100],
