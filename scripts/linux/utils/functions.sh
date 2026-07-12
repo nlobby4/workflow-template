@@ -138,6 +138,7 @@ json_field() {
   ' "$file" || return 1
 }
 
+# Create a separator line based on terminal width
 separator() {
   local width line
   width="$(tput cols 2> /dev/null || echo 60)"
