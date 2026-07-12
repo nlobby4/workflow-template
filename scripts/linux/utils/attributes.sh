@@ -102,7 +102,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 done < .gitattributes
 
 if [[ "${#patterns[@]}" -eq 0 ]]; then
-  printf '%s %s\n' "$INFO" 'No non-default patterns found in .gitattributes.'
+  printf '%s %s\n' "$INFO" 'No non-default patterns found in .gitattributes'
 else
   status=0
   declare -A file_rules=()
@@ -148,7 +148,7 @@ else
   done
 
   if [[ "$found_overlap" -eq 0 ]]; then
-    printf '%s %s\n' "$OK" 'No overlapping .gitattributes rules detected.'
+    printf '%s %s\n' "$OK" 'No overlapping .gitattributes rules detected'
   fi
 
   exit "$status"

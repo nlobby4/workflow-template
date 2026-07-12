@@ -9,7 +9,7 @@
 
 # Guard against direct execution
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  echo "This file is meant to be sourced, not executed directly." >&2
+  echo "This file is meant to be sourced, not executed directly" >&2
   exit 1
 fi
 
