@@ -64,6 +64,10 @@ plural_label() {
   local singular="${2:-entry}"
   local plural="${3:-${singular}s}"
 
+  if [[ "$singular" == *y ]]; then
+    plural="${3:-${singular%y}ies}"
+  fi
+
   if [[ "$count" -eq 1 ]]; then
     printf '%s' "$singular"
   else
