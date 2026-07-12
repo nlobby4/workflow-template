@@ -1,6 +1,6 @@
 {
   "cache": {
-    "cacheLocation": ".cache/.cspellcache"
+    "cacheLocation": ".cache/cspell/.cspellcache"
   },
   "dictionaries": [
     "companies",
