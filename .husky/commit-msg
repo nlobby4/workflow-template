@@ -3,12 +3,14 @@
 # --------------------------------------------------
 # Commit message hook.
 #
-# Validates the commit message against the
-# Conventional Commits specification using commitlint.
+# Runs after Git prepares the commit message and before the
+# commit is created.
 # Failures here block the commit.
 #
-# Use `npm run commit` for an interactive prompt
-# that guides you through the correct format.
+# To skip this hook in exceptional cases:
+# git commit --no-verify
 # --------------------------------------------------
 
+# Run commitlint against the commit message file passed by Git
+# Use `npm run commit` for an interactive prompt
 npx --no -- commitlint --edit "$1" --verbose

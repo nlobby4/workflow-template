@@ -3,13 +3,13 @@
 # --------------------------------------------------
 # Pre-commit hook.
 #
-# Runs fast checks on staged files before a commit
-# is created to catch common issues before they reach CI.
+# Runs before Git creates a commit to validate only the files
+# staged for that commit.
 # Failures here block the commit.
 #
 # To skip this hook in exceptional cases:
-#
 # git commit --no-verify
 # --------------------------------------------------
 
+# Run lint-staged using the staged-file tasks defined in package.json
 npx lint-staged
