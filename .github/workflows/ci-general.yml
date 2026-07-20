@@ -41,9 +41,9 @@ jobs:
     permissions:
       contents: "read"
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: "actions/checkout@v7"
 
-      - uses: "actions/setup-node@v6"
+      - uses: "actions/setup-node@v6.4.0"
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -65,9 +65,9 @@ jobs:
     permissions:
       contents: "read"
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: "actions/checkout@v7"
 
-      - uses: "actions/setup-node@v6"
+      - uses: "actions/setup-node@v6.4.0"
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -88,9 +88,9 @@ jobs:
     permissions:
       contents: "read"
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: "actions/checkout@v7"
 
-      - uses: "actions/setup-node@v6"
+      - uses: "actions/setup-node@v6.4.0"
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -114,9 +114,9 @@ jobs:
     permissions:
       contents: "read"
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: "actions/checkout@v7"
 
-      - uses: "actions/setup-node@v6"
+      - uses: "actions/setup-node@v6.4.0"
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -126,7 +126,7 @@ jobs:
 
       - name: "Restore cspell cache"
         id: "cspell-cache-restore"
-        uses: "actions/cache/restore@v5"
+        uses: "actions/cache/restore@v6"
         with:
           path: ".cache/.cspellcache"
           key: >-
@@ -139,7 +139,7 @@ jobs:
 
       - name: "Save cspell cache"
         if: "always() && steps.cspell-cache-restore.outputs.cache-hit != 'true'"
-        uses: "actions/cache/save@v5"
+        uses: "actions/cache/save@v6"
         with:
           path: ".cache/.cspellcache"
           key: >-
@@ -155,9 +155,9 @@ jobs:
     permissions:
       contents: "read"
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: "actions/checkout@v7"
 
-      - uses: "actions/setup-node@v6"
+      - uses: "actions/setup-node@v6.4.0"
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
