@@ -39,8 +39,8 @@
 !/.github/**
 !/.husky/**
 !/.vscode/**
-!/scripts/**
 !/media/**
+!/scripts/**
 !/*.json
 !/.editorconfig
 !/.git-blame-ignore-revs
@@ -48,21 +48,14 @@
 !/.gitignore
 !/.gitmessage
 !/.mailmap
-!/.markdownlint.json
 !/.markdownlintignore
 !/.npmrc
-!/.nvmrc
 !/.prettierignore
 !/.shellcheckrc
 !/.tool-versions
-!/ARCHITECTURE.md
+!/*.md
 !/AUTHORS
-!/CHANGELOG.md
 !/*.config.js
 !/dictionary.txt
 !/LICENSE
-!/README.md
 # TODO: Allow other root-level files as needed
-
-# TODO: Remove template specific exceptions
-!/README_TEMPLATE.md
