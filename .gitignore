@@ -42,15 +42,13 @@
 !/media/**
 !/scripts/**
 !/*.json
+!/*.*ignore
 !/.editorconfig
 !/.git-blame-ignore-revs
 !/.gitattributes
-!/.gitignore
 !/.gitmessage
 !/.mailmap
-!/.markdownlintignore
 !/.npmrc
-!/.prettierignore
 !/.shellcheckrc
 !/.tool-versions
 !/*.md
