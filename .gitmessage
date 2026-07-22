@@ -16,7 +16,8 @@
 
 # type: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert (required)
 # scope: assets, ci, deps, deps-dev, docs, meta, release, scripts, src, templates, tests (optional)
-# subject: imperative, lowercase start, all caps forbidden, no period, max 72 chars total
+# header: max 72 chars total (header: subject)
+# subject: imperative, lowercase start, all caps forbidden, no period, max 50 chars total
 
 type(scope): short summary
 
