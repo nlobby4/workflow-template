@@ -1,0 +1,31 @@
+# --------------------------------------------------
+# Allowlist Docker ignore file.
+#
+# This file uses a deny-by-default approach so all files
+# are excluded from the Docker build context unless explicitly
+# allowed via exceptions.
+#
+# This keeps the development container build context small and predictable.
+# The devcontainer Dockerfile only copies .tool-versions during image build,
+# the full repository is mounted later by the devcontainer runtime.
+#
+# Add files and paths to the Docker build context by adding exceptions.
+# Keep the context minimal and only allow files that are needed by
+# Dockerfile COPY instructions or build-time tooling.
+#
+# Add specific file:                        !/path/to/file
+# Add all files in a directory:             !/path/to/directory/
+# Add all files in a directory recursively: !/path/to/directory/**
+#
+# A pattern that does not contain a slash matches by basename
+# in any directory.
+# --------------------------------------------------
+
+# Deny by default
+*
+
+# Allow directory traversal
+!*/
+
+# Allow ASDF tool versions used by the devcontainer build
+!/.tool-versions
