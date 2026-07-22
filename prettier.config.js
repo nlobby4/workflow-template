@@ -11,8 +11,9 @@
  * instead of "dockerfile.yaml".
  *
  * **NOTE:** The Prettier vscode extension cannot use a .gitignore and
- * .prettierignore at the same time, instead sync the .prettierignore file with
- * .gitignore to maintain flexibility.
+ * .prettierignore at the same time, if you open a file that is ignored by
+ * .gitignore but not by .prettierignore, it will be formatted by Prettier on
+ * save.
  *
  * @file Prettier configuration file.
  *
@@ -38,14 +39,11 @@ export default {
     "prettier-plugin-jsdoc",
   ],
 
-  // Allow to use prettier-ignore-start and prettier-ignore-end
+  // Allow files to ignore prettier by adding a pragma at the top of the file
   checkIgnorePragma: true,
 
   // Always wrap prose if it exceeds the print width.
   proseWrap: "always",
-
-  // Put the > of a blockquote on the same line as the content.
-  bracketSameLine: true,
 
   // Put the operator at the beginning of the line
   experimentalOperatorPosition: "start",
@@ -56,9 +54,6 @@ export default {
 
   // Don't remove unused imports
   organizeImportsSkipDestructiveCodeActions: true,
-
-  // Quote keys in objects only when required
-  yamlQuoteValues: true,
 
   // Add a period at the end of JSDoc descriptions if missing
   jsdocDescriptionWithDot: true,
