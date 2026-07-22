@@ -14,5 +14,5 @@
 CHANGELOG.md
 
 # Project rules
-.husky
+.husky/_/
 .gitattributes
