@@ -8,8 +8,8 @@ Binary assets in this folder are tracked with Git LFS. The repository stores
 small pointer files in Git history, while the actual asset content is stored in
 Git LFS remote storage.
 
-Markdown and SVG files in this folder are intentionally excluded from Git LFS so
-they remain readable, reviewable, and diff-able in normal Git history.
+Markdown files in this folder are intentionally excluded from Git LFS so they
+remain readable, reviewable, and diff-able in normal Git history.
 
 Adding the rules to `.gitattributes` affects new files from that point forward.
 Existing files are not migrated automatically; move pre-existing large files to
