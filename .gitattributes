@@ -16,10 +16,17 @@
 # Files can be ignored from GitHub source zip downloads
 # by using the `export-ignore` attribute.
 #
-# NOTE: Contributors must have the Git LFS client
-#       installed and run `git lfs install` once per machine for the
-#       filters to work correctly; otherwise, LFS-tracked files will
-#       only appear as pointer text rather than their real content.
+# Contributors must have the Git LFS client installed before
+# working with media assets. Run the repository setup script to
+# configure Git LFS for this repository:
+#
+# ./scripts/linux/commands/repository/setup.sh
+#
+# If you are not using the setup script, initialize Git LFS
+# manually for this repository:
+#
+# git lfs install --local
+# git lfs pull
 #
 # For more information, see:
 # https://git-lfs.com/
@@ -112,26 +119,8 @@
 *.zip      binary
 *.zst      binary
 
-# --------------------------------------------------
-# Web Rules
-# --------------------------------------------------
-
-# Source code
-.husky/*          text eol=lf
-*.js              text eol=lf
-
-# Docker
-Dockerfile        text eol=lf
-
-# RC files
-*.*rc             text eol=lf
-
-# Configs
-package.json      text eol=lf
-package-lock.json text eol=lf -diff
-
 # Ignore files
-*.*ignore         text eol=lf
+*.*ignore  text eol=lf
 
 # --------------------------------------------------
 # Git LFS Rules
@@ -143,8 +132,25 @@ media/** filter=lfs diff=lfs merge=lfs -text
 # Exclude markdown files in the media directory and its subdirectories
 media/**/*.md -filter -diff -merge text diff=markdown
 
-# Exclude SVG files in the media directory and its subdirectories
-media/**/*.svg -filter -diff -merge text diff
+# --------------------------------------------------
+# Web Rules
+# --------------------------------------------------
+
+# Scripts
+.husky/*          text eol=lf
+
+# Source code
+*.js              text eol=lf
+
+# Docker
+Dockerfile        text eol=lf
+
+# RC files
+*.*rc             text eol=lf
+
+# Configs
+package.json      text eol=lf
+package-lock.json text eol=lf -diff
 
 # --------------------------------------------------
 # Custom Rules
