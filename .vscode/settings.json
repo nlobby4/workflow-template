@@ -3,6 +3,7 @@
     "editor.defaultFormatter": "joshbolduc.commitlint",
     "editor.rulers": [72, 100],
     "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 100,
     "workbench.editor.restoreViewState": false
   },
   "[json]": {
@@ -26,7 +27,7 @@
   "editor.formatOnType": false,
   "editor.rulers": [80],
   "files.associations": {
-    ".gitmessage": "ignore",
+    ".gitmessage": "git-commit",
     ".mailmap": "properties",
     "AUTHORS": "properties",
     "CODEOWNERS": "properties",
@@ -43,7 +44,6 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
-    "**/.husky/_/**": true,
-    "**/package-lock.json": true
+    "**/.husky/_/**": true
   }
 }
