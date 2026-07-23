@@ -6,20 +6,22 @@
 #
 # To use this file as the default commit message template,
 # run the setup script or set the following git configuration:
-#
 # git config commit.template .gitmessage
 #
 # Alternatively, use the interactive prompt:
-#
 # npm run commit
+#
+# format:           type(scope): subject
+# header:           max 72 chars total (header: subject)
+# subject:          imperative, lowercase start, all caps forbidden,
+#                   no period, max 50 chars total
+# type (required):  feat, fix, docs, style, refactor, perf, test, build,
+#                   ci, chore, revert
+# scope (optional): assets, ci, deps, deps-dev, docs, meta, release,
+#                   scripts, src, templates, tests
 # --------------------------------------------------
 
-# type: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert (required)
-# scope: assets, ci, deps, deps-dev, docs, meta, release, scripts, src, templates, tests (optional)
-# header: max 72 chars total (header: subject)
-# subject: imperative, lowercase start, all caps forbidden, no period, max 50 chars total
-
-type(scope): short summary
+chore: generic commit
 
 # why: what problem does this solve?
 # what: what changed
