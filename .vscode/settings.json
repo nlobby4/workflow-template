@@ -27,12 +27,12 @@
   "editor.formatOnType": false,
   "editor.rulers": [80],
   "files.associations": {
+    "*.*ignore": "ignore",
     ".gitmessage": "git-commit",
     ".mailmap": "properties",
     "AUTHORS": "properties",
     "CODEOWNERS": "properties",
     "LICENSE": "plaintext",
-    ".markdownlintignore": "ignore",
     ".husky/*": "shellscript",
     ".tool-versions": "properties",
     "dictionary.txt": "properties"
