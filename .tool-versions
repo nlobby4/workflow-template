@@ -5,7 +5,11 @@
 # asdf is automatically installed and run in the development container.
 # GitHub Actions runners install tools from this file via asdf-vm/actions.
 #
-# NOTE: ASDF requires the necessary plugins to be installed.
+# If you are not using the development container, install asdf manually, add the
+# required plugins, then install the pinned tool versions from this file:
+#
+# asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+# asdf install
 #
 # For more information please see:
 # https://asdf-vm.com/manage/configuration.html
