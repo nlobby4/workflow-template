@@ -40,7 +40,9 @@
 !/.husky/**
 !/.vscode/**
 !/media/**
+!/schemas/**
 !/scripts/**
+!/spellcheck/*
 !/*.json
 !/*.*ignore
 !/.editorconfig
@@ -54,6 +56,6 @@
 !/*.md
 !/AUTHORS
 !/*.config.js
-!/dictionary.txt
+!/config.yml
 !/LICENSE
 # TODO: Allow other root-level files as needed
