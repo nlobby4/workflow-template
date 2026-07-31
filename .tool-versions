@@ -3,8 +3,6 @@
 #
 # This file specifies the exact versions of tools to be used in this project.
 # asdf is automatically installed and run in the development container.
-# If you are not using the development container set the tool versions manually:
-#
 # GitHub Actions runners install tools from this file via asdf-vm/actions.
 #
 # NOTE: ASDF requires the necessary plugins to be installed.
