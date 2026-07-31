@@ -6,7 +6,7 @@
 # can be configured to group updates, set schedules, and apply labels.
 #
 # Minor and patch releases are grouped together to reduce PR noise.
-# Major releases are grouped separately by dependency type for explicit review.
+# Major releases are left as individual pull requests for explicit review.
 #
 # For more information please see:
 # https://docs.github.com/en/code-security/dependabot
@@ -16,64 +16,107 @@
 
 version: 2
 updates:
-  # GitHub Actions workflow updates
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  # --------------------------------------------------
+  # Docker dependency updates
+  # --------------------------------------------------
+
+  - package-ecosystem: docker
+    directories:
+      - /
+      - /.devcontainer
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Berlin"
+      interval: weekly
+      day: monday
+      time: 09:00
+      timezone: Europe/Berlin
     open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
     commit-message:
-      prefix: "ci"
-      include: "scope"
+      prefix: build
+      include: scope
+    cooldown:
+      default-days: 8
+
+  # --------------------------------------------------
+  # DevContainer dependency updates
+  # --------------------------------------------------
+
+  - package-ecosystem: devcontainers
+    directory: /.devcontainer
+    schedule:
+      interval: weekly
+      day: monday
+      time: 09:00
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+      include: scope
     cooldown:
       default-days: 8
     groups:
-      github-actions:
+      devcontainer-minor-patch:
         patterns:
           - "*"
+        update-types:
+          - minor
+          - patch
 
+  # --------------------------------------------------
+  # GitHub Actions workflow updates
+  # --------------------------------------------------
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: 09:00
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+      include: scope
+    cooldown:
+      default-days: 8
+    groups:
+      github-actions-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # --------------------------------------------------
   # Node.js dependency updates.
   # Minor and patch updates are grouped to reduce PR noise.
-  # Major updates are grouped separately by dependency type.
-  - package-ecosystem: "npm"
-    directory: "/"
+  # Major updates are left as individual pull requests.
+  # --------------------------------------------------
+
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Berlin"
+      interval: weekly
+      day: monday
+      time: 09:00
+      timezone: Europe/Berlin
     open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: chore
+      prefix-development: chore
+      include: scope
     cooldown:
-      default-days: 4
+      default-days: 7
       semver-minor-days: 6
       semver-major-days: 8
     groups:
-      npm-prod:
-        dependency-type: "production"
+      npm-deps-minor-patch:
+        dependency-type: production
         update-types:
-          - "minor"
-          - "patch"
-      npm-prod-major:
-        dependency-type: "production"
+          - minor
+          - patch
+      npm-deps-dev-minor-patch:
+        dependency-type: development
         update-types:
-          - "major"
-      npm-dev:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-          - "patch"
-      npm-dev-major:
-        dependency-type: "development"
-        update-types:
-          - "major"
+          - minor
+          - patch
   # TODO: Add additional package ecosystems as needed
