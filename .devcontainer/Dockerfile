@@ -35,8 +35,23 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     gawk \
     git-lfs \
     jq \
+    pipx \
     shellcheck \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# --------------------------
+# Install Zizmor
+#
+# Zizmor audits GitHub Actions workflows for security issues.
+# The version is pinned here for reproducibility.
+# To upgrade, update ZIZMOR_VERSION and rebuild the image.
+# --------------------------
+
+ENV ZIZMOR_VERSION=1.26.1
+ENV PIPX_HOME=/opt/pipx
+ENV PIPX_BIN_DIR=/usr/local/bin
+
+RUN pipx install "zizmor==${ZIZMOR_VERSION}"
 
 # --------------------------
 # Install ASDF

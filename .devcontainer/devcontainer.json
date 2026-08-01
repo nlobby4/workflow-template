@@ -19,7 +19,8 @@
         "DavidAnson.vscode-markdownlint",
         "webpro.vscode-knip",
         "redhat.vscode-yaml",
-        "timonwong.shellcheck"
+        "timonwong.shellcheck",
+        "zizmor.zizmor-vscode"
       ]
     }
   },
