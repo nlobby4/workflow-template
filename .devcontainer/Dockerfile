@@ -75,6 +75,27 @@ RUN ACTIONLINT_ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
   && rm -f /tmp/actionlint.tar.gz /tmp/actionlint
 
 # --------------------------
+# Install Act
+#
+# Act runs GitHub Actions workflows locally against a Docker runtime.
+# The version is pinned here for reproducibility.
+# To upgrade, update ACT_VERSION and rebuild the image.
+# --------------------------
+
+ENV ACT_VERSION=0.2.80
+
+RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
+  && case "${ACT_ARCH}" in \
+    x86_64 | arm64) ;; \
+    *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
+  esac \
+  && curl -fsSL "https://github.com/nektos/act/releases/download/v${ACT_VERSION}/act_Linux_${ACT_ARCH}.tar.gz" \
+  -o /tmp/act.tar.gz \
+  && tar -xzf /tmp/act.tar.gz -C /tmp act \
+  && install -m 0755 /tmp/act /usr/local/bin/act \
+  && rm -f /tmp/act.tar.gz /tmp/act
+
+# --------------------------
 # Install ASDF
 #
 # ASDF is used to manage runtime versions (Node.js, etc.) across all
