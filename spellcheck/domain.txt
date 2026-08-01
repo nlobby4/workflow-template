@@ -1,0 +1,20 @@
+# --------------------------------------------------
+# Domain dictionary.
+#
+# Repository-specific technical terms and identifiers accepted by cspell.
+#
+# To add another dictionary, create a new .txt file in this directory and add a
+# matching entry to dictionaryDefinitions and dictionaries in ../.cspell.json.
+# --------------------------------------------------
+
+adoc
+astextplain
+bibtex
+containerenv
+gitmessage
+gpgsign
+gsub
+maxtimeout
+mintimeout
+monorepositories
+signingkey

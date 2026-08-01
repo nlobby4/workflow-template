@@ -1,0 +1,21 @@
+# --------------------------------------------------
+# Tooling dictionary.
+#
+# Tool, extension, package, runtime, and command names accepted by cspell.
+#
+# To add another dictionary, create a new .txt file in this directory and add a
+# matching entry to dictionaryDefinitions and dictionaries in ../.cspell.json.
+# --------------------------------------------------
+
+amannn
+clippy
+DavidAnson
+esbenp
+gofmt
+joshbolduc
+prettiercache
+reshim
+temurin
+timonwong
+webpro
+zizmor

@@ -1,0 +1,11 @@
+# --------------------------------------------------
+# People dictionary.
+#
+# Usernames, maintainer names, and contributor handles accepted by cspell.
+#
+# To add another dictionary, create a new .txt file in this directory and add a
+# matching entry to dictionaryDefinitions and dictionaries in ../.cspell.json.
+# --------------------------------------------------
+
+exquz3me
+sphoon

@@ -21,13 +21,31 @@
     "fonts",
     "filetypes",
     "npm",
-    "project-words"
+    "project-brands",
+    "project-domain",
+    "project-people",
+    "project-tools"
   ],
   "dictionaryDefinitions": [
     {
-      "name": "project-words",
-      "path": "./dictionary.txt",
-      "addWords": true
+      "name": "project-brands",
+      "description": "Project brand and organization names.",
+      "path": "./spellcheck/brands.txt"
+    },
+    {
+      "name": "project-domain",
+      "description": "Project-specific technical terms and identifiers.",
+      "path": "./spellcheck/domain.txt"
+    },
+    {
+      "name": "project-people",
+      "description": "Project usernames, maintainer names, and contributor handles.",
+      "path": "./spellcheck/people.txt"
+    },
+    {
+      "name": "project-tools",
+      "description": "Project tool, extension, package, runtime, and command names.",
+      "path": "./spellcheck/tools.txt"
     }
   ],
   "flagWords": [],
@@ -36,7 +54,7 @@
     ".git",
     ".cache",
     ".husky/_",
-    "dictionary.txt",
+    "spellcheck/",
     "package-lock.json",
     "dist",
     "docs",
