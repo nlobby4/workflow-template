@@ -33,9 +33,9 @@
     "AUTHORS": "properties",
     "CODEOWNERS": "properties",
     "LICENSE": "plaintext",
-    ".husky/*": "shellscript",
     ".tool-versions": "properties",
-    "dictionary.txt": "properties"
+    "**/.husky/*": "shellscript",
+    "**/spellcheck/*.txt": "properties"
   },
   "files.autoSave": "off",
   "knip.configFilePath": "knip.json",
