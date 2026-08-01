@@ -54,6 +54,27 @@ ENV PIPX_BIN_DIR=/usr/local/bin
 RUN pipx install "zizmor==${ZIZMOR_VERSION}"
 
 # --------------------------
+# Install Actionlint
+#
+# Actionlint validates GitHub Actions workflow files locally and in CI.
+# The version is pinned here for reproducibility.
+# To upgrade, update ACTIONLINT_VERSION and rebuild the image.
+# --------------------------
+
+ENV ACTIONLINT_VERSION=1.7.7
+
+RUN ACTIONLINT_ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
+  && case "${ACTIONLINT_ARCH}" in \
+    amd64 | arm64) ;; \
+    *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
+  esac \
+  && curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_${ACTIONLINT_ARCH}.tar.gz" \
+  -o /tmp/actionlint.tar.gz \
+  && tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint \
+  && install -m 0755 /tmp/actionlint /usr/local/bin/actionlint \
+  && rm -f /tmp/actionlint.tar.gz /tmp/actionlint
+
+# --------------------------
 # Install ASDF
 #
 # ASDF is used to manage runtime versions (Node.js, etc.) across all
