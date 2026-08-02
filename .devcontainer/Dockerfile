@@ -32,6 +32,8 @@ FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 # sudo access, and home-directory ownership from the base image.
 RUN groupmod --new-name nlobby4 vscode \
   && usermod --login nlobby4 --home /home/nlobby4 --move-home vscode \
+  && mkdir -p /home/nlobby4/.npm \
+  && chown -R nlobby4:nlobby4 /home/nlobby4/.npm \
   && printf '%s\n' 'nlobby4 ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/nlobby4 \
   && chmod 0440 /etc/sudoers.d/nlobby4
 
