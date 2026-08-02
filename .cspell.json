@@ -54,6 +54,7 @@
     ".git",
     ".cache",
     ".husky/_",
+    "schemas/",
     "spellcheck/",
     "package-lock.json",
     "dist",
