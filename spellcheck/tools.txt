@@ -8,12 +8,16 @@
 # --------------------------------------------------
 amannn
 clippy
+catthehacker
 DavidAnson
 esbenp
+eventpath
 gofmt
 joshbolduc
+ltrimstr
 prettiercache
 reshim
+strenv
 temurin
 timonwong
 webpro
