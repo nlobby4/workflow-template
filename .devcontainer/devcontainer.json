@@ -27,5 +27,5 @@
   "name": "nlobby4 Dev Container",
   "postCreateCommand": "./scripts/linux/setup.sh",
   "postStartCommand": "./scripts/linux/health.sh",
-  "remoteUser": "vscode"
+  "remoteUser": "nlobby4"
 }

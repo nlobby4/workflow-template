@@ -28,6 +28,13 @@
 ARG VARIANT="bookworm"
 FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 
+# Rename the default devcontainer user while preserving its UID, permissions,
+# sudo access, and home-directory ownership from the base image.
+RUN groupmod --new-name nlobby4 vscode \
+  && usermod --login nlobby4 --home /home/nlobby4 --move-home vscode \
+  && printf '%s\n' 'nlobby4 ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/nlobby4 \
+  && chmod 0440 /etc/sudoers.d/nlobby4
+
 # Install dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y install --no-install-recommends \
@@ -103,7 +110,7 @@ RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
 # To upgrade, update ASDF_VERSION and rebuild the image.
 #
 # ASDF_DIR and ASDF_DATA_DIR are set to a shared system path so all users
-# inside the container (including the non-root "vscode" user) can access
+# inside the container (including the non-root "nlobby4" user) can access
 # the installed runtimes without per-user installation.
 #
 # To add more language plugins, extend the RUN block below.
@@ -150,5 +157,5 @@ COPY .tool-versions /usr/local/asdf/.tool-versions
 
 RUN cd /usr/local/asdf && asdf install \
   && asdf reshim \
-  && chown -R vscode:vscode /usr/local/asdf \
+  && chown -R nlobby4:nlobby4 /usr/local/asdf \
   && chmod -R 755 /usr/local/asdf
