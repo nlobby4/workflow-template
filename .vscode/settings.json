@@ -50,7 +50,8 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
-    "**/.husky/_/**": true
+    "**/.husky/_/**": true,
+    "**/package-lock.json": true
   },
   "yaml.schemas": {
     "./schemas/nlobby4.schema.json": [
