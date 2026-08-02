@@ -89,7 +89,7 @@ RUN ACTIONLINT_ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
 # To upgrade, update ACT_VERSION and rebuild the image.
 # --------------------------
 
-ENV ACT_VERSION=0.2.80
+ENV ACT_VERSION=0.2.89
 
 RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
   && case "${ACT_ARCH}" in \
