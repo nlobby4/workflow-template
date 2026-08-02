@@ -24,6 +24,9 @@
       ]
     }
   },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
   "name": "nlobby4 Dev Container",
   "postCreateCommand": "./scripts/linux/setup.sh",
   "postStartCommand": "./scripts/linux/health.sh",
