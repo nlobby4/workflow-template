@@ -27,6 +27,11 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "16gb"
+  },
   "name": "nlobby4 Dev Container",
   "postCreateCommand": "./scripts/linux/setup.sh",
   "postStartCommand": "./scripts/linux/health.sh",
