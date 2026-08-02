@@ -42,6 +42,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     gawk \
     git-lfs \
     jq \
+    yq \
     pipx \
     shellcheck \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
