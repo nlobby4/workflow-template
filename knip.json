@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/knip/schema.json",
+  "entry": [
+    "scripts/node/bin/**/*.js"
+  ],
   "include": [
     "dependencies"
   ]
