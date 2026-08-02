@@ -54,6 +54,10 @@
     "**/package-lock.json": true
   },
   "yaml.schemas": {
+    "./schemas/nlobby4-project.schema.json": [
+      "project/.nlobby4.yml",
+      "project/*/.nlobby4.yml"
+    ],
     "./schemas/nlobby4.schema.json": [
       ".nlobby4.yml"
     ]
