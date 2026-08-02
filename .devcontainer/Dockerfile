@@ -40,7 +40,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y install --no-install-recommends \
     curl \
     gawk \
-    git-lfs \
     jq \
     pipx \
     shellcheck \
