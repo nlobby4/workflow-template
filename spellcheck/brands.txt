@@ -6,6 +6,5 @@
 # To add another dictionary, create a new .txt file in this directory and add a
 # matching entry to dictionaryDefinitions and dictionaries in ../.cspell.json.
 # --------------------------------------------------
-
 flockmod
 nlobby4

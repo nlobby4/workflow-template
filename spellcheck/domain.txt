@@ -6,7 +6,6 @@
 # To add another dictionary, create a new .txt file in this directory and add a
 # matching entry to dictionaryDefinitions and dictionaries in ../.cspell.json.
 # --------------------------------------------------
-
 adoc
 astextplain
 bibtex
@@ -17,4 +16,5 @@ gsub
 maxtimeout
 mintimeout
 monorepositories
+NOPASSWD
 signingkey
