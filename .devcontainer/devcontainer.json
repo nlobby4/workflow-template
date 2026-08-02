@@ -32,6 +32,9 @@
     "memory": "4gb",
     "storage": "16gb"
   },
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-npm-cache,target=/home/nlobby4/.npm,type=volume"
+  ],
   "name": "nlobby4 Dev Container",
   "postCreateCommand": "./scripts/linux/setup.sh",
   "postStartCommand": "./scripts/linux/health.sh",
