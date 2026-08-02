@@ -50,12 +50,12 @@
 !/.gitattributes
 !/.gitmessage
 !/.mailmap
+!/.nlobby4.yml
 !/.npmrc
 !/.shellcheckrc
 !/.tool-versions
 !/*.md
 !/AUTHORS
 !/*.config.js
-!/config.yml
 !/LICENSE
 # TODO: Allow other root-level files as needed
