@@ -72,14 +72,18 @@ RUN pipx install "zizmor==${ZIZMOR_VERSION}"
 # --------------------------
 
 ENV ACTIONLINT_VERSION=1.7.7
+ENV ACTIONLINT_SHA256_AMD64=023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757
+ENV ACTIONLINT_SHA256_ARM64=401942f9c24ed71e4fe71b76c7d638f66d8633575c4016efd2977ce7c28317d0
 
 RUN ACTIONLINT_ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
   && case "${ACTIONLINT_ARCH}" in \
-    amd64 | arm64) ;; \
+    amd64) ACTIONLINT_SHA256="${ACTIONLINT_SHA256_AMD64}" ;; \
+    arm64) ACTIONLINT_SHA256="${ACTIONLINT_SHA256_ARM64}" ;; \
     *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
   esac \
   && curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_${ACTIONLINT_ARCH}.tar.gz" \
   -o /tmp/actionlint.tar.gz \
+  && printf '%s  %s\n' "${ACTIONLINT_SHA256}" /tmp/actionlint.tar.gz | sha256sum -c - \
   && tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint \
   && install -m 0755 /tmp/actionlint /usr/local/bin/actionlint \
   && rm -f /tmp/actionlint.tar.gz /tmp/actionlint
@@ -93,14 +97,18 @@ RUN ACTIONLINT_ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
 # --------------------------
 
 ENV ACT_VERSION=0.2.89
+ENV ACT_SHA256_X86_64=0191d6f1f3b716b5c55820032605d05fc3c1cdbf581ebeff655019e5dd1524c0
+ENV ACT_SHA256_ARM64=daa8679ba9615a74d2d0cec321dc593f21948a2a11bb65862b063d8b930f4bcb
 
 RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
   && case "${ACT_ARCH}" in \
-    x86_64 | arm64) ;; \
+    x86_64) ACT_SHA256="${ACT_SHA256_X86_64}" ;; \
+    arm64) ACT_SHA256="${ACT_SHA256_ARM64}" ;; \
     *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
   esac \
   && curl -fsSL "https://github.com/nektos/act/releases/download/v${ACT_VERSION}/act_Linux_${ACT_ARCH}.tar.gz" \
   -o /tmp/act.tar.gz \
+  && printf '%s  %s\n' "${ACT_SHA256}" /tmp/act.tar.gz | sha256sum -c - \
   && tar -xzf /tmp/act.tar.gz -C /tmp act \
   && install -m 0755 /tmp/act /usr/local/bin/act \
   && rm -f /tmp/act.tar.gz /tmp/act
@@ -122,10 +130,18 @@ RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
 ENV ASDF_VERSION=0.18.1
 ENV ASDF_DIR=/usr/local/asdf
 ENV ASDF_DATA_DIR=/usr/local/asdf
+ENV ASDF_MD5_AMD64=6c68f29f7cf16bf4a0cd2d50f464ccf0
+ENV ASDF_MD5_ARM64=d3e22a5b51ab03a4770c74d9581370f1
 
 RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
+  && case "${ARCH}" in \
+    amd64) ASDF_MD5="${ASDF_MD5_AMD64}" ;; \
+    arm64) ASDF_MD5="${ASDF_MD5_ARM64}" ;; \
+    *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
+  esac \
   && curl -fsSL "https://github.com/asdf-vm/asdf/releases/download/v${ASDF_VERSION}/asdf-v${ASDF_VERSION}-linux-${ARCH}.tar.gz" \
   -o /tmp/asdf.tar.gz \
+  && printf '%s  %s\n' "${ASDF_MD5}" /tmp/asdf.tar.gz | md5sum -c - \
   && tar -xzf /tmp/asdf.tar.gz -C /tmp \
   && mv /tmp/asdf /usr/local/bin/asdf \
   && rm /tmp/asdf.tar.gz \
