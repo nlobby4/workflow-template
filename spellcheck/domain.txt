@@ -16,7 +16,6 @@ gsub
 maxtimeout
 mintimeout
 modeline
-monorepositories
 NOPASSWD
 signingkey
 worktree

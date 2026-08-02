@@ -17,8 +17,6 @@ joshbolduc
 ltrimstr
 prettiercache
 reshim
-strenv
-temurin
 timonwong
 webpro
 zizmor
