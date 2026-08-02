@@ -51,5 +51,10 @@
     "**/node_modules": true,
     "**/dist": true,
     "**/.husky/_/**": true
+  },
+  "yaml.schemas": {
+    "./schemas/nlobby4.schema.json": [
+      ".nlobby4.yml"
+    ]
   }
 }
