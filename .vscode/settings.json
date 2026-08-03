@@ -38,6 +38,12 @@
     "**/spellcheck/*.txt": "properties"
   },
   "files.autoSave": "off",
+  "json.schemaDownload.enable": true,
+  "json.schemaDownload.trustedDomains": {
+    "https://unpkg.com/": true,
+    "https://json.schemastore.org/": true,
+    "https://www.schemastore.org/": true
+  },
   "knip.configFilePath": "knip.json",
   "knip.requireConfig": true,
   "markdownlint.lintWorkspaceGlobs": [
