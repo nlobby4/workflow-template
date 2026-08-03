@@ -28,7 +28,9 @@
 # Allow directory traversal
 !*/
 
-# Allow repository scripts and nlobby4 build snapshot files
+# Allow repository scripts
 !/scripts/**
+
+# Allow nlobby4 build snapshot files
 !/.tool-versions
 !/.nlobby4.yml
