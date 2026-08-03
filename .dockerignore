@@ -6,7 +6,7 @@
 # allowed via exceptions.
 #
 # This keeps the development container build context small and predictable.
-# The devcontainer Dockerfile only copies .tool-versions during image build,
+# The devcontainer Dockerfile only copies the orchestrator CLI and config snapshot;
 # the full repository is mounted later by the devcontainer runtime.
 #
 # Add files and paths to the Docker build context by adding exceptions.
@@ -27,5 +27,7 @@
 # Allow directory traversal
 !*/
 
-# Allow ASDF tool versions used by the devcontainer build
+# Allow nlobby4 build snapshot files used by the devcontainer build
+!/scripts/**
 !/.tool-versions
+!/.nlobby4.yml
