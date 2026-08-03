@@ -10,7 +10,7 @@
 # tools from .tool-versions locally and then run the repository setup through
 # the nlobby4 interface:
 #
-# nlobby4 project setup
+# nlobby4 repository setup
 #
 # For more information, see:
 # https://github.com/devcontainers/images
