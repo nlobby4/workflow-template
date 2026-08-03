@@ -36,7 +36,8 @@
     "source=${localWorkspaceFolderBasename}-npm-cache,target=/home/nlobby4/.npm,type=volume"
   ],
   "name": "nlobby4 Dev Container",
-  "postCreateCommand": "nlobby4 project setup",
+  "postCreateCommand": "nlobby4 repository setup && nlobby4 project setup",
   "postStartCommand": "nlobby4 doctor",
-  "remoteUser": "nlobby4"
+  "remoteUser": "nlobby4",
+  "updateContentCommand": "npm ci --ignore-scripts --silent"
 }
