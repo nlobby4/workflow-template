@@ -5,13 +5,14 @@
 # are excluded from the Docker build context unless explicitly
 # allowed via exceptions.
 #
-# This keeps the development container build context small and predictable.
-# The devcontainer Dockerfile only copies the orchestrator CLI and config snapshot;
-# the full repository is mounted later by the devcontainer runtime.
+# This keeps the development container build context predictable.
+# The devcontainer Dockerfile can copy repository script helpers and the
+# orchestration config snapshot; the full repository is mounted later by the
+# devcontainer runtime.
 #
 # Add files and paths to the Docker build context by adding exceptions.
-# Keep the context minimal and only allow files that are needed by
-# Dockerfile COPY instructions or build-time tooling.
+# Keep the context focused on files that are needed by Dockerfile COPY
+# instructions or build-time tooling.
 #
 # Add specific file:                        !/path/to/file
 # Add all files in a directory:             !/path/to/directory/
@@ -27,7 +28,7 @@
 # Allow directory traversal
 !*/
 
-# Allow nlobby4 build snapshot files used by the devcontainer build
+# Allow repository scripts and nlobby4 build snapshot files
 !/scripts/**
 !/.tool-versions
 !/.nlobby4.yml

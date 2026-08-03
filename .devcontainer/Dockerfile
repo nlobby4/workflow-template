@@ -6,12 +6,11 @@
 # and extends it with additional tools and configuration to ensure consistency
 # across local development environments.
 #
-# If you prefer not to use the development container,
-# you can set up your local environment by running the setup script,
-# and manually configuring the tool versions as specified in .tool-versions.
-# Please note that the script does not automatically install required tools:
+# If you prefer not to use the development container, install the required
+# tools from .tool-versions locally and then run the repository setup through
+# the nlobby4 interface:
 #
-# ./scripts/linux/setup.sh
+# nlobby4 project setup
 #
 # For more information, see:
 # https://github.com/devcontainers/images
@@ -124,7 +123,9 @@ RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
 # inside the container (including the non-root "nlobby4" user) can access
 # the installed runtimes without per-user installation.
 #
-# To add more language plugins, extend the RUN block below.
+# To add language runtimes, add plugin metadata in .nlobby4.yml and requested
+# runtime versions in .tool-versions. The Dockerfile installs whatever
+# .tool-versions requires from the copied build snapshot.
 # --------------------------
 
 ENV ASDF_VERSION=0.18.1
@@ -165,16 +166,23 @@ RUN printf '%s\n' \
 # Enable bash tab-completion for asdf commands.
 RUN echo '. <(asdf completion bash)' >> /etc/bash.bashrc
 
-# Install ASDF plugins and set permissions
-# Available plugins: https://github.com/asdf-vm
-#                    https://github.com/asdf-community
-# TODO: Add needed plugins
-RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+# --------------------------
+# Install nlobby4 Orchestrator
+#
+# The nlobby4 orchestrator is a wrapper script that provides a unified interface
+# for running commands across multiple projects in a repository. It is installed
+# in /usr/local/bin so it is available to all users inside the container.
+# --------------------------
 
-# Install tools
-COPY .tool-versions /usr/local/asdf/.tool-versions
+COPY scripts/linux/commands/repository/orchestrator.sh /usr/local/bin/nlobby4
+RUN chmod 0755 /usr/local/bin/nlobby4
 
-RUN cd /usr/local/asdf && asdf install \
-  && asdf reshim \
+# Copy orchestration inputs as a deterministic image-build snapshot
+RUN mkdir -p /usr/local/share/nlobby4
+COPY .nlobby4.yml /usr/local/share/nlobby4/.nlobby4.yml
+COPY .tool-versions /usr/local/share/nlobby4/.tool-versions
+
+# Provision image toolchains from the build snapshot, not the mounted workspace
+RUN nlobby4 toolchain install \
   && chown -R nlobby4:nlobby4 /usr/local/asdf \
   && chmod -R 755 /usr/local/asdf

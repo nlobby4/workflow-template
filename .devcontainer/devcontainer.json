@@ -36,7 +36,7 @@
     "source=${localWorkspaceFolderBasename}-npm-cache,target=/home/nlobby4/.npm,type=volume"
   ],
   "name": "nlobby4 Dev Container",
-  "postCreateCommand": "./scripts/linux/setup.sh",
-  "postStartCommand": "./scripts/linux/health.sh",
+  "postCreateCommand": "nlobby4 project setup",
+  "postStartCommand": "nlobby4 doctor",
   "remoteUser": "nlobby4"
 }
