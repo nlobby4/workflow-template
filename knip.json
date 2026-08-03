@@ -1,9 +1,14 @@
 {
-  "$schema": "./node_modules/knip/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "scripts/node/bin/**/*.js"
   ],
-  "include": [
-    "dependencies"
+  "ignoreBinaries": [
+    "devcontainer"
+  ],
+  "project": [
+    "scripts/node/**/*.js",
+    "*.config.js",
+    "!project/**"
   ]
 }
