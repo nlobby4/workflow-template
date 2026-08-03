@@ -15,5 +15,5 @@
 # https://asdf-vm.com/manage/configuration.html
 # --------------------------------------------------
 
-nodejs 24.14.1
+nodejs 24.15.0
 # TODO: Add more tools and versions as needed.
