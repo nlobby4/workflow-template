@@ -18,6 +18,7 @@
   },
   "cSpell.advanced.feature.useReferenceProviderWithRename": true,
   "cSpell.fixSpellingWithRenameProvider": true,
+  "cSpell.language": "en-US",
   "cSpell.useLocallyInstalledCSpellDictionaries": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
