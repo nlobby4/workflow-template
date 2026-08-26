@@ -17,7 +17,7 @@
 # https://docs.github.com/en/account-and-profile/how-tos/email-preferences/setting-your-commit-email-address
 # --------------------------------------------------
 
-# Canonical Name <canonical@email.com> [Old Name <old@email.com>]
+# Canonical Name <canonical@email.com> Old Name <old@email.com>
 
 # TODO:  Use your flockmod username and the appropriate nlobby4 email
 sphoon <sphoon@nlobby4.org> exquz3me <105126696+exquz3me@users.noreply.github.com>
