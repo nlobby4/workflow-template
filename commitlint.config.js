@@ -4,9 +4,14 @@
  * extends the standard configuration and defines custom rules for commit types,
  * scopes, and message formatting.
  *
- * Commitlint uses the prompt configuration to provide an interactive commit
- * message wizard that enforces the same rules. Use `npm run commit` to start
- * the interactive prompt that guides you through the correct format.
+ * Use `mise run lint:commits` as the developer-facing command to validate the
+ * latest commit. mise delegates to the npm script, which resolves the exact
+ * repository-local Commitlint version from `node_modules/.bin`. The Git hook
+ * calls the same npm script with the commit message file supplied by Git.
+ *
+ * The prompt configuration drives the interactive Commitizen wizard and uses
+ * the same types, scopes, and message constraints. Use `npm run commit` to
+ * create a commit through that prompt.
  *
  * @file Commitlint configuration file.
  *
@@ -99,54 +104,7 @@ export default {
         },
       },
       scope: {
-        description:
-          "What is the scope of this change (e.g. src, scripts, meta)",
-        enum: {
-          assets: {
-            description: "Static assets",
-            title: "assets",
-          },
-          ci: {
-            description: "CI configuration",
-            title: "ci",
-          },
-          deps: {
-            description: "Production dependencies",
-            title: "deps",
-          },
-          "deps-dev": {
-            description: "Development dependencies",
-            title: "deps-dev",
-          },
-          docs: {
-            description: "Documentation",
-            title: "docs",
-          },
-          meta: {
-            description: "Repository meta files",
-            title: "meta",
-          },
-          release: {
-            description: "Release tooling",
-            title: "release",
-          },
-          scripts: {
-            description: "Repository scripts",
-            title: "scripts",
-          },
-          src: {
-            description: "Source code",
-            title: "src",
-          },
-          templates: {
-            description: "Templates",
-            title: "templates",
-          },
-          tests: {
-            description: "Tests",
-            title: "tests",
-          },
-        },
+        description: "What is the scope of this change (optional)",
       },
       subject: {
         description:
@@ -197,23 +155,6 @@ export default {
     ],
     "type-case": [2, "always", "lower-case"],
     "type-empty": [2, "never"],
-    "scope-enum": [
-      2,
-      "always",
-      [
-        "assets",
-        "ci",
-        "deps",
-        "deps-dev",
-        "docs",
-        "meta",
-        "release",
-        "scripts",
-        "src",
-        "templates",
-        "tests",
-      ],
-    ],
     "scope-case": [2, "always", "kebab-case"],
     "subject-empty": [2, "never"],
     "subject-case": [
@@ -221,19 +162,21 @@ export default {
       "never",
       ["sentence-case", "start-case", "pascal-case", "upper-case"],
     ],
-    "subject-max-length": [2, "always", 50],
+    "subject-max-length": [1, "always", 50],
     "subject-full-stop": [2, "never", "."],
-    "header-max-length": [2, "always", 72],
+    "header-max-length": [1, "always", 72],
+    "header-trim": [2, "always"],
+    "body-leading-blank": [2, "always"],
     "body-max-line-length": [1, "always", 100],
     "footer-max-line-length": [1, "always", 100],
-    "footer-leading-blank": [1, "always"],
+    "footer-leading-blank": [2, "always"],
     "no-empty-scope": [2, "always"],
   },
   plugins: [
     {
       rules: {
         "no-empty-scope": ({ header }) => [
-          !header.includes("():"),
+          !/^[a-z][a-z-]*\(\)!?:/.test(header),
           "Scope cannot be empty. Use 'type: subject' or 'type(scope): subject'.",
         ],
       },
