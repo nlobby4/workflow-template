@@ -12,6 +12,7 @@
 # Stop the editor from looking for .editorconfig files in the parent directories
 root = true
 
+# Default settings for all files
 [*]
 charset = utf-8
 end_of_line = lf
@@ -21,17 +22,17 @@ indent_size = 2
 max_line_length = 80
 trim_trailing_whitespace = true
 
-[*.{bat,cmd,ps1,csv}]
-end_of_line = crlf
-
-[*.{md,mdx}]
+# Configure specific directories
+[**/.generated/**]
+charset = unset
+end_of_line = unset
+indent_style = unset
 indent_size = unset
-trim_trailing_whitespace = false
+insert_final_newline = unset
+max_line_length = unset
+trim_trailing_whitespace = unset
 
-[*.ansi]
-insert_final_newline = false
-trim_trailing_whitespace = false
-
+# Configure specific file types
 [*.{patch,diff}]
 charset = unset
 end_of_line = unset
@@ -41,11 +42,13 @@ insert_final_newline = unset
 max_line_length = unset
 trim_trailing_whitespace = false
 
-[**/.generated/**]
-charset = unset
-end_of_line = unset
-indent_style = unset
+[*.{bat,cmd,ps1,csv}]
+end_of_line = crlf
+
+[*.ansi]
+insert_final_newline = false
+trim_trailing_whitespace = false
+
+[*.{md,mdx}]
 indent_size = unset
-insert_final_newline = unset
-max_line_length = unset
-trim_trailing_whitespace = unset
+trim_trailing_whitespace = false
