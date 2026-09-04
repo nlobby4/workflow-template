@@ -25,6 +25,7 @@ max_line_length = 80
 end_of_line = crlf
 
 [*.md]
+indent_size = unset
 trim_trailing_whitespace = false
 
 [*.ansi]
@@ -32,6 +33,10 @@ insert_final_newline = false
 trim_trailing_whitespace = false
 
 [*.patch]
+charset = unset
 end_of_line = unset
+indent_style = unset
+indent_size = unset
 insert_final_newline = unset
+max_line_length = unset
 trim_trailing_whitespace = false
