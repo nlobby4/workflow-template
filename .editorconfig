@@ -21,9 +21,17 @@ indent_style = space
 indent_size = 2
 max_line_length = 80
 
+[*.{bat,cmd,ps1,csv}]
+end_of_line = crlf
+
 [*.md]
 trim_trailing_whitespace = false
 
 [*.ansi]
 insert_final_newline = false
+trim_trailing_whitespace = false
+
+[*.patch]
+end_of_line = unset
+insert_final_newline = unset
 trim_trailing_whitespace = false
