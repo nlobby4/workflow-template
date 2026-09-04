@@ -22,7 +22,7 @@ indent_size = 2
 max_line_length = 80
 trim_trailing_whitespace = true
 
-# Configure specific directories
+# Stettings for specific directories
 [**/.generated/**]
 charset = unset
 end_of_line = unset
@@ -32,7 +32,7 @@ insert_final_newline = unset
 max_line_length = unset
 trim_trailing_whitespace = unset
 
-# Configure specific file types
+# Settings for specific file types
 [*.{patch,diff}]
 charset = unset
 end_of_line = unset
