@@ -15,9 +15,10 @@
 set -eu
 
 # Spell-check the commit message passed by Git
-pnpm exec cspell lint stdin://COMMIT_EDITMSG \
+pnpm exec cspell lint "$1" \
   --language-id git-commit \
-  --no-progress < "$1"
+  --no-cache \
+  --no-progress
 
 # Validate the commit message file through the shared Commitlint runner
 pnpm run lint:commit --edit "$1"
