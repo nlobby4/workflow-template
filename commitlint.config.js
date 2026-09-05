@@ -5,13 +5,14 @@
  * scopes, and message formatting.
  *
  * Use `mise run lint:commits` as the developer-facing command to validate the
- * latest commit. mise delegates to the npm script, which resolves the exact
+ * latest commit. mise delegates to the pnpm script, which resolves the exact
  * repository-local Commitlint version from `node_modules/.bin`. The Git hook
- * calls the same npm script with the commit message file supplied by Git.
+ * calls the same pnpm script with the commit message file supplied by Git.
  *
  * The prompt configuration drives the interactive Commitizen wizard and uses
- * the same types, scopes, and message constraints. Use `npm run commit` to
- * create a commit through that prompt.
+ * the same types, scopes, and message constraints. Use `mise run commit` as the
+ * developer-facing command, or `pnpm run commit` as the direct package-script
+ * path, to create a commit through that prompt.
  *
  * @file Commitlint configuration file.
  *
@@ -51,7 +52,7 @@ export default {
           },
           fix: {
             description: "A bug fix",
-            title: "Bug Fixes",
+            title: "A confirmed issue fix",
             emoji: "🐛",
           },
           docs: {
@@ -60,7 +61,7 @@ export default {
             emoji: "📚",
           },
           style: {
-            description: "Changes that do not affect the meaning of the code",
+            description: "Changes that only change the style of the code",
             title: "Styles",
             emoji: "🧽",
           },
@@ -92,7 +93,8 @@ export default {
             emoji: "🔄",
           },
           chore: {
-            description: "Other changes that do not modify src or test files",
+            description:
+              "Maintenance changes that do not change product behavior",
             title: "Chores",
             emoji: "🧹",
           },
