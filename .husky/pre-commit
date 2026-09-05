@@ -12,4 +12,4 @@
 # --------------------------------------------------
 
 # Run lint-staged using the staged-file tasks defined in package.json
-npx lint-staged
+pnpm exec lint-staged

@@ -11,6 +11,13 @@
 # git commit --no-verify
 # --------------------------------------------------
 
-# Run commitlint against the commit message file passed by Git
-# Use `npm run commit` for an interactive prompt
-npx --no -- commitlint --edit "$1" --verbose
+# Exit immediately if a command fails
+set -eu
+
+# Spell-check the commit message passed by Git
+pnpm exec cspell lint stdin://COMMIT_EDITMSG \
+  --language-id git-commit \
+  --no-progress < "$1"
+
+# Validate the commit message file through the shared Commitlint runner
+pnpm run lint:commit --edit "$1"
