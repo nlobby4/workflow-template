@@ -4,25 +4,33 @@
 # This file serves as a template for writing consistent commit messages
 # that satisfy the Conventional Commits specification.
 #
-# To use this file as the default commit message template,
-# run the setup script or set the following git configuration:
-# git config commit.template .gitmessage
+# The recommended setup path configures this template automatically:
+# mise run setup
 #
-# Alternatively, use the interactive prompt:
-# npm run commit
+# To configure only the commit template without running repository setup, use:
+# git config --local commit.template .gitmessage
 #
-# format:           type(scope): subject
-# header:           max 72 chars total (header: subject)
-# subject:          imperative, lowercase start, all caps forbidden,
-#                   no period, max 50 chars total
+# To create a commit through the interactive prompt, use the developer-facing
+# command `mise run commit`, or run the underlying package script directly with
+# `pnpm run commit`.
+#
+# format:           type(scope)!: subject
+# header:           complete first line; warns when longer than 72 characters
+# subject:          imperative, lowercase start, all caps forbidden, no period;
+#                   warns when longer than 50 characters
 # type (required):  feat, fix, docs, style, refactor, perf, test, build,
 #                   ci, chore, revert
 # scope (optional): any non-empty kebab-case value
+# dependencies:     use the deps or dev-deps scope as applicable
+# body/footer:      separate each from the preceding content with a blank line;
+#                   warns when a line is longer than 100 characters
+# breaking change:  add ! before the colon and a BREAKING CHANGE footer
 # --------------------------------------------------
 
-chore: generic commit
+chore: describe the change
 
 # why: what problem does this solve?
 # what: what changed
 
+# BREAKING CHANGE: describe the change and required migration
 # Refs: #issue
