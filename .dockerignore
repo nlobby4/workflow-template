@@ -5,10 +5,9 @@
 # are excluded from the Docker build context unless explicitly
 # allowed via exceptions.
 #
-# This keeps the development container build context predictable.
-# The devcontainer Dockerfile can copy repository script helpers and the
-# orchestration config snapshot; the full repository is mounted later by the
-# devcontainer runtime.
+# This keeps the development container build context predictable. The
+# Dockerfile receives only explicitly allowed build-time inputs, while the
+# complete repository is mounted later by the devcontainer runtime.
 #
 # Add files and paths to the Docker build context by adding exceptions.
 # Keep the context focused on files that are needed by Dockerfile COPY
@@ -28,9 +27,6 @@
 # Allow directory traversal
 !*/
 
-# Allow repository scripts
-!/scripts/**
-
-# Allow nlobby4 build snapshot files
-!/.tool-versions
-!/.nlobby4.yml
+# Dockerfile COPY inputs
+!/mise.lock
+!/mise.toml
