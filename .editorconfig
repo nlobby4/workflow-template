@@ -1,9 +1,11 @@
 # --------------------------------------------------
 # EditorConfig configuration file.
 #
-# EditorConfig helps maintain consistent coding styles for multiple developers
-# working on the same project across various editors and IDEs. Note that some
-# editors may require a plugin to enable EditorConfig support.
+# EditorConfig helps maintain consistent coding styles across editors and IDEs.
+# Matching sections are applied from top to bottom, so later settings override
+# earlier settings. A closer nested .editorconfig takes precedence over this
+# root configuration. Some editors may require a plugin for EditorConfig
+# support.
 #
 # For more information please see:
 # https://editorconfig.org/
@@ -21,16 +23,6 @@ indent_style = space
 indent_size = 2
 max_line_length = 80
 trim_trailing_whitespace = true
-
-# Stettings for specific directories
-[**/.generated/**]
-charset = unset
-end_of_line = unset
-indent_style = unset
-indent_size = unset
-insert_final_newline = unset
-max_line_length = unset
-trim_trailing_whitespace = unset
 
 # Settings for specific file types
 [*.{patch,diff}]
@@ -52,3 +44,13 @@ trim_trailing_whitespace = false
 [*.{md,mdx}]
 indent_size = unset
 trim_trailing_whitespace = false
+
+# Settings for specific directories
+[{.cache/**,**/.generated/**}]
+charset = unset
+end_of_line = unset
+indent_style = unset
+indent_size = unset
+insert_final_newline = unset
+max_line_length = unset
+trim_trailing_whitespace = unset
