@@ -4,7 +4,7 @@
  * extends the standard configuration and defines custom rules for commit types,
  * scopes, and message formatting.
  *
- * Use `mise run lint:commits` as the developer-facing command to validate the
+ * Use `mise run lint:commit` as the developer-facing command to validate the
  * latest commit. mise delegates to the pnpm script, which resolves the exact
  * repository-local Commitlint version from `node_modules/.bin`. The Git hook
  * calls the same pnpm script with the commit message file supplied by Git.
