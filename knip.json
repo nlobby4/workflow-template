@@ -1,14 +1,15 @@
 {
-  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
   "entry": [
-    "scripts/node/bin/**/*.js"
+    "scripts/node/markdownlint/github-html.mjs",
+    "scripts/node/build-policy-input.js",
+    "scripts/node/bin/node-status.js",
+    "scripts/node/bin/validate-schemas.js",
+    "scripts/node/bin/visible-width.js",
+    "scripts/node/bin/wrap-lines.js"
   ],
-  "ignoreBinaries": [
-    "devcontainer"
-  ],
-  "project": [
-    "scripts/node/**/*.js",
-    "*.config.js",
-    "!project/**"
-  ]
+  "ignoreBinaries": ["devcontainer", "tombi", "yamllint"],
+  "ignoreDependencies": ["@commitlint/cli", "nx"],
+  "project": ["scripts/node/**/*.{js,mjs}", "*.config.js"],
+  "treatConfigHintsAsErrors": true
 }

@@ -5,9 +5,8 @@
 # Uses pull_request to safely execute untrusted code
 # from forks without elevated privileges.
 #
-# Jobs run in parallel. Node.js npm cache is shared
-# across jobs via setup-node's built-in cache support,
-# keyed by package-lock.json hash for precise invalidation.
+# Jobs install tool versions from mise.toml and mise.lock so tests use the same
+# runtime versions as the development container and local users.
 #
 # For more information please see:
 # https://docs.github.com/en/actions/writing-workflows
@@ -15,14 +14,14 @@
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: "CI Test"
+name: CI Test
 on:
   pull_request:
     branches:
-      - "main"
+      - main
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}"
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 # Deny all by default, jobs declare their own permissions as needed
@@ -33,21 +32,42 @@ jobs:
   # Test - runs code quality checks.
   # --------------------------------------------------
   test:
-    name: "test"
-    runs-on: "ubuntu-latest"
+    name: test
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install dependencies"
-        run: "npm ci --ignore-scripts"
+      - uses: ./.github/actions/setup-node-deps
 
-      - name: "Test"
-        run: "npm test"
+      - name: Compute test cache key
+        id: test-cache-key
+        env:
+          CACHE_HASH: ${{ hashFiles( 'pnpm-lock.yaml', 'package.json', '.nlobby4.yml', 'project/**/.nlobby4.yml', 'mise.toml', 'mise.lock', 'project/**/package-lock.json', 'project/**/pnpm-lock.yaml', 'project/**/yarn.lock', 'project/**/Cargo.lock', 'project/**/go.sum', 'project/**/poetry.lock', 'project/**/uv.lock', 'project/**/requirements*.txt', 'project/**/pom.xml', 'project/**/gradle.lockfile' ) }}
+          RUNNER_OS: ${{ runner.os }}
+        run: pnpm run ci:test-cache-key
+
+      - name: Restore test cache
+        id: test-cache-restore
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            .cache/test
+          key: ${{ steps.test-cache-key.outputs.value }}
+          restore-keys: |
+            test-${{ runner.os }}-
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Save test cache
+        if: always() && steps.test-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            .cache/test
+          key: ${{ steps.test-cache-key.outputs.value }}

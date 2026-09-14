@@ -1,10 +1,7 @@
 {
   "build": {
     "dockerfile": "Dockerfile",
-    "context": "..",
-    "args": {
-      "VARIANT": "bookworm"
-    }
+    "context": ".."
   },
   "customizations": {
     "vscode": {
@@ -20,24 +17,44 @@
         "webpro.vscode-knip",
         "redhat.vscode-yaml",
         "timonwong.shellcheck",
-        "zizmor.zizmor-vscode"
+        "zizmor.zizmor-vscode",
+        "exiasr.hadolint",
+        "tombi-toml.tombi",
+        "dbaeumer.vscode-eslint"
       ]
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:4.1.0": {
+      "dockerDashComposeVersion": "none",
+      "installDockerBuildx": true,
+      "installDockerComposeSwitch": false,
+      "moby": true,
+      "mobyBuildxVersion": "0.37.0",
+      "version": "29.6.0"
+    }
   },
   "hostRequirements": {
-    "cpus": 2,
-    "memory": "4gb",
-    "storage": "16gb"
+    "cpus": 4,
+    "memory": "8gb",
+    "storage": "32gb"
   },
+  "init": true,
   "mounts": [
-    "source=${localWorkspaceFolderBasename}-npm-cache,target=/home/nlobby4/.npm,type=volume"
+    {
+      "source": "workflow-template-pnpm-v10-store-${devcontainerId}",
+      "target": "/home/nlobby4/.local/share/pnpm/store",
+      "type": "volume"
+    }
   ],
   "name": "nlobby4 Dev Container",
-  "postCreateCommand": "nlobby4 repository setup && nlobby4 project setup",
-  "postStartCommand": "nlobby4 doctor",
+  "postCreateCommand": "mise trust && mise run setup",
+  "postStartCommand": "bash scripts/linux/commands/repository/container-start.sh",
+  "remoteEnv": {
+    "NPM_CONFIG_STORE_DIR": "/home/nlobby4/.local/share/pnpm/store"
+  },
   "remoteUser": "nlobby4",
-  "updateContentCommand": "npm ci --ignore-scripts --silent"
+  "shutdownAction": "stopContainer",
+  "updateRemoteUserUID": true,
+  "waitFor": "postCreateCommand"
 }
