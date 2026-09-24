@@ -1,0 +1,54 @@
+# --------------------------------------------------
+# nlobby4 project specification.
+#
+# This file exposes the current project to the repository wrapper. Keep command
+# bodies project-native; the root orchestrator only discovers and delegates.
+# --------------------------------------------------
+
+# yaml-language-server: $schema=__SCHEMA_PATH__
+
+version: 1
+name: __PROJECT_NAME__
+type: __PROJECT_TYPE__
+description: __PROJECT_DESCRIPTION__
+
+language:
+  primary: __PROJECT_LANGUAGE__
+
+tools:
+  packageManager: __PROJECT_PACKAGE_MANAGER__
+
+commands:
+  setup:
+    run: __SETUP_COMMAND__
+    required: false
+    tools:
+      - __SETUP_TOOL__
+  format:
+    run: __FORMAT_COMMAND__
+    required: false
+    tools:
+      - __FORMAT_TOOL__
+  lint:
+    run: __LINT_COMMAND__
+    required: false
+    tools:
+      - __LINT_TOOL__
+  test:
+    run: __TEST_COMMAND__
+    required: false
+    tools:
+      - __TEST_TOOL__
+  build:
+    run: __BUILD_COMMAND__
+    required: false
+    tools:
+      - __BUILD_TOOL__
+
+paths:
+  sources:
+    - __SOURCE_PATH__
+  tests:
+    - __TEST_PATH__
+  config:
+    - __CONFIG_PATH__

@@ -1,0 +1,145 @@
+# --------------------------------------------------
+# mise development environment and task configuration.
+#
+# mise owns tool versions, environment bootstrapping, and the stable developer
+# interface. pnpm owns repository scripts, while the project gate orchestrator
+# delegates lifecycle commands to projects.
+# --------------------------------------------------
+
+min_version = "2026.9.1"
+
+[settings]
+lockfile = true
+
+[tools]
+node = "24.15.0"
+"npm:pnpm" = "10.20.0"
+"npm:@devcontainers/cli" = "0.88.0"
+shellcheck = "0.11.0"
+trivy = "0.69.3"
+act = "0.2.89"
+actionlint = "1.7.7"
+conftest = "0.69.0"
+cosign = "3.1.3"
+gitleaks = "8.30.1"
+hadolint = "2.15.1"
+tombi = "1.5.2"
+yamllint = "1.38.0"
+zizmor = "1.26.1"
+
+[tasks.install]
+description = "Install repository dependencies"
+run = "pnpm install --frozen-lockfile --ignore-scripts --silent"
+
+[tasks.setup]
+description = "Set up the repository"
+depends = ["install"]
+run = "bash scripts/linux/commands/repository/setup.sh"
+
+[tasks.doctor]
+description = "Check the repository development environment"
+run = "bash scripts/linux/commands/repository/health.sh"
+
+[tasks.commit]
+description = "Create a commit with the interactive Commitizen prompt"
+run = "pnpm run commit"
+
+[tasks.format]
+description = "Format the repository and all projects"
+run = "pnpm run format"
+
+[tasks.lint]
+description = "Lint the repository and all projects"
+run = "pnpm run lint"
+
+[tasks."lint:commit"]
+description = "Lint the latest commit message"
+run = "pnpm run lint:commit"
+
+[tasks.test]
+description = "Test the repository and all projects"
+run = "pnpm run test"
+
+[tasks."test:devcontainer"]
+description = "Build and smoke-test a disposable development container"
+run = "pnpm run test:devcontainer"
+
+[tasks.build]
+description = "Build the repository and all projects"
+run = "pnpm run build"
+
+[tasks.audit]
+description = "Audit repository and project dependencies"
+run = "pnpm run audit"
+
+[tasks.check]
+description = "Run all repository and project quality gates"
+run = "pnpm run check"
+
+[tasks."gate:add"]
+description = "Add or update one project gate manifest"
+run = "pnpm run gate:add"
+
+[tasks."gate:list"]
+description = "List configured project gates"
+run = "pnpm run gate:list"
+
+[tasks."gate:run"]
+description = "Run a lifecycle command through the project gate orchestrator"
+run = "pnpm run gate:run"
+
+[tasks."devcontainer:up"]
+description = "Create or start the development container"
+run = "pnpm run devcontainer:up"
+
+[tasks."devcontainer:rebuild"]
+description = "Rebuild the development container without cached image layers"
+run = "pnpm run devcontainer:rebuild"
+
+[tasks."devcontainer:clear"]
+description = "Remove this workspace's development container caches"
+run = "pnpm run devcontainer:clear"
+
+[tasks."devcontainer:shell"]
+description = "Open Bash inside the development container"
+run = "pnpm run devcontainer:shell"
+
+[tasks."devcontainer:doctor"]
+description = "Run repository health checks inside the development container"
+run = "pnpm run devcontainer:doctor"
+
+[tasks."devcontainer:scan"]
+description = "Build and scan the development-container image and generate its SBOM"
+run = "pnpm run devcontainer:scan"
+
+[tasks."lint:secrets"]
+description = "Scan complete Git history for secrets"
+run = "pnpm run lint:secrets"
+
+[tasks."lint:secrets:staged"]
+description = "Scan staged changes for secrets"
+run = "pnpm run lint:secrets:staged"
+
+[tasks."lint:dockerfile"]
+description = "Lint the development-container Dockerfile"
+run = "pnpm run lint:dockerfile"
+
+[tasks."lint:policy"]
+description = "Validate repository configuration policy"
+run = "pnpm run lint:policy"
+
+[tasks."lint:toml"]
+description = "Lint repository TOML configuration"
+run = "pnpm run lint:toml"
+
+[tasks."lint:yaml"]
+description = "Lint repository YAML configuration"
+run = "pnpm run lint:yaml"
+
+[tasks."devcontainer:sign"]
+description = "Keylessly sign and attest a published development-container image"
+run = "pnpm run devcontainer:sign"
+
+[tasks."devcontainer:verify"]
+description = "Verify a development-container signature and SBOM attestations"
+run = "pnpm run devcontainer:verify"

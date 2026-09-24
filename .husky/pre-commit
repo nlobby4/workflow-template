@@ -11,5 +11,8 @@
 # git commit --no-verify
 # --------------------------------------------------
 
+# Reject secrets before formatters rewrite any staged content.
+pnpm run lint:secrets:staged
+
 # Run lint-staged using the staged-file tasks defined in package.json
 pnpm exec lint-staged

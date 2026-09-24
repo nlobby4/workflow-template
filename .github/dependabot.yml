@@ -1,9 +1,10 @@
 # --------------------------------------------------
 # Dependabot configuration file.
 #
-# Dependabot opens pull requests to keep dependencies up to date
-# automatically. It supports a wide range of package ecosystems and
-# can be configured to group updates, set schedules, and apply labels.
+# Dependabot maintains the dependency sources it understands: pnpm manifests,
+# GitHub Actions, the Dev Container Feature, and Dockerfile image references.
+# Direct Dockerfile tool pins in .devcontainer/versions.env and their hashes in
+# .devcontainer/checksums.sha256 remain deliberate maintainer updates.
 #
 # Minor and patch releases are grouped together to reduce PR noise.
 # Major releases are left as individual pull requests for explicit review.
@@ -21,9 +22,7 @@ updates:
   # --------------------------------------------------
 
   - package-ecosystem: docker
-    directories:
-      - /
-      - /.devcontainer
+    directory: /.devcontainer
     schedule:
       interval: weekly
       day: monday
@@ -33,6 +32,9 @@ updates:
     commit-message:
       prefix: build
       include: scope
+    labels:
+      - build
+      - dependencies
     cooldown:
       default-days: 8
 
@@ -51,6 +53,9 @@ updates:
     commit-message:
       prefix: build
       include: scope
+    labels:
+      - build
+      - dependencies
     cooldown:
       default-days: 8
     groups:
@@ -76,6 +81,9 @@ updates:
     commit-message:
       prefix: ci
       include: scope
+    labels:
+      - ci
+      - dependencies
     cooldown:
       default-days: 8
     groups:
@@ -101,9 +109,11 @@ updates:
       timezone: Europe/Berlin
     open-pull-requests-limit: 5
     commit-message:
-      prefix: chore
-      prefix-development: chore
-      include: scope
+      prefix: chore(deps)
+      prefix-development: chore(dev-deps)
+    labels:
+      - chore
+      - dependencies
     cooldown:
       default-days: 7
       semver-minor-days: 6
@@ -119,4 +129,3 @@ updates:
         update-types:
           - minor
           - patch
-  # TODO: Add additional package ecosystems as needed

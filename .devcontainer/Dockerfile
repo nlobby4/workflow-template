@@ -2,187 +2,136 @@
 # Dockerfile for the development container.
 #
 # This Dockerfile defines the development environment.
-# It is based on a official devcontainer image (Debian Bookworm variant)
-# and extends it with additional tools and configuration to ensure consistency
-# across local development environments.
+# It is based on Micros*ft's official Dev Containers base image for Debian
+# Bookworm and extends it with additional tools and configuration to ensure
+# consistency across local development environments.
 #
-# If you prefer not to use the development container, install the required
-# tools from .tool-versions locally and then run the repository setup through
-# the nlobby4 interface:
+# The multi-architecture Dockerfile BuildKit frontend is pinned by digest while
+# retaining its major tag as a human-readable update channel. Review and refresh
+# the tag and digest together when updating the BuildKit frontend.
 #
-# nlobby4 repository setup
+# The development container provisions tools during its image build and runs
+# repository setup automatically when it is created. For the equivalent
+# managed local path, install mise and run:
+#
+# mise trust
+# mise install --locked
+# mise run setup
+#
+# To invoke the underlying repository setup script directly instead of the
+# mise task, run:
+#
+# bash scripts/linux/commands/repository/setup.sh
 #
 # For more information, see:
+# https://mise.jdx.dev/
 # https://github.com/devcontainers/images
 # https://containers.dev/supporting
 # --------------------------------------------------
 
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
 
 # --------------------------
 # Base Image
 # --------------------------
 
-# Use the official Debian Bookworm image
-ARG VARIANT="bookworm"
-FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
+# Use the Micros*ft Dev Containers Debian Bookworm image. The complete tag and
+# immutable OCI index digest are owned by this FROM instruction so Docker
+# tooling and Dependabot can detect and update the dependency directly.
+FROM mcr.microsoft.com/devcontainers/base:bookworm@sha256:86165cfc170e9b2aa8df90b847127eea97b08eb9987021e6e6ec6c3a96545d7c
 
-# Rename the default devcontainer user while preserving its UID, permissions,
-# sudo access, and home-directory ownership from the base image.
+ARG TARGETARCH
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV PATH="/home/nlobby4/.local/share/mise/shims:/usr/local/share/mise/shims:${PATH}"
+
+# Copy the canonical version manifest before its dependent layers.
+# Update versions when their corresponding dependencies change.
+COPY .devcontainer/versions.env /usr/local/share/devcontainer/versions.env
+
+# Remove every inherited APT source before configuring the dated Debian snapshot,
+# so future base-image sources cannot remain enabled accidentally.
+RUN . /usr/local/share/devcontainer/versions.env \
+  && rm -f \
+    /etc/apt/sources.list \
+    /etc/apt/sources.list.d/*.list \
+    /etc/apt/sources.list.d/*.sources \
+  && printf '%s\n' \
+    'Types: deb' \
+    "URIs: https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}" \
+    'Suites: bookworm bookworm-updates' \
+    'Components: main' \
+    'Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg' \
+    'Check-Valid-Until: no' \
+    '' \
+    'Types: deb' \
+    "URIs: https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}" \
+    'Suites: bookworm-security' \
+    'Components: main' \
+    'Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg' \
+    'Check-Valid-Until: no' \
+    > /etc/apt/sources.list.d/debian.sources
+
+# Rename the default user while preserving its UID and home ownership.
+# Remove inherited sudo membership and policy;
+# Image provisioning remains build-time.
 RUN groupmod --new-name nlobby4 vscode \
   && usermod --login nlobby4 --home /home/nlobby4 --move-home vscode \
-  && mkdir -p /home/nlobby4/.npm \
-  && chown -R nlobby4:nlobby4 /home/nlobby4/.npm \
-  && printf '%s\n' 'nlobby4 ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/nlobby4 \
-  && chmod 0440 /etc/sudoers.d/nlobby4
+  && if id -nG nlobby4 | grep -qw sudo; then gpasswd --delete nlobby4 sudo; fi \
+  && rm -f /etc/sudoers.d/vscode /etc/sudoers.d/nlobby4 \
+  && mkdir -p /home/nlobby4/.cache /home/nlobby4/.local/share/pnpm/store \
+  && chown -R nlobby4:nlobby4 /home/nlobby4/.cache /home/nlobby4/.local
 
-# Install dependencies
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+# Install direct Debian dependencies at exact versions from the dated snapshot.
+# Transitive packages are resolved from the same immutable package index.
+RUN . /usr/local/share/devcontainer/versions.env \
+  && DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y install --no-install-recommends \
-    curl \
-    gawk \
-    git-lfs \
-    jq \
-    yq \
-    pipx \
-    shellcheck \
+    cmark-gfm="${CMARK_GFM_VERSION}" curl="${CURL_VERSION}" \
+    gawk="${GAWK_VERSION}" git-lfs="${GIT_LFS_VERSION}" \
+    jq="${JQ_VERSION}" yq="${YQ_VERSION}" \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # --------------------------
-# Install Zizmor
+# Install mise
 #
-# Zizmor audits GitHub Actions workflows for security issues.
-# The version is pinned here for reproducibility.
-# To upgrade, update ZIZMOR_VERSION and rebuild the image.
-# --------------------------
-
-ENV ZIZMOR_VERSION=1.26.1
-ENV PIPX_HOME=/opt/pipx
-ENV PIPX_BIN_DIR=/usr/local/bin
-
-RUN pipx install "zizmor==${ZIZMOR_VERSION}"
-
-# --------------------------
-# Install Actionlint
+# mise manages runtime versions and repository tasks. System installations make
+# the image-provided tools available to every user while keeping user-managed
+# tool installations separate.
 #
-# Actionlint validates GitHub Actions workflow files locally and in CI.
-# The version is pinned here for reproducibility.
-# To upgrade, update ACTIONLINT_VERSION and rebuild the image.
+# mise.toml and mise.lock own the tools installed through mise.
+#
+# The bootstrap version is stored in versions.env, and checksums.sha256
+# authenticates the amd64 and arm64 binaries.
 # --------------------------
 
-ENV ACTIONLINT_VERSION=1.7.7
-ENV ACTIONLINT_SHA256_AMD64=023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757
-ENV ACTIONLINT_SHA256_ARM64=401942f9c24ed71e4fe71b76c7d638f66d8633575c4016efd2977ce7c28317d0
+COPY .devcontainer/checksums.sha256 /usr/local/share/devcontainer/checksums.sha256
 
-RUN ACTIONLINT_ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
-  && case "${ACTIONLINT_ARCH}" in \
-    amd64) ACTIONLINT_SHA256="${ACTIONLINT_SHA256_AMD64}" ;; \
-    arm64) ACTIONLINT_SHA256="${ACTIONLINT_SHA256_ARM64}" ;; \
-    *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
+RUN . /usr/local/share/devcontainer/versions.env \
+  && case "${TARGETARCH}" in \
+  amd64) MISE_ARCH=x64 ;; \
+  arm64) MISE_ARCH=arm64 ;; \
+  *) echo "Unsupported target architecture: ${TARGETARCH}" >&2; exit 1 ;; \
   esac \
-  && curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_${ACTIONLINT_ARCH}.tar.gz" \
-  -o /tmp/actionlint.tar.gz \
-  && printf '%s  %s\n' "${ACTIONLINT_SHA256}" /tmp/actionlint.tar.gz | sha256sum -c - \
-  && tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint \
-  && install -m 0755 /tmp/actionlint /usr/local/bin/actionlint \
-  && rm -f /tmp/actionlint.tar.gz /tmp/actionlint
+  && MISE_ASSET="mise-v${MISE_VERSION}-linux-${MISE_ARCH}" \
+  && curl --fail --location --show-error --silent --retry 5 \
+  --retry-all-errors --connect-timeout 15 --max-time 300 \
+  "https://github.com/jdx/mise/releases/download/v${MISE_VERSION}/${MISE_ASSET}" \
+  -o "/tmp/${MISE_ASSET}" \
+  && MISE_SHA256="$(awk -v asset="${MISE_ASSET}" '$2 == asset { print $1 }' /usr/local/share/devcontainer/checksums.sha256)" \
+  && test -n "${MISE_SHA256}" \
+  && printf '%s  %s\n' "${MISE_SHA256}" "/tmp/${MISE_ASSET}" \
+  | sha256sum --check --strict - \
+  && install -m 0755 "/tmp/${MISE_ASSET}" /usr/local/bin/mise \
+  && rm "/tmp/${MISE_ASSET}"
 
-# --------------------------
-# Install Act
-#
-# Act runs GitHub Actions workflows locally against a Docker runtime.
-# The version is pinned here for reproducibility.
-# To upgrade, update ACT_VERSION and rebuild the image.
-# --------------------------
+# Provision system toolchains from the locked mise configuration copied into the
+# image. mise automatically discovers /usr/local/share/mise/installs at runtime.
+COPY mise.toml /usr/local/share/mise/mise.toml
+COPY mise.lock /usr/local/share/mise/mise.lock
 
-ENV ACT_VERSION=0.2.89
-ENV ACT_SHA256_X86_64=0191d6f1f3b716b5c55820032605d05fc3c1cdbf581ebeff655019e5dd1524c0
-ENV ACT_SHA256_ARM64=daa8679ba9615a74d2d0cec321dc593f21948a2a11bb65862b063d8b930f4bcb
-
-RUN ACT_ARCH=$(uname -m | sed 's/aarch64/arm64/') \
-  && case "${ACT_ARCH}" in \
-    x86_64) ACT_SHA256="${ACT_SHA256_X86_64}" ;; \
-    arm64) ACT_SHA256="${ACT_SHA256_ARM64}" ;; \
-    *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
-  esac \
-  && curl -fsSL "https://github.com/nektos/act/releases/download/v${ACT_VERSION}/act_Linux_${ACT_ARCH}.tar.gz" \
-  -o /tmp/act.tar.gz \
-  && printf '%s  %s\n' "${ACT_SHA256}" /tmp/act.tar.gz | sha256sum -c - \
-  && tar -xzf /tmp/act.tar.gz -C /tmp act \
-  && install -m 0755 /tmp/act /usr/local/bin/act \
-  && rm -f /tmp/act.tar.gz /tmp/act
-
-# --------------------------
-# Install ASDF
-#
-# ASDF is used to manage runtime versions (Node.js, etc.) across all
-# contributors. The version is pinned here for reproducibility.
-# To upgrade, update ASDF_VERSION and rebuild the image.
-#
-# ASDF_DIR and ASDF_DATA_DIR are set to a shared system path so all users
-# inside the container (including the non-root "nlobby4" user) can access
-# the installed runtimes without per-user installation.
-#
-# To add language runtimes, add plugin metadata in .nlobby4.yml and requested
-# runtime versions in .tool-versions. The Dockerfile installs whatever
-# .tool-versions requires from the copied build snapshot.
-# --------------------------
-
-ENV ASDF_VERSION=0.18.1
-ENV ASDF_DIR=/usr/local/asdf
-ENV ASDF_DATA_DIR=/usr/local/asdf
-ENV ASDF_MD5_AMD64=6c68f29f7cf16bf4a0cd2d50f464ccf0
-ENV ASDF_MD5_ARM64=d3e22a5b51ab03a4770c74d9581370f1
-
-RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
-  && case "${ARCH}" in \
-    amd64) ASDF_MD5="${ASDF_MD5_AMD64}" ;; \
-    arm64) ASDF_MD5="${ASDF_MD5_ARM64}" ;; \
-    *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;; \
-  esac \
-  && curl -fsSL "https://github.com/asdf-vm/asdf/releases/download/v${ASDF_VERSION}/asdf-v${ASDF_VERSION}-linux-${ARCH}.tar.gz" \
-  -o /tmp/asdf.tar.gz \
-  && printf '%s  %s\n' "${ASDF_MD5}" /tmp/asdf.tar.gz | md5sum -c - \
-  && tar -xzf /tmp/asdf.tar.gz -C /tmp \
-  && mv /tmp/asdf /usr/local/bin/asdf \
-  && rm /tmp/asdf.tar.gz \
-  && chmod +x /usr/local/bin/asdf
-
-# Non-login shell configuration for ASDF
-RUN printf '%s\n' \
-  'export ASDF_DIR=/usr/local/asdf' \
-  'export ASDF_DATA_DIR=/usr/local/asdf' \
-  'export PATH="${ASDF_DATA_DIR}/shims:${ASDF_DATA_DIR}/plugins:${PATH}"' \
-  >> /etc/bash.bashrc
-
-# Login shell configuration for ASDF
-RUN printf '%s\n' \
-  'export ASDF_DIR=/usr/local/asdf' \
-  'export ASDF_DATA_DIR=/usr/local/asdf' \
-  'export PATH="${ASDF_DATA_DIR}/shims:${ASDF_DATA_DIR}/plugins:${PATH}"' \
-  > /etc/profile.d/asdf.sh \
-  && chmod +x /etc/profile.d/asdf.sh
-
-# Enable bash tab-completion for asdf commands.
-RUN echo '. <(asdf completion bash)' >> /etc/bash.bashrc
-
-# --------------------------
-# Install nlobby4 Orchestrator
-#
-# The nlobby4 orchestrator is a wrapper script that provides a unified interface
-# for running commands across multiple projects in a repository. It is installed
-# in /usr/local/bin so it is available to all users inside the container.
-# --------------------------
-
-COPY scripts/linux/commands/repository/orchestrator.sh /usr/local/bin/nlobby4
-RUN chmod 0755 /usr/local/bin/nlobby4
-
-# Copy orchestration inputs as a deterministic image-build snapshot
-RUN mkdir -p /usr/local/share/nlobby4
-COPY .nlobby4.yml /usr/local/share/nlobby4/.nlobby4.yml
-COPY .tool-versions /usr/local/share/nlobby4/.tool-versions
-
-# Provision image toolchains from the build snapshot, not the mounted workspace
-RUN nlobby4 toolchain install \
-  && chown -R nlobby4:nlobby4 /usr/local/asdf \
-  && chmod -R 755 /usr/local/asdf
+RUN --mount=type=cache,target=/root/.cache/mise,sharing=locked \
+  mise trust /usr/local/share/mise/mise.toml \
+  && mise --cd /usr/local/share/mise install --system --locked \
+  && chmod -R u=rwX,go=rX /usr/local/share/mise
