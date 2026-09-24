@@ -1,0 +1,6 @@
+packages:
+  - projects/packages/*
+
+savePrefix: ""
+engineStrict: true
+strictPeerDependencies: true

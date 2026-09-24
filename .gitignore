@@ -34,14 +34,42 @@
 # Rely on the project-level .gitignore for project files
 !/project/**
 
-# Allow specific root-level files and directories
+# Allow specific root-level directories
 !/.devcontainer/**
-!/.github/**
 !/.husky/**
 !/.vscode/**
+!/scripts/**
+!/docs/**
+!/policy/**
+
+# Allow specific root-level file types
+!/*.json
+!/.markdownlint-cli2.jsonc
+!/*.*ignore
+!/.trivyignore.yaml
+!/.yamllint.yaml
+!/*.md
+!/*.config.js
+
+# Allow specific root-level files
+!/.editorconfig
+!/.env.template
+!/.git-blame-ignore-revs
+!/.gitattributes
+!/.gitmessage
+!/.mailmap
+!/.orca.yml
+!/.npmrc
+!/mise.lock
+!/mise.toml
+!/pnpm-lock.yaml
+!/pnpm-workspace.yaml
+!/.shellcheckrc
+
+# Allow specific root-level files and directories
+!/.github/**
 !/media/**
 !/schemas/**
-!/scripts/**
 !/spellcheck/*
 !/*.json
 !/*.*ignore
@@ -52,8 +80,9 @@
 !/.mailmap
 !/.nlobby4.yml
 !/.npmrc
+!/pnpm-lock.yaml
+!/pnpm-workspace.yaml
 !/.shellcheckrc
-!/.tool-versions
 !/*.md
 !/AUTHORS
 !/*.config.js

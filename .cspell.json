@@ -48,17 +48,20 @@
       "path": "./spellcheck/tools.txt"
     }
   ],
+  "enableGlobDot": true,
+  "files": ["**/*.md", ".git/COMMIT_EDITMSG"],
   "flagWords": [],
-  "gitignoreRoot": "./project",
+  "gitignoreRoot": ".",
   "ignorePaths": [
-    "**/.git/**",
+    "**/.git/{info,lfs,logs,objects,refs}/**",
+    "**/.git/{index,*HEAD,*refs}",
     "**/.cache/**",
+    "**/.generated/**",
     "**/.husky/_/**",
     "**/CHANGELOG.md",
     "**/coverage/**",
     "**/dist/**",
-    "**/docs/**",
-    "**/package-lock.json",
+    "**/pnpm-lock.yaml",
     "**/schemas/**",
     "spellcheck/**"
   ],

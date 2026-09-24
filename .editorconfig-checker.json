@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/editorconfig-checker/editorconfig-checker/v3.11.1/.editorconfig-checker.schema.json",
+  "Disable": {
+    "MaxLineLength": true
+  }
+}

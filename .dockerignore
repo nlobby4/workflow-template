@@ -28,5 +28,7 @@
 !*/
 
 # Dockerfile COPY inputs
+!/.devcontainer/versions.env
+!/.devcontainer/checksums.sha256
 !/mise.lock
 !/mise.toml

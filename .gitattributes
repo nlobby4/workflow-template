@@ -16,15 +16,12 @@
 # Files can be ignored from GitHub source zip downloads
 # by using the `export-ignore` attribute.
 #
-# Contributors must have the Git LFS client installed before
-# working with media assets. Run the repository setup script to
-# configure Git LFS for this repository:
+# Contributors must have the Git LFS client installed before working with
+# media assets. The recommended setup path configures Git LFS and downloads
+# the repository's LFS objects:
+# mise run setup
 #
-# ./scripts/linux/commands/repository/setup.sh
-#
-# If you are not using the setup script, initialize Git LFS
-# manually for this repository:
-#
+# To configure only Git LFS without running repository setup:
 # git lfs install --local
 # git lfs pull
 #
@@ -43,6 +40,7 @@
 *          text=auto
 
 # Text files where line endings should be preserved
+*.diff     -text
 *.patch    -text
 
 # Scripts
@@ -56,6 +54,7 @@
 *.zsh      text eol=lf
 
 # Documents
+*.ansi     text eol=lf
 *.bibtex   text diff=bibtex
 *.doc      diff=astextplain
 *.DOC      diff=astextplain
@@ -67,8 +66,8 @@
 *.PDF      diff=astextplain
 *.rtf      diff=astextplain
 *.RTF      diff=astextplain
-*.md       text diff=markdown
-*.mdx      text diff=markdown
+*.md       text eol=lf diff=markdown
+*.mdx      text eol=lf diff=markdown
 *.tex      text diff=tex
 *.adoc     text
 *.textile  text
@@ -79,6 +78,7 @@
 *.txt      text
 *.sql      text
 *.epub     diff=astextplain
+*.sha256   text eol=lf
 
 # Graphics
 *.png      binary
@@ -150,7 +150,9 @@ Dockerfile        text eol=lf
 
 # Configs
 package.json      text eol=lf
-package-lock.json text eol=lf -diff
+mise.lock         text eol=lf -diff
+mise.toml         text eol=lf
+pnpm-lock.yaml    text eol=lf -diff
 
 # --------------------------------------------------
 # Custom Rules
@@ -166,9 +168,12 @@ package-lock.json text eol=lf -diff
 .gitmessage            text eol=lf
 
 # Repository specific files
-.github/CODEOWNERS     text eol=lf
-.editorconfig          text eol=lf
-AUTHORS                text eol=lf
-LICENSE                text eol=lf
-.tool-versions         text eol=lf
+.devcontainer/versions.env                  text eol=lf
+.editorconfig                               text eol=lf
+.github/CODEOWNERS                          text eol=lf
+.markdownlint-cli2.jsonc                    text eol=lf
+scripts/node/markdownlint/github-html.mjs   text eol=lf
+AUTHORS                                     text eol=lf
+LICENSE                                     text eol=lf
+pnpm-workspace.yaml                         text eol=lf
 # TODO: Add more files as needed
