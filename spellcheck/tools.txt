@@ -7,16 +7,27 @@
 # matching entry to dictionaryDefinitions and dictionaries in ../.cspell.json.
 # --------------------------------------------------
 amannn
-clippy
+Buildx
 catthehacker
+cmark
+Conftest
 DavidAnson
 esbenp
 eventpath
-gofmt
+gpasswd
 joshbolduc
 ltrimstr
+Moby
+println
 prettiercache
 reshim
+runuser
+sboms
+sigstore
+spdxjson
+tini
 timonwong
 webpro
+yusukebe
+YYYYMMDDTHHMMSSZ
 zizmor

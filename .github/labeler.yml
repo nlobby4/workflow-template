@@ -62,7 +62,8 @@ ci:
               - "**/scripts/**"
               - "**/.nlobby4.yml"
               - "**/.npmrc"
-              - "**/.tool-versions"
+              - "**/mise.lock"
+              - "**/mise.toml"
               - "**/knip.json"
 
 # TODO: Add your build systems
@@ -77,10 +78,11 @@ style:
       - changed-files:
           - any-glob-to-any-file:
               - "**/.editorconfig"
+              - "**/.editorconfig-checker.*"
               - "**/prettier.config.*"
               - "**/commitlint.config.*"
               - "**/.cspell.json"
-              - "**/.markdownlint.json"
+              - "**/.markdownlint-cli2.*"
               - "**/.shellcheckrc"
 
 # TODO: Adjust to fit your testing framework
@@ -94,5 +96,6 @@ dependencies:
       - head-branch: [^dependabot/]
       - changed-files:
           - any-glob-to-any-file:
-              - "**/package-lock.json"
+              - "**/pnpm-lock.yaml"
+              - "**/pnpm-workspace.yaml"
               - "**/package.json"

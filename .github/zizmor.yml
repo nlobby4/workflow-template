@@ -8,12 +8,9 @@
 # https://docs.zizmor.sh/configuration/
 # --------------------------------------------------
 
+# yaml-language-server: $schema=https://raw.githubusercontent.com/woodruffw/zizmor/main/support/zizmor.schema.json
+
 rules:
-  dangerous-triggers:
-    ignore:
-      # pull_request_target is intentional in PR automation
-      # the workflow will never checkout or execute pull request code.
-      - pr-automation.yml:21
   unpinned-uses:
     config:
       policies:

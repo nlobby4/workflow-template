@@ -13,9 +13,6 @@ containerenv
 gitmessage
 gpgsign
 gsub
-maxtimeout
-mintimeout
 modeline
-NOPASSWD
 signingkey
 worktree

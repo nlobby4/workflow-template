@@ -1,0 +1,248 @@
+# --------------------------------------------------
+# Development-container CI workflow.
+#
+# Builds the complete Dev Container configuration without cache on native
+# amd64 and arm64 runners. A least-privilege job scans the source-built image.
+# Main-branch publication scans both exact platform manifests, emits their
+# SBOMs, and then signs and attests the multi-architecture OCI index.
+# --------------------------------------------------
+
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: CI Dev Container
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .devcontainer/**
+      - .dockerignore
+      - .github/dependabot.yml
+      - .github/actions/setup-node-deps/**
+      - .github/workflows/ci-devcontainer.yml
+      - mise.lock
+      - mise.toml
+      - package.json
+      - pnpm-lock.yaml
+      - .trivyignore.yaml
+      - scripts/linux/**
+      - scripts/node/validate-devcontainer-inputs.js
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: 23 4 * * 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  smoke:
+    name: smoke (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+
+      - name: Validate Dev Container inputs
+        run: pnpm run lint:devcontainer
+
+      - name: Run Dockerfile build checks
+        run: pnpm run ci:buildkit-check
+
+      - name: Confirm native architecture
+        env:
+          EXPECTED_PLATFORM: ${{ matrix.platform }}
+        run: pnpm run ci:confirm-architecture
+
+      - name: Clean build and smoke test
+        run: pnpm run test:devcontainer
+
+  supply-chain:
+    name: vulnerability and SBOM
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    services:
+      registry:
+        image: registry:2@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+        ports:
+          - 5000:5000
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm trivy
+
+      - name: Build complete Dev Container image
+        env:
+          IMAGE: localhost:5000/nlobby4/devcontainer:${{ github.sha }}
+        run: pnpm run ci:build-source-image
+
+      - name: Scan image and generate SPDX JSON SBOM
+        env:
+          DEVCONTAINER_IMAGE: localhost:5000/nlobby4/devcontainer:${{ github.sha }}
+          DEVCONTAINER_SCAN_BUILD: false
+          DEVCONTAINER_SBOM_OUTPUT: .generated/devcontainer.spdx.json
+        run: pnpm run devcontainer:scan
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          if-no-files-found: error
+          name: devcontainer-supply-chain-${{ github.sha }}
+          path: |
+            .generated/devcontainer.spdx.json
+          retention-days: 14
+
+  publish:
+    name: publish signed multi-architecture image
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - smoke
+      - supply-chain
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read # Read the reviewed build context.
+      attestations: write # Store GitHub-native provenance and SBOM attestations.
+      id-token: write # Request the short-lived Sigstore signing identity.
+      packages: write # Publish the image and OCI attestations to GHCR.
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm trivy cosign
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
+
+      - name: Log in to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+        with:
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+
+      - name: Build and push multi-architecture candidate
+        id: publish
+        env:
+          OWNER: ${{ github.repository_owner }}
+        run: pnpm run ci:publish-candidate
+
+      - name: Resolve published architecture digests
+        id: platforms
+        env:
+          DIGEST: ${{ steps.publish.outputs.digest }}
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: pnpm run ci:platform-digests
+
+      - name: Verify exact published platform images
+        env:
+          AMD64_DIGEST: ${{ steps.platforms.outputs.amd64 }}
+          ARM64_DIGEST: ${{ steps.platforms.outputs.arm64 }}
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: pnpm run ci:verify-platform-images
+
+      - name: Scan published AMD64 image and generate SBOM
+        env:
+          DEVCONTAINER_IMAGE: ${{ steps.publish.outputs.image }}@${{ steps.platforms.outputs.amd64 }}
+          DEVCONTAINER_SCAN_BUILD: false
+          DEVCONTAINER_SBOM_OUTPUT: .generated/devcontainer-amd64.spdx.json
+        run: pnpm run devcontainer:scan
+
+      - name: Scan published ARM64 image and generate SBOM
+        env:
+          DEVCONTAINER_IMAGE: ${{ steps.publish.outputs.image }}@${{ steps.platforms.outputs.arm64 }}
+          DEVCONTAINER_SCAN_BUILD: false
+          DEVCONTAINER_SBOM_OUTPUT: .generated/devcontainer-arm64.spdx.json
+        run: pnpm run devcontainer:scan
+
+      - name: Promote approved image to commit tag
+        env:
+          DIGEST: ${{ steps.publish.outputs.digest }}
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: pnpm run ci:promote-image
+
+      - name: Attest build provenance
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d
+        with:
+          create-storage-record: false
+          push-to-registry: true
+          subject-digest: ${{ steps.publish.outputs.digest }}
+          subject-name: ${{ steps.publish.outputs.image }}
+
+      - name: Attest AMD64 SBOM
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d
+        with:
+          create-storage-record: false
+          push-to-registry: true
+          sbom-path: .generated/devcontainer-amd64.spdx.json
+          subject-digest: ${{ steps.platforms.outputs.amd64 }}
+          subject-name: ${{ steps.publish.outputs.image }}
+
+      - name: Attest ARM64 SBOM
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d
+        with:
+          create-storage-record: false
+          push-to-registry: true
+          sbom-path: .generated/devcontainer-arm64.spdx.json
+          subject-digest: ${{ steps.platforms.outputs.arm64 }}
+          subject-name: ${{ steps.publish.outputs.image }}
+
+      - name: Sign and attest published image
+        env:
+          AMD64_DIGEST: ${{ steps.platforms.outputs.amd64 }}
+          ARM64_DIGEST: ${{ steps.platforms.outputs.arm64 }}
+          DIGEST: ${{ steps.publish.outputs.digest }}
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: pnpm run devcontainer:sign
+
+      - name: Verify published image
+        env:
+          AMD64_DIGEST: ${{ steps.platforms.outputs.amd64 }}
+          ARM64_DIGEST: ${{ steps.platforms.outputs.arm64 }}
+          COSIGN_IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/ci-devcontainer.yml@refs/heads/main
+          DIGEST: ${{ steps.publish.outputs.digest }}
+          IMAGE: ${{ steps.publish.outputs.image }}
+        run: pnpm run devcontainer:verify
+
+      - name: Upload published SBOMs
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          if-no-files-found: error
+          name: devcontainer-published-sboms-${{ github.sha }}
+          path: .generated/devcontainer-*.spdx.json
+          retention-days: 30

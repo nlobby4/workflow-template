@@ -5,9 +5,8 @@
 # Uses pull_request to safely execute untrusted code
 # from forks without elevated privileges.
 #
-# Jobs run in parallel. Node.js npm cache is shared
-# across jobs via setup-node's built-in cache support,
-# keyed by package-lock.json hash for precise invalidation.
+# Jobs run in parallel. Tool versions are installed from mise.toml and mise.lock
+# so CI uses the same runtime versions as local and development-container users.
 #
 # For more information please see:
 # https://docs.github.com/en/actions/writing-workflows
@@ -15,15 +14,15 @@
 
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
-name: "CI General"
+name: CI General
 
 on:
   pull_request:
     branches:
-      - "main"
+      - main
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}"
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 # Deny all by default, jobs declare their own permissions as needed
@@ -31,166 +30,379 @@ permissions: {}
 
 jobs:
   # --------------------------------------------------
+  # EditorConfig - enforces cross-editor file invariants
+  # --------------------------------------------------
+  editorconfig:
+    name: editorconfig
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+
+      - name: Validate EditorConfig compliance
+        run: pnpm run lint:editorconfig
+
+  # --------------------------------------------------
   # Audit - runs the npm audit script to check for
   # vulnerable production dependencies.
   # --------------------------------------------------
   audit:
-    name: "audit"
-    runs-on: "ubuntu-latest"
+    name: audit
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install dependencies"
-        run: "npm ci --ignore-scripts"
+      - uses: ./.github/actions/setup-node-deps
 
-      - name: "Audit dependencies"
-        run: "npm run audit"
+      - name: Audit dependencies
+        run: pnpm run audit
 
   # --------------------------------------------------
   # Format check - validates code formatting
   # using Prettier
   # --------------------------------------------------
   prettier:
-    name: "prettier"
-    runs-on: "ubuntu-latest"
+    name: prettier
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install dependencies"
-        run: "npm ci --ignore-scripts"
+      - uses: ./.github/actions/setup-node-deps
 
-      - name: "Check formatting"
-        run: "npm run format:check"
+      - name: Restore prettier cache
+        id: prettier-cache-restore
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: .cache/general/prettier/.prettiercache
+          key: >-
+            prettier-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'prettier.config.js', '.prettierignore', '.gitignore', '.editorconfig', 'mise.toml', 'mise.lock') }}
+          restore-keys: |
+            prettier-${{ runner.os }}-
+
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: Save prettier cache
+        if: always() && steps.prettier-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: .cache/general/prettier/.prettiercache
+          key: >-
+            prettier-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'prettier.config.js', '.prettierignore', '.gitignore', '.editorconfig', 'mise.toml', 'mise.lock') }}
 
   # --------------------------------------------------
   # Markdown lint - validates markdown files
   # --------------------------------------------------
   markdownlint:
-    name: "markdownlint"
-    runs-on: "ubuntu-latest"
+    name: markdownlint
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install dependencies"
-        run: "npm ci --ignore-scripts"
+      - uses: ./.github/actions/setup-node-deps
 
-      - name: "Lint markdown"
-        run: "npm run lint:md"
+      - name: Install cmark-gfm
+        run: pnpm run ci:install-cmark-gfm
+
+      - name: Lint markdown
+        run: pnpm run lint:md
+
+      - name: Validate GFM parsing
+        run: pnpm run lint:md:gfm
+
+  # --------------------------------------------------
+  # Schema validation - validates repository schemas
+  # and schema-backed configuration files
+  # --------------------------------------------------
+  schema:
+    name: schema
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+
+      - name: Validate schemas
+        run: pnpm run lint:schema
+
+  # --------------------------------------------------
+  # ESLint - validates repository-owned JavaScript
+  # --------------------------------------------------
+  eslint:
+    name: eslint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+
+      - name: Lint JavaScript
+        run: pnpm run lint:js
+
+  # --------------------------------------------------
+  # Tombi - validates repository TOML configuration
+  # --------------------------------------------------
+  tombi:
+    name: tombi
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm tombi
+
+      - name: Lint TOML
+        run: pnpm run lint:toml
+
+  # --------------------------------------------------
+  # yamllint - validates generic YAML structure and style
+  # --------------------------------------------------
+  yamllint:
+    name: yamllint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm yamllint
+
+      - name: Lint YAML
+        run: pnpm run lint:yaml
 
   # --------------------------------------------------
   # ShellCheck - validates shell scripts
   # --------------------------------------------------
   shellcheck:
-    name: "shellcheck"
-    runs-on: "ubuntu-latest"
+    name: shellcheck
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install ShellCheck"
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends shellcheck
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm shellcheck
 
-      - name: "Lint shell scripts"
-        run: "npm run lint:shell"
+      - name: Lint shell scripts
+        run: pnpm run lint:shell
 
   # --------------------------------------------------
-  # Spell check - validates spelling across all files
-  # using cspell. Cache is keyed by package-lock.json,
-  # .cspell.json, dictionary.txt and .nvmrc since a Node
-  # version change can affect cspell's binary behaviour.
+  # Actionlint - validates GitHub Actions workflows
+  # --------------------------------------------------
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm actionlint
+
+      - name: Lint GitHub Actions workflows
+        run: pnpm run lint:actions
+
+  # --------------------------------------------------
+  # Zizmor - audits GitHub Actions workflow security
+  # --------------------------------------------------
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm zizmor
+
+      - name: Audit GitHub Actions security
+        run: pnpm run lint:actions:security
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ZIZMOR_FORMAT: github
+          ZIZMOR_OFFLINE: "false"
+
+  # --------------------------------------------------
+  # Spell check - validates authored Markdown through the shared CSpell config.
+  # Cache is keyed by pnpm-lock.yaml, .cspell.json, spellcheck dictionaries,
+  # mise.toml, and mise.lock since a
+  # Node version change can affect cspell's binary behaviour.
   # --------------------------------------------------
   spellcheck:
-    name: "spellcheck"
-    runs-on: "ubuntu-latest"
+    name: spellcheck
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install dependencies"
-        run: "npm ci --ignore-scripts"
+      - uses: ./.github/actions/setup-node-deps
 
-      - name: "Restore cspell cache"
-        id: "cspell-cache-restore"
-        uses: "actions/cache/restore@v5"
+      - name: Restore cspell cache
+        id: cspell-cache-restore
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
-          path: ".cache/cspell/.cspellcache"
+          path: .cache/general/cspell/.cspellcache
           key: >-
-            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json', '.cspell.json', 'dictionary.txt', '.nvmrc') }}
+            cspell-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', '.cspell.json', 'spellcheck/*.txt', 'mise.toml', 'mise.lock') }}
           restore-keys: |
             cspell-${{ runner.os }}-
 
-      - name: "Spell check"
-        run: "npm run lint:spell"
+      - name: Spell check
+        run: pnpm run lint:spell
 
-      - name: "Save cspell cache"
-        if: "always() && steps.cspell-cache-restore.outputs.cache-hit != 'true'"
-        uses: "actions/cache/save@v5"
+      - name: Save cspell cache
+        if: always() && steps.cspell-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
         with:
-          path: ".cache/cspell/.cspellcache"
+          path: .cache/general/cspell/.cspellcache
           key: >-
-            cspell-${{ runner.os }}-${{ hashFiles('package-lock.json', '.cspell.json', 'dictionary.txt', '.nvmrc') }}
+            cspell-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', '.cspell.json', 'spellcheck/*.txt', 'mise.toml', 'mise.lock') }}
 
   # --------------------------------------------------
   # Knip - checks for unused dependencies
   # --------------------------------------------------
   knip:
-    name: "knip"
-    runs-on: "ubuntu-latest"
+    name: knip
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: "read"
+      contents: read
     steps:
-      - uses: "actions/checkout@v6"
-
-      - uses: "actions/setup-node@v6"
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          persist-credentials: false
 
-      - name: "Install dependencies"
-        run: "npm ci --ignore-scripts"
+      - uses: ./.github/actions/setup-node-deps
 
-      - name: "Check unused dependencies"
-        run: "npm run deps:unused"
+      - name: Restore knip cache
+        id: knip-cache-restore
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: .cache/general/knip
+          key: >-
+            knip-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'knip.json', 'package.json', 'mise.toml', 'mise.lock') }}
+          restore-keys: |
+            knip-${{ runner.os }}-
 
-# TODO: Add jobs for introduced tools
+      - name: Check unused dependencies
+        run: pnpm run deps:unused
+
+      - name: Save knip cache
+        if: always() && steps.knip-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: .cache/general/knip
+          key: >-
+            knip-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'knip.json', 'package.json', 'mise.toml', 'mise.lock') }}
+
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm gitleaks
+      - name: Scan complete Git history
+        run: pnpm run lint:secrets
+
+  hadolint:
+    name: hadolint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm hadolint
+      - name: Lint Dockerfile
+        run: pnpm run lint:dockerfile
+
+  conftest:
+    name: conftest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-node-deps
+        with:
+          install-args: node npm:pnpm conftest
+      - name: Validate configuration policy
+        run: pnpm run lint:policy

@@ -1,0 +1,12 @@
+# --------------------------------------------------
+# Canonical development-container checksums.
+#
+# Records SHA-256 values for Linux artifacts downloaded directly by the
+# Dockerfile. OCI dependencies are pinned in their native configuration files.
+#
+# Entries use the canonical sha256sum text format: a 64-character digest, two
+# spaces, then the artifact filename.
+# --------------------------------------------------
+
+c98423c8470d6dc416d9f7036d0646d8ef5ae92ad9186907f8fcc84cbe7db4ea  mise-v2026.9.1-linux-x64
+0ef0a778eaa8599f3e90a8a0979c9fc3f79922cafb5fa6d39f366d974da33bba  mise-v2026.9.1-linux-arm64
